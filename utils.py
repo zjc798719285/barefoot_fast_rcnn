@@ -57,7 +57,45 @@ def mkdir(path, output):
 #####################################################################################
 #####################################################################################
 ####################################################################################
-def get_filepath_table():
+def create_train_test_table(input_dir,label_dir,train_key, output_train, output_test):
+    # This function used for create two txt files, which contains img file path and label file path
+    # The two txt files are train table and test table
+    # Each table have two columns,the first column is img path, the second column is label path
+    # input_dir, label_dir: The img source folder path, the label source folder path
+    # train_key: A int number, which is represent key point between train and test
+    # output_train, output_test: The txt file output path
+    p_id_img = os.listdir(input_dir)
+    p_id_lab = os.listdir(label_dir)
+    p_id_img.sort(key=lambda x: int(x))
+    p_id_lab.sort(key=lambda x: int(x))
+    for ind_pid in range(len(p_id_img)):
+      if ind_pid <= train_key:
+        path_img = os.path.join(input_dir, p_id_img[ind_pid])
+        path_lab = os.path.join(label_dir, p_id_lab[ind_pid])
+        list_img = []; list_lab = []
+        getfilelist(path_img, list_img)
+        getfilelist(path_lab, list_lab)
+        train_tab = open(output_train, 'a')
+        for ind_fid in range(len(list_img)):
+            train_tab.write(list_img[ind_fid])
+            train_tab.write(';')
+            train_tab.write(list_lab[ind_fid])
+            train_tab.write('\n')
+        train_tab.close()
+      else:
+          path_img = os.path.join(input_dir, p_id_img[ind_pid])
+          path_lab = os.path.join(label_dir, p_id_lab[ind_pid])
+          list_img = []
+          list_lab = []
+          getfilelist(path_img, list_img)
+          getfilelist(path_lab, list_lab)
+          test_tab = open(output_test, 'a')
+          for ind_fid in range(len(list_img)):
+              test_tab.write(list_img[ind_fid])
+              test_tab.write(';')
+              test_tab.write(list_lab[ind_fid])
+              test_tab.write('\n')
+          test_tab.close()
     return
 
 
@@ -67,10 +105,18 @@ def get_filepath_table():
 
 
 
+
 if __name__ == '__main__':
-    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\\V1.0.0.0'
-    output_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\\V1.0.0.0_128'
-    source_img_resize(input_dir, output_dir, (59, 128))
+    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\image'
+    lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\label'
+    output_train = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
+    output_test = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
+    create_train_test_table(input_dir, lab_dir, 50, output_train, output_test)
+
+    #print(file_list)
+
+    # output_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\\V1.0.0.0_128'
+    # source_img_resize(input_dir, output_dir, (59, 128))
 
     #
     # mkdir(path=input_dir, output=output_dir)
