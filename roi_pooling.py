@@ -47,6 +47,9 @@ def padding_img(img, shape):
     return img
 
 if __name__ == '__main__':
+    # unit testing interference
+
+
     map1 = tf.random_normal(shape=[1, 40, 80, 10], mean=0.0, stddev=1.0, dtype=tf.float32)
     # map1 = padding_img(map1, [41, 88])
     # print(map1)

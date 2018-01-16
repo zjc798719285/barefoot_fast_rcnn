@@ -1,7 +1,7 @@
 import os
 import cv2
 import scipy.io as sio
-
+import numpy as np
 ###############################################
 ##########  File I/O funcnctions   ############
 ###############################################
@@ -56,7 +56,6 @@ def mkdir(path, output):
             mkdir(filepath, outpath)
 #####################################################################################
 #####################################################################################
-####################################################################################
 def create_train_test_table(input_dir,label_dir,train_key, output_train, output_test):
     # This function used for create two txt files, which contains img file path and label file path
     # The two txt files are train table and test table
@@ -97,21 +96,49 @@ def create_train_test_table(input_dir,label_dir,train_key, output_train, output_
               test_tab.write('\n')
           test_tab.close()
     return
-
-
-
-
-
-
+#####################################################################################
+#####################################################################################
+#####################################################################################
+def load_data(train_path, test_path):
+    # This function used for load data
+    f_train = open(train_path)
+    f_test = open(test_path)
+    train_line = f_train.readlines()
+    test_line = f_test.readlines()
+    train_x = []; train_y = []; test_x = []; test_y = []
+    for line_i in train_line:
+       s_line = line_i.split(";", 2)
+       img = cv2.imread(s_line[0])
+       lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
+       train_x.append(img)
+       train_y.append(lab)
+    for line_i in test_line:
+       s_line = line_i.split(";", 2)
+       img = cv2.imread(s_line[0])
+       lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
+       test_x.append(img)
+       test_y.append(lab)
+    return train_x, train_y, test_x, test_y
 
 
 
 if __name__ == '__main__':
-    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\image'
-    lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\label'
-    output_train = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
-    output_test = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
-    create_train_test_table(input_dir, lab_dir, 50, output_train, output_test)
+    # unit testing interference
+    train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
+    test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
+    train_x, train_y, test_x, test_y = load_data(train_txt, test_txt)
+    print(np.shape(train_x))
+    print(np.shape(train_y))
+    print(np.shape(test_x))
+    print(np.shape(test_y))
+
+
+
+     #input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\image'
+    # lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\label'
+    # output_train = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
+    # output_test = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
+    # create_train_test_table(input_dir, lab_dir, 50, output_train, output_test)
 
     #print(file_list)
 
