@@ -105,20 +105,20 @@ def load_data(train_path, test_path):
     f_test = open(test_path)
     train_line = f_train.readlines()
     test_line = f_test.readlines()
-    train_x = []; train_y = []; test_x = []; test_y = []
+    train_x = []; train_roi = []; test_x = []; test_roi = []
     for line_i in train_line:
        s_line = line_i.split(";", 2)
        img = cv2.imread(s_line[0])
        lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
        train_x.append(img)
-       train_y.append(lab)
+       train_roi.append(lab)
     for line_i in test_line:
        s_line = line_i.split(";", 2)
        img = cv2.imread(s_line[0])
        lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
        test_x.append(img)
-       test_y.append(lab)
-    return train_x, train_y, test_x, test_y
+       test_roi.append(lab)
+    return train_x, train_roi, test_x, test_roi
 
 
 
@@ -126,11 +126,11 @@ if __name__ == '__main__':
     # unit testing interference
     train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
     test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
-    train_x, train_y, test_x, test_y = load_data(train_txt, test_txt)
+    train_x, train_roi, test_x, test_roi = load_data(train_txt, test_txt)
     print(np.shape(train_x))
-    print(np.shape(train_y))
+    print(np.shape(train_roi))
     print(np.shape(test_x))
-    print(np.shape(test_y))
+    print(np.shape(test_roi))
 
 
 

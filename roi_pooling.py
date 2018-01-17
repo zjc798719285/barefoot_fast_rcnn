@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 import math
 
-
 def roi_layer(fc_map, out_size, rois):
     fc = []
     for roi_i in rois:
