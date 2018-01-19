@@ -1,70 +1,42 @@
 import tensorflow as tf
-import numpy as np
-import math
+
 
 def roi_layer(fc_map, out_size, rois):
+    # ROI Pooling layer
+    # fc_map: A tensor, feature maps of last ConvNet
+    # out_size: A list, shape of output feature map
+    # rois: A tensor,
     fc = []
     num_roi = rois.get_shape().as_list()[0]
     for i in range(num_roi):
         ind = tf.constant(value=i, shape=[1])
         roi_i = tf.reshape(tf.gather(indices=ind, params=rois), [4, -1])
-        fc_i = roi_pooling(fc_map, out_size, roi_i)
-        fc = tf.concat(0, [fc, fc_i])
-    return fc
+        fc_i = ROI_pooling(fc_map, roi_i, out_size)
+        fc.append(fc_i)
+    final_fc = tf.concat(fc, axis=0)
+    return final_fc
 
-def roi_pooling(fc_map, out_size, roi):
-    # fc_map: feature map from a CNN net, which is a 4-dims tensor[1, height, width, channel]
-    # out_size: the output size of feature map after roi_pooling, which is a list [height, width]
-    # roi: [p_x, p_y, height, width], the resigon proposel
-    roi_img = get_roi_img(fc_map, roi, out_size)
-    roi_shape = roi_img.get_shape().as_list()
-    st_x = tf.floor(tf.div(tf.cast(x=roi_shape[1], dtype=tf.float32), tf.cast(x=out_size[0], dtype=tf.float32)))
-    st_y = tf.floor(tf.div(tf.cast(x=roi_shape[2], dtype=tf.float32), tf.cast(x=out_size[1], dtype=tf.float32)))
-    roi_img = padding_img(roi_img, [st_x*out_size[0], st_y*out_size[1]])
-    roi_fc_map = tf.nn.max_pool(roi_img, ksize=[1, st_x, st_y, 1], strides=[1, st_x, st_y, 1], padding='SAME')
-    roi_fc = tf.reshape(roi_fc_map, [-1, out_size[0]*out_size[1]*roi_shape[3]])
-    return roi_fc
-
-def get_roi_img(fc_map, roi, out_size):
+def ROI_pooling(fc_map, roi, out_size):
     # This function get the roi_img form feature map and roi label
     # return roi_img which is a tensor subsampled from fc_map, by using roi label
     shape_fc_map = fc_map.get_shape().as_list()
-    roi_row = tf.round(shape_fc_map[1] * tf.gather(indices=0, params=roi))
-    roi_col = tf.round(shape_fc_map[2] * tf.gather(indices=1, params=roi))
-    roi_h = tf.round(shape_fc_map[1] * tf.gather(indices=2, params=roi))
-    roi_w = tf.round(shape_fc_map[2] * tf.gather(indices=3, params=roi))
-    roi_row = tf.cast(x=roi_row[0], dtype=tf.int32)
-    roi_col = tf.cast(x=roi_col[0], dtype=tf.int32)
-    roi_h = tf.cast(x=roi_h[0], dtype=tf.int32)
-    roi_w = tf.cast(x=roi_w[0], dtype=tf.int32)
+    roi_row = tf.cast(shape_fc_map[1] * tf.gather(indices=0, params=roi)[0], tf.int32)
+    roi_col = tf.cast(shape_fc_map[2] * tf.gather(indices=1, params=roi)[0], tf.int32)
+    roi_h = tf.cast(shape_fc_map[1] * tf.gather(indices=2, params=roi)[0], tf.int32)
+    roi_w = tf.cast(shape_fc_map[2] * tf.gather(indices=3, params=roi)[0], tf.int32)
     roi_img = fc_map[:, roi_row:roi_row+roi_h, roi_col:roi_col+roi_w, :]
-    roi_img = tf.image.resize_images(roi_img, (out_size[0], out_size[1]))
+    shape = [int(x) for x in out_size]
+    roi_img = tf.image.resize_images(roi_img, tuple(shape))
     return roi_img
-def padding_img(img, shape):
-    shape_img = img.get_shape().as_list()
-    pad_rows = shape[0] - shape_img[1]
-    pad_up = shape_img.copy(); pad_down = shape_img.copy()
-    pad_down[1] = math.ceil(pad_rows / 2);pad_up[1] = math.floor(pad_rows / 2)
-    img = tf.concat([tf.zeros(pad_up), img, tf.zeros(pad_down)], axis=1)
-    shape_img = img.get_shape().as_list()
-    pad_cols = shape[1] - shape_img[2]
-    pad_left = shape_img.copy(); pad_right = shape_img.copy()
-    pad_left[2] = math.ceil(pad_cols / 2);pad_right[2] = math.floor(pad_cols / 2)
-    img = tf.concat([tf.zeros(pad_left), img, tf.zeros(pad_right)], axis=2)
-    return img
 
 if __name__ == '__main__':
     # unit testing interference
+    size = [14.0, 14.0]
+    size1 = [int(x) for x in size]
+    shape = tuple(size1)
+    print(size)
 
 
-    map1 = tf.random_normal(shape=[1, 40, 80, 10], mean=0.0, stddev=1.0, dtype=tf.float32)
-    # map1 = padding_img(map1, [41, 88])
-    # print(map1)
-    roi = [0.5, 0.5, 0.5, 0.5]
-    roi_map = get_roi_img(map1, roi)
-    roi_fc = roi_pooling(fc_map=map1, out_size=[5, 8], roi=roi)
-    print(np.shape(roi_fc))
-    print(np.shape(roi_map))
 
 
 
