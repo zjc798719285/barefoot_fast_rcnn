@@ -4,7 +4,10 @@ import math
 
 def roi_layer(fc_map, out_size, rois):
     fc = []
-    for roi_i in rois:
+    num_roi = rois.get_shape().as_list()[0]
+    for i in range(num_roi):
+        ind = tf.constant(value=i, shape=[1])
+        roi_i = tf.reshape(tf.gather(indices=ind, params=rois), [4, -1])
         fc_i = roi_pooling(fc_map, out_size, roi_i)
         fc = tf.concat(0, [fc, fc_i])
     return fc
@@ -13,24 +16,29 @@ def roi_pooling(fc_map, out_size, roi):
     # fc_map: feature map from a CNN net, which is a 4-dims tensor[1, height, width, channel]
     # out_size: the output size of feature map after roi_pooling, which is a list [height, width]
     # roi: [p_x, p_y, height, width], the resigon proposel
-    roi_img = get_roi_img(fc_map, roi)
+    roi_img = get_roi_img(fc_map, roi, out_size)
     roi_shape = roi_img.get_shape().as_list()
-    st_x = math.ceil(roi_shape[1]/out_size[0])
-    st_y = math.ceil(roi_shape[2]/out_size[1])
+    st_x = tf.floor(tf.div(tf.cast(x=roi_shape[1], dtype=tf.float32), tf.cast(x=out_size[0], dtype=tf.float32)))
+    st_y = tf.floor(tf.div(tf.cast(x=roi_shape[2], dtype=tf.float32), tf.cast(x=out_size[1], dtype=tf.float32)))
     roi_img = padding_img(roi_img, [st_x*out_size[0], st_y*out_size[1]])
     roi_fc_map = tf.nn.max_pool(roi_img, ksize=[1, st_x, st_y, 1], strides=[1, st_x, st_y, 1], padding='SAME')
     roi_fc = tf.reshape(roi_fc_map, [-1, out_size[0]*out_size[1]*roi_shape[3]])
     return roi_fc
 
-def get_roi_img(fc_map, roi):
+def get_roi_img(fc_map, roi, out_size):
     # This function get the roi_img form feature map and roi label
     # return roi_img which is a tensor subsampled from fc_map, by using roi label
     shape_fc_map = fc_map.get_shape().as_list()
-    roi_row = int(np.round(shape_fc_map[1] * roi[0]))
-    roi_col = int(np.round(shape_fc_map[2] * roi[1]))
-    roi_h = int(np.round(shape_fc_map[1] * roi[2]))
-    roi_w = int(np.round(shape_fc_map[2] * roi[3]))
+    roi_row = tf.round(shape_fc_map[1] * tf.gather(indices=0, params=roi))
+    roi_col = tf.round(shape_fc_map[2] * tf.gather(indices=1, params=roi))
+    roi_h = tf.round(shape_fc_map[1] * tf.gather(indices=2, params=roi))
+    roi_w = tf.round(shape_fc_map[2] * tf.gather(indices=3, params=roi))
+    roi_row = tf.cast(x=roi_row[0], dtype=tf.int32)
+    roi_col = tf.cast(x=roi_col[0], dtype=tf.int32)
+    roi_h = tf.cast(x=roi_h[0], dtype=tf.int32)
+    roi_w = tf.cast(x=roi_w[0], dtype=tf.int32)
     roi_img = fc_map[:, roi_row:roi_row+roi_h, roi_col:roi_col+roi_w, :]
+    roi_img = tf.image.resize_images(roi_img, (out_size[0], out_size[1]))
     return roi_img
 def padding_img(img, shape):
     shape_img = img.get_shape().as_list()

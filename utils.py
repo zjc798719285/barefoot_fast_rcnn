@@ -124,21 +124,21 @@ def load_data(train_path, test_path):
 
 if __name__ == '__main__':
     # unit testing interference
-    train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
-    test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
-    train_x, train_roi, test_x, test_roi = load_data(train_txt, test_txt)
-    print(np.shape(train_x))
-    print(np.shape(train_roi))
-    print(np.shape(test_x))
-    print(np.shape(test_roi))
+    # train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
+    # test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
+    # train_x, train_roi, test_x, test_roi = load_data(train_txt, test_txt)
+    # print(np.shape(train_x))
+    # print(np.shape(train_roi))
+    # print(np.shape(test_x))
+    # print(np.shape(test_roi))
 
 
 
-     #input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\image'
-    # lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\label'
-    # output_train = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
-    # output_test = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
-    # create_train_test_table(input_dir, lab_dir, 50, output_train, output_test)
+    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\image'
+    lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\label'
+    output_train = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
+    output_test = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
+    create_train_test_table(input_dir, lab_dir, 1, output_train, output_test)
 
     #print(file_list)
 
