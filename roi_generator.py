@@ -10,7 +10,7 @@ def pos_neg_roi_generator(roi, num_pair):
     # -after using this function
     # roi: The labeled roi for one image which is shaped [p_x, p_y, height, width]
     # num_pair: How many rois we except to generate
-    rois = []; cls_label = []
+    rois = []; cls_label = [];
     border_top = roi[0]; border_bottom = 1 - roi[0] - roi[2]
     border_left = roi[1]; border_right = 1 - roi[1] - roi[3]
     for i in range(num_pair):
@@ -29,6 +29,16 @@ def pos_neg_roi_generator(roi, num_pair):
         roi_pos = [roi[0] + x_up_off, roi[1] + y_left_off, roi[2] * h_expand, roi[3] * w_expand]
         rois.append(roi_pos); cls_label.append([1, 0])
     return rois, cls_label
+
+def box_roi_generator(cls_label, roi):
+    box_roi = []
+    for cls_i in cls_label:
+      if cls_i  == [1, 0]:
+          box_roi.append(roi)
+      elif cls_i  == [0, 1]:
+          box_roi.append([0, 0, 0, 0])
+    return box_roi
+
 
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
@@ -50,6 +60,11 @@ def iou_eval(gt, dr):
      union_area = gt_area + dr_area - inter_area
      return  inter_area / union_area
 
+def loss_box(gt, dr):
+     loss = tf.reduce_mean(tf.abs(tf.subtract(gt, dr)))
+     return loss
+
+
 if __name__ == '__main__':
    # roi1 = [0.1, 0.1, 0.2, 0.2]
    # roi2 = [0.2, 0.2, 0.2, 0.2]
@@ -61,8 +76,10 @@ if __name__ == '__main__':
 
    roi = [0.2, 0.1, 0.5, 0.5]
    rois, label = pos_neg_roi_generator(roi, 10)
-   for roi_i in rois:
-       print(iou_eval(roi, roi_i))
+   box_roi = box_roi_generator(cls_label=label, roi=roi)
+
+   for box_roi_i in box_roi:
+       print(box_roi_i)
    print(np.shape(rois))
    print(np.shape(label))
 

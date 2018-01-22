@@ -28,4 +28,15 @@ def classcify(base_net, rois, out_size, trainable):
      cls = Dense(2, trainable=trainable)(net1)
      return cls
 
+def box_regressor(base_net, rois,out_size, trainable):
+    init = k.initializers.glorot_uniform()
+    net1 = roi_layer(fc_map=base_net, out_size=out_size, rois=rois)
+    net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
+                  kernel_initializer=init, activation='relu', trainable=trainable)(net1)
+    net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
+                  kernel_initializer=init, activation='relu', trainable=trainable)(net1)
+    net1 = tf.reshape(net1, [-1, out_size[0] * out_size[1] * 256])
+    net1 = Dense(4096, activation='tanh', trainable=trainable)(net1)
+    box = Dense(4, trainable=trainable)(net1)
+    return box
 
