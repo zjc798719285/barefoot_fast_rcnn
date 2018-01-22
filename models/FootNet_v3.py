@@ -30,7 +30,7 @@ class FootNet_v3(object):
         cls = Dense(2, trainable=trainable)(net1)
         return cls
 
-    def box_regressor(self, base_net, rois,out_size, trainable):
+    def box_regressor(self, base_net, rois, out_size, trainable):
         init = k.initializers.glorot_uniform()
         net1 = RoiLayer(out_size=out_size, rois=rois)(base_net)
         net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
