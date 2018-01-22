@@ -60,11 +60,6 @@ def iou_eval(gt, dr):
      union_area = gt_area + dr_area - inter_area
      return  inter_area / union_area
 
-def loss_box(gt, dr):
-     loss = tf.reduce_mean(tf.abs(tf.subtract(gt, dr)))
-     return loss
-
-
 if __name__ == '__main__':
    # roi1 = [0.1, 0.1, 0.2, 0.2]
    # roi2 = [0.2, 0.2, 0.2, 0.2]

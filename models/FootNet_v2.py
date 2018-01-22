@@ -1,6 +1,6 @@
 from keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, SeparableConv2D
 from keras.layers import Dense, BatchNormalization, Dropout, Activation, regularizers
-from roi_pooling import roi_layer, RoiLayer
+from roi_pooling import RoiLayer
 import keras as k
 import tensorflow as tf
 

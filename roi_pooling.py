@@ -28,14 +28,10 @@ def ROI_pooling(fc_map, roi, out_size):
     roi_img = tf.image.resize_images(roi_img, tuple(shape))
     return roi_img
 
+
 if __name__ == '__main__':
     # unit testing interference
     size = [14.0, 14.0]
     size1 = [int(x) for x in size]
     shape = tuple(size1)
     print(size)
-
-
-
-
-

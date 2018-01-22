@@ -1,5 +1,6 @@
 import tensorflow as tf
 from models import FootNet_v2
+from Loss import *
 from roi_generator import pos_neg_roi_generator, loss_box, box_roi_generator
 from utils import load_data
 import numpy as np
@@ -13,8 +14,9 @@ y = tf.placeholder(tf.float32, [20, 2])
 base_net = FootNet_v2.base_net(x=x, trainable=True)
 cls_label = FootNet_v2.classcify(base_net=base_net, rois=ROI, out_size=[4, 2], trainable=True)
 box = FootNet_v2.box_regressor(base_net=base_net, rois=ROI, out_size=[4, 2], trainable=True)
-cls_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=cls_label))
-roi_loss = loss_box(gt=gt_roi, dr=box)
+cls_loss = loss_classify(cls_predic=cls_label, labels=y)
+#cls_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y, logits=cls_label))
+roi_loss = loss_box_regressor(gt=gt_roi, dr=box, mode='abs')
 opt1 = tf.train.AdadeltaOptimizer(0.01, rho=0.9)
 cls_opt = opt1.minimize(cls_loss)
 roi_opt = opt1.minimize(roi_loss)
