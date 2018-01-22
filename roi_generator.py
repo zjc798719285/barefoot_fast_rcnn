@@ -63,6 +63,6 @@ if __name__ == '__main__':
    rois, label = pos_neg_roi_generator(roi, 10)
    for roi_i in rois:
        print(iou_eval(roi, roi_i))
-   print(rois)
-   print(label)
+   print(np.shape(rois))
+   print(np.shape(label))
 

@@ -112,21 +112,26 @@ def load_data(train_path, test_path):
        lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
        train_x.append(img)
        train_roi.append(lab)
+    train_x = np.array(train_x)
+    train_roi = np.array(train_roi)
     for line_i in test_line:
        s_line = line_i.split(";", 2)
        img = cv2.imread(s_line[0])
        lab = sio.loadmat(s_line[1][0:len(s_line[1])-1])['label'][0, :]
        test_x.append(img)
        test_roi.append(lab)
+    test_x = np.array(test_x)
+    test_roi = np.array(test_roi)
     return train_x, train_roi, test_x, test_roi
 
 
 
 if __name__ == '__main__':
     # unit testing interference
-    # train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
-    # test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
-    # train_x, train_roi, test_x, test_roi = load_data(train_txt, test_txt)
+    train_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\train.txt'
+    test_txt = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\V1.0.0.0_128\\test.txt'
+    train_x, train_roi, test_x, test_roi = load_data(train_txt, test_txt)
+    print(np.shape(train_x))
     # print(np.shape(train_x))
     # print(np.shape(train_roi))
     # print(np.shape(test_x))
@@ -134,11 +139,11 @@ if __name__ == '__main__':
 
 
 
-    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\image'
-    lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\label'
-    output_train = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
-    output_test = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
-    create_train_test_table(input_dir, lab_dir, 1, output_train, output_test)
+    # input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\image'
+    # lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\label'
+    # output_train = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
+    # output_test = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
+    # create_train_test_table(input_dir, lab_dir, 1, output_train, output_test)
 
     #print(file_list)
 
