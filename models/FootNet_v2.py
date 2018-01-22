@@ -1,6 +1,6 @@
 from keras.layers import Conv2D, AveragePooling2D, MaxPooling2D, SeparableConv2D
 from keras.layers import Dense, BatchNormalization, Dropout, Activation, regularizers
-from roi_pooling import roi_layer
+from roi_pooling import roi_layer, RoiLayer
 import keras as k
 import tensorflow as tf
 
@@ -18,7 +18,7 @@ def base_net(x, trainable):
 
 def classcify(base_net, rois, out_size, trainable):
      init = k.initializers.glorot_normal()
-     net1 = roi_layer(fc_map=base_net, out_size=out_size, rois=rois)
+     net1 = RoiLayer(out_size=out_size, rois=rois)(base_net)
      net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
                   kernel_initializer=init, activation='relu', trainable=trainable)(net1)
      net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
@@ -30,7 +30,7 @@ def classcify(base_net, rois, out_size, trainable):
 
 def box_regressor(base_net, rois,out_size, trainable):
     init = k.initializers.glorot_uniform()
-    net1 = roi_layer(fc_map=base_net, out_size=out_size, rois=rois)
+    net1 = RoiLayer(out_size=out_size, rois=rois)(base_net)
     net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
                   kernel_initializer=init, activation='relu', trainable=trainable)(net1)
     net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],

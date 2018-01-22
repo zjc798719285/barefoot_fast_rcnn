@@ -1,20 +1,19 @@
 import tensorflow as tf
 
-
-def roi_layer(fc_map, out_size, rois):
-    # ROI Pooling layer
-    # fc_map: A tensor, feature maps of last ConvNet
-    # out_size: A list, shape of output feature map
-    # rois: A tensor,
-    fc = []
-    num_roi = rois.get_shape().as_list()[0]
-    for i in range(num_roi):
-        ind = tf.constant(value=i, shape=[1])
-        roi_i = tf.reshape(tf.gather(indices=ind, params=rois), [4, -1])
-        fc_i = ROI_pooling(fc_map, roi_i, out_size)
-        fc.append(fc_i)
-    final_fc = tf.concat(fc, axis=0)
-    return final_fc
+class RoiLayer(object):
+    def __init__(self, out_size, rois):
+        self.out_size = out_size
+        self.rois = rois
+    def __call__(self, fc_map):
+        fc = []
+        num_roi = self.rois.get_shape().as_list()[0]
+        for i in range(num_roi):
+            ind = tf.constant(value=i, shape=[1])
+            roi_i = tf.reshape(tf.gather(indices=ind, params=self.rois), [4, -1])
+            fc_i = ROI_pooling(fc_map, roi_i, self.out_size)
+            fc.append(fc_i)
+        final_fc = tf.concat(fc, axis=0)
+        return final_fc
 
 def ROI_pooling(fc_map, roi, out_size):
     # This function get the roi_img form feature map and roi label
