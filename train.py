@@ -1,7 +1,7 @@
 import tensorflow as tf
 from models import FootNet_v2
 from Loss import *
-from roi_generator import pos_neg_roi_generator, loss_box, box_roi_generator
+from roi_generator import pos_neg_roi_generator, box_roi_generator
 from utils import load_data
 import numpy as np
 train_path = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'

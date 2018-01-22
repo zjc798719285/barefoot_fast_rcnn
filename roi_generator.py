@@ -22,8 +22,8 @@ def pos_neg_roi_generator(roi, num_pair):
         roi_neg = [roi[0] + x_offset, roi[1] + y_offset, roi[2] * h_zoom, roi[3] * w_zoom]
         rois.append(roi_neg); cls_label.append([0, 1])
         # positive roi and label generation
-        h_expand = np.random.uniform(low=1, high=1.1)  #set high parameter
-        w_expand = np.random.uniform(low=1, high=1.1)
+        h_expand = np.random.uniform(low=1, high=1.2)  #set high parameter
+        w_expand = np.random.uniform(low=1, high=1.2)
         x_up_off = np.random.uniform(low=-(h_expand-1)*roi[2], high=0)
         y_left_off = np.random.uniform(low=-(w_expand-1)*roi[3], high=0)
         roi_pos = [roi[0] + x_up_off, roi[1] + y_left_off, roi[2] * h_expand, roi[3] * w_expand]
