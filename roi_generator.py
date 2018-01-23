@@ -10,7 +10,7 @@ def pos_neg_roi_generator(roi, num_pair):
     # -after using this function
     # roi: The labeled roi for one image which is shaped [p_x, p_y, height, width]
     # num_pair: How many rois we except to generate
-    rois = []; cls_label = [];
+    pos_neg_rois = []; cls_label = []; RPN_rois = []
     border_top = roi[0]; border_bottom = 1 - roi[0] - roi[2]
     border_left = roi[1]; border_right = 1 - roi[1] - roi[3]
     for i in range(num_pair):
@@ -20,15 +20,15 @@ def pos_neg_roi_generator(roi, num_pair):
         h_zoom = np.random.uniform(low=0.5, high=1.3)  #set parameters
         w_zoom = np.random.uniform(low=0.5, high=1.3)
         roi_neg = [roi[0] + x_offset, roi[1] + y_offset, roi[2] * h_zoom, roi[3] * w_zoom]
-        rois.append(roi_neg); cls_label.append([0, 1])
+        pos_neg_rois.append(roi_neg); cls_label.append([0, 1])
         # positive roi and label generation
         h_expand = np.random.uniform(low=1, high=1.2)  #set high parameter
         w_expand = np.random.uniform(low=1, high=1.2)
         x_up_off = np.random.uniform(low=-(h_expand-1)*roi[2], high=0)
         y_left_off = np.random.uniform(low=-(w_expand-1)*roi[3], high=0)
         roi_pos = [roi[0] + x_up_off, roi[1] + y_left_off, roi[2] * h_expand, roi[3] * w_expand]
-        rois.append(roi_pos); cls_label.append([1, 0])
-    return rois, cls_label
+        pos_neg_rois.append(roi_pos); cls_label.append([1, 0]); RPN_rois.append(roi_pos)
+    return pos_neg_rois, cls_label, RPN_rois
 
 def box_roi_generator(cls_label, roi):
     # using pos_neg_roi_generator to generate pos-neg rois
@@ -41,15 +41,6 @@ def box_roi_generator(cls_label, roi):
       elif cls_i  == [0, 1]:
           box_roi.append([0, 0, 0, 0])
     return box_roi
-
-def foot_roi_search(Image):
-    img_shape = np.shape(Image)
-
-
-
-    return
-
-
 
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
@@ -72,11 +63,11 @@ def iou_eval(gt, dr):
      return  inter_area / union_area
 
 if __name__ == '__main__':
-    image1 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\0101.jpg')
-    image2 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\4284.jpg')
-    print(np.shape(image1))
-    cv2.imshow('image1', image1)
-    cv2.waitKey(0)
+    # image1 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\0101.jpg')
+    # image2 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\4284.jpg')
+    # print(np.shape(image1))
+    # cv2.imshow('image1', image1)
+    # cv2.waitKey(0)
 
 
 
@@ -91,8 +82,9 @@ if __name__ == '__main__':
    # print(iou_eval(roi1, roi3))
    # print(iou_eval(roi1, roi4))
 
-   # roi = [0.2, 0.1, 0.5, 0.5]
-   # rois, label = pos_neg_roi_generator(roi, 10)
+   roi = [0.2, 0.1, 0.5, 0.5]
+   rois, label, RPN_rois = pos_neg_roi_generator(roi, 10)
+   print(np.shape(RPN_rois))
    # box_roi = box_roi_generator(cls_label=label, roi=roi)
    #
    # for box_roi_i in box_roi:
