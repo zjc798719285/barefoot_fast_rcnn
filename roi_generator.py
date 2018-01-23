@@ -31,6 +31,9 @@ def pos_neg_roi_generator(roi, num_pair):
     return rois, cls_label
 
 def box_roi_generator(cls_label, roi):
+    # using pos_neg_roi_generator to generate pos-neg rois
+    # Then using this function to generate ground truth rois
+    # The pos rois are ground truth the neg rois are zeros
     box_roi = []
     for cls_i in cls_label:
       if cls_i  == [1, 0]:
@@ -38,6 +41,11 @@ def box_roi_generator(cls_label, roi):
       elif cls_i  == [0, 1]:
           box_roi.append([0, 0, 0, 0])
     return box_roi
+
+def foot_roi_generator(Image):
+
+    return
+
 
 
 def iou_eval(gt, dr):

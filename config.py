@@ -11,7 +11,10 @@ flags.DEFINE_integer('roi_shape', [4, 2], 'Shape of feature map after roi-poolin
 flags.DEFINE_integer('epoch', 10, 'Max number of epoch')
 
 flags.DEFINE_float('learning_rate', 0.1, 'learning_rate')
+flags.DEFINE_float('loss_balance', 0.3, 'loss balance factor')
 flags.DEFINE_float('rho', 0.9, 'rho')
+flags.DEFINE_string('box_loss', 'abs', 'abs, L2,...')
+
 
 flags.DEFINE_string('train_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
                     , 'train_path')
