@@ -1,6 +1,6 @@
-import tensorflow as tf
 import numpy as np
-
+import cv2
+import matplotlib.pyplot as plt
 
 def pos_neg_roi_generator(roi, num_pair):
     # This function used for generate positive roi and negtive roi for one image,and return rois and labels
@@ -42,7 +42,10 @@ def box_roi_generator(cls_label, roi):
           box_roi.append([0, 0, 0, 0])
     return box_roi
 
-def foot_roi_generator(Image):
+def foot_roi_search(Image):
+    img_shape = np.shape(Image)
+
+
 
     return
 
@@ -69,6 +72,17 @@ def iou_eval(gt, dr):
      return  inter_area / union_area
 
 if __name__ == '__main__':
+    image1 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\0101.jpg')
+    image2 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\4284.jpg')
+    print(np.shape(image1))
+    cv2.imshow('image1', image1)
+    cv2.waitKey(0)
+
+
+
+
+
+
    # roi1 = [0.1, 0.1, 0.2, 0.2]
    # roi2 = [0.2, 0.2, 0.2, 0.2]
    # roi3 = [0.3, 0.2, 0.2, 0.2]
@@ -77,12 +91,12 @@ if __name__ == '__main__':
    # print(iou_eval(roi1, roi3))
    # print(iou_eval(roi1, roi4))
 
-   roi = [0.2, 0.1, 0.5, 0.5]
-   rois, label = pos_neg_roi_generator(roi, 10)
-   box_roi = box_roi_generator(cls_label=label, roi=roi)
-
-   for box_roi_i in box_roi:
-       print(box_roi_i)
-   print(np.shape(rois))
-   print(np.shape(label))
+   # roi = [0.2, 0.1, 0.5, 0.5]
+   # rois, label = pos_neg_roi_generator(roi, 10)
+   # box_roi = box_roi_generator(cls_label=label, roi=roi)
+   #
+   # for box_roi_i in box_roi:
+   #     print(box_roi_i)
+   # print(np.shape(rois))
+   # print(np.shape(label))
 
