@@ -6,6 +6,8 @@ import tensorflow as tf
 class FootNet_v3(object):
     def __init__(self):
         return
+
+
     def base_net(self, x, trainable):
         init = k.initializers.glorot_normal()
         net1 = Conv2D(64, (3, 3), padding='same', strides=[2, 2],
@@ -18,6 +20,18 @@ class FootNet_v3(object):
         net3 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net3)
         return net3
 
+
+    def RPN(self, base_net, out_size, trainable, num_rois):
+        init = k.initializers.glorot_normal()
+        net1 = tf.image.resize_images(base_net, tuple(out_size))
+        net1 = Conv2D(num_rois, (3, 3), padding='same', strides=[1, 1],
+                      kernel_initializer=init, activation='relu', trainable=trainable)(net1)
+        net1 = tf.reshape(net1, [-1, out_size[0] * out_size[1]])
+        net1 = Dense(32, activation='tanh', trainable=trainable)(net1)
+        RPN_rois = Dense(4, trainable=trainable)(net1)
+        return RPN_rois
+
+
     def classcify(self, base_net, rois, out_size, trainable):
         init = k.initializers.glorot_normal()
         net1 = RoiLayer(out_size=out_size, rois=rois)(base_net)
@@ -29,6 +43,7 @@ class FootNet_v3(object):
         net1 = Dense(4096, activation='tanh', trainable=trainable)(net1)
         cls = Dense(2, trainable=trainable)(net1)
         return cls
+
 
     def box_regressor(self, base_net, rois, out_size, trainable):
         init = k.initializers.glorot_uniform()
