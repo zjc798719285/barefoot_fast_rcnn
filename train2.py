@@ -16,7 +16,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
 
    # ConvNet define
     base_net = model.base_net(x=Image, trainable=True)
-    rpn_roi_predict = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True,num_rois=int(params.num_rois / 2))
+    rpn_roi_predict = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True, num_rois=int(params.num_rois / 2))
     cls_predict = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
     roi_predict = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
 
@@ -29,11 +29,10 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     opt1 = tf.train.AdadeltaOptimizer(learning_rate=params.learning_rate, rho=params.rho)
     loss_opt = opt1.minimize(loss)
     rpn_opt = opt1.minimize(rpn_loss)
-
     # training
-    # sess and run,feed data
+
+    train_x = img; train_roi = ground_truth; test_x = test_img
     with tf.Session() as sess:
-        train_x = img; train_roi = ground_truth; test_x = test_img
         sess.run(tf.global_variables_initializer())
         img = np.ndarray(params.batch_shape)
         for i in range(params.epoch):
@@ -41,6 +40,9 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 img[0, :, :, :] = train_x[step, :, :, :]
                 pos_neg_rois, cls_label, rpn_rois = pos_neg_roi_generator(train_roi[step], int(params.num_rois/2))
                 gt_box_roi = box_roi_generator(cls_label=cls_label, roi=train_roi[step])
+
+
+
                 sess.run(rpn_opt, feed_dict={Image: img, RpnGtRoi: rpn_rois})
                 sess.run(loss_opt, feed_dict={Image: img,  ClsGtRoi: gt_box_roi,
                                               ClsRoi: pos_neg_rois, ClsLabel: cls_label})
