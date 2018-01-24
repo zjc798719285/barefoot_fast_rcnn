@@ -42,6 +42,12 @@ def box_roi_generator(cls_label, roi):
           box_roi.append([0, 0, 0, 0])
     return box_roi
 
+
+
+
+
+
+
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
     # dr: DetectionResult roi

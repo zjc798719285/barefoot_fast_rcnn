@@ -9,8 +9,8 @@ import math
 def train(img, ground_truth, test_img,test_roi, model, params):
     # placeholder define
     Image = tf.placeholder(tf.float32, params.batch_shape)
-    ClsRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
-    ClsGtRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
+    ClsRoi = tf.placeholder(tf.float32, [params.num_rois, 4])   # class proposed rois
+    ClsGtRoi = tf.placeholder(tf.float32, [params.num_rois, 4])  #class groundtruth rois
     RpnGtRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
     ClsLabel = tf.placeholder(tf.float32, [params.num_rois, 2])
 
@@ -27,27 +27,26 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     loss = cls_loss + params.loss_balance * roi_loss
     # optimatic
     opt1 = tf.train.AdadeltaOptimizer(learning_rate=params.learning_rate, rho=params.rho)
-    loss_opt = opt1.minimize(loss)
-    rpn_opt = opt1.minimize(rpn_loss)
+    opt_loss = opt1.minimize(loss)
+    opt_rpn = opt1.minimize(rpn_loss)
     # training
 
     train_x = img; train_roi = ground_truth; test_x = test_img
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
-        img = np.ndarray(params.batch_shape)
+        _Image = np.ndarray(params.batch_shape)
         for i in range(params.epoch):
             for step in range(int(math.ceil(len(train_x)/params.batch_shape[0]))):
-                img[0, :, :, :] = train_x[step, :, :, :]
-                pos_neg_rois, cls_label, rpn_rois = pos_neg_roi_generator(train_roi[step], int(params.num_rois/2))
-                gt_box_roi = box_roi_generator(cls_label=cls_label, roi=train_roi[step])
+                _Image[0, :, :, :] = train_x[step, :, :, :]
+                _ClsRoi, _ClsLabel, _RpnGtRoi = pos_neg_roi_generator(train_roi[step], int(params.num_rois/2))
+                _ClsGtRoi = box_roi_generator(cls_label=_ClsLabel, roi=train_roi[step])
 
-
-
-                sess.run(rpn_opt, feed_dict={Image: img, RpnGtRoi: rpn_rois})
-                sess.run(loss_opt, feed_dict={Image: img,  ClsGtRoi: gt_box_roi,
-                                              ClsRoi: pos_neg_rois, ClsLabel: cls_label})
+                _opt_rpn, _rpn_loss = sess.run([opt_rpn, rpn_loss], feed_dict={Image: _Image, RpnGtRoi: _RpnGtRoi})
+                _opt_loss, _cls_loss, _roi_loss = sess.run([opt_loss, cls_loss, roi_loss], feed_dict={Image: _Image,  ClsGtRoi: _ClsGtRoi,
+                                              ClsRoi: _ClsRoi, ClsLabel: _ClsLabel})
                 if step % 50 == 0:
-                    print('epoch=', i, 'train_step=', step)
+                     print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
+                                           'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
                 # testing
                 if step % 500 == 0:
                     for step_t in range(int(math.ceil(len(test_x)/params.batch_shape[0]))):
