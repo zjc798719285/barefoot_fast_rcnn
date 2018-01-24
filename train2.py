@@ -9,29 +9,28 @@ import math
 def train(img, ground_truth, test_img,test_roi, model, params):
     # placeholder define
     Image = tf.placeholder(tf.float32, params.batch_shape)
-    PosNegRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
-    GroundTruthRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
-    GroundRpnRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
+    ClsRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
+    ClsGtRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
+    RpnGtRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
     ClsLabel = tf.placeholder(tf.float32, [params.num_rois, 2])
 
-
-   # ConvNet define and loss calculation
+   # ConvNet define
     base_net = model.base_net(x=Image, trainable=True)
-    cls_label = model.classcify(base_net=base_net, rois=PosNegRoi, out_size=params.roi_shape, trainable=True)
-    box = model.box_regressor(base_net=base_net, rois=PosNegRoi, out_size=params.roi_shape, trainable=True)
-    pre_box = model.box_regressor(base_net=base_net, rois=GroundRpnRoi, out_size=params.roi_shape, trainable=True)
-    RPN_rois = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True, num_rois=int(params.num_rois/2))
-    RPN_loss = Loss.loss_RPN(RPN_rois=RPN_rois, gt=GroundRpnRoi, num_rois=int(params.num_rois/2), mode=params.box_loss)
-    cls_loss = Loss.loss_classify(cls_predic=cls_label, labels=ClsLabel)
-    roi_loss = Loss.loss_box_regressor(gt=GroundTruthRoi, dr=box, mode=params.box_loss)
+    rpn_roi_predict = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True,num_rois=int(params.num_rois / 2))
+    cls_predict = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
+    roi_predict = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
+
+    # loss function define
+    rpn_loss = Loss.loss_RPN(RPN_rois=rpn_roi_predict, gt=RpnGtRoi, num_rois=int(params.num_rois/2), mode=params.box_loss)
+    cls_loss = Loss.loss_classify(cls_predic=cls_predict, labels=ClsLabel)
+    roi_loss = Loss.loss_box_regressor(gt=ClsGtRoi, dr=roi_predict, mode=params.box_loss)
+    loss = cls_loss + params.loss_balance * roi_loss
+    # optimatic
     opt1 = tf.train.AdadeltaOptimizer(learning_rate=params.learning_rate, rho=params.rho)
-    loss = cls_loss + params.loss_balance*roi_loss
     loss_opt = opt1.minimize(loss)
-    rpn_opt = opt1.minimize(RPN_loss)
+    rpn_opt = opt1.minimize(rpn_loss)
+
     # training
-#    IOU = iou_eval(gt=GroundTruthRoi, dr=box)
-
-
     # sess and run,feed data
     with tf.Session() as sess:
         train_x = img; train_roi = ground_truth; test_x = test_img
@@ -42,9 +41,9 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 img[0, :, :, :] = train_x[step, :, :, :]
                 pos_neg_rois, cls_label, rpn_rois = pos_neg_roi_generator(train_roi[step], int(params.num_rois/2))
                 gt_box_roi = box_roi_generator(cls_label=cls_label, roi=train_roi[step])
-                sess.run(rpn_opt, feed_dict={Image: img, GroundRpnRoi: rpn_rois})
-                sess.run(loss_opt, feed_dict={Image: img, GroundTruthRoi: gt_box_roi,
-                                               PosNegRoi: pos_neg_rois, ClsLabel: cls_label})
+                sess.run(rpn_opt, feed_dict={Image: img, RpnGtRoi: rpn_rois})
+                sess.run(loss_opt, feed_dict={Image: img,  ClsGtRoi: gt_box_roi,
+                                              ClsRoi: pos_neg_rois, ClsLabel: cls_label})
                 if step % 50 == 0:
                     print('epoch=', i, 'train_step=', step)
                 # testing
@@ -52,7 +51,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                     for step_t in range(int(math.ceil(len(test_x)/params.batch_shape[0]))):
                         img = np.ndarray(params.batch_shape)
                         img[0, :, :, :] = test_x[step_t, :, :, :]
-                        pre_rois = sess.run(RPN_rois, feed_dict={Image: img})
+                        pre_rois = sess.run(rpn_roi_predict, feed_dict={Image: img})
                         # pre_box_roi = sess.run(pre_box, feed_dict={Image: img, GroundRpnRoi: pre_rois})
                         if step_t % 50 == 0:
                             print('epoch=', i, 'test_step=', step_t, 'rpn_loss=')
