@@ -17,7 +17,7 @@ def pos_neg_roi_generator(roi, num_pair):
         # negtive roi and label generation
         x_offset = np.random.uniform(low=-border_top, high=border_bottom)
         y_offset = np.random.uniform(low=-border_left, high=border_right)
-        h_zoom = np.random.uniform(low=0.5, high=1.3)  #set parameters
+        h_zoom = np.random.uniform(low=0.5, high=1.3)    #set parameters
         w_zoom = np.random.uniform(low=0.5, high=1.3)
         roi_neg = [roi[0] + x_offset, roi[1] + y_offset, roi[2] * h_zoom, roi[3] * w_zoom]
         pos_neg_rois.append(roi_neg); cls_label.append([0, 1])
@@ -30,6 +30,27 @@ def pos_neg_roi_generator(roi, num_pair):
         pos_neg_rois.append(roi_pos); cls_label.append([1, 0]); RPN_rois.append(roi_pos)
     return pos_neg_rois, cls_label, RPN_rois
 
+def cls_roi_generator(roi, num_rois, num_cls):
+    roi = np.reshape(a=roi, newshape=[num_cls, 4])
+    cls_label = []; cls_roi = []; cls_gt_roi = []
+    for ind in range(num_cls):
+        print(ind)
+        for i in range(num_rois):
+            h_expand = np.random.uniform(low=1, high=1.2) # set high parameter
+            w_expand = np.random.uniform(low=1, high=1.2)
+            x_offset = np.random.uniform(low=-(h_expand - 1) * roi[ind, 2], high=0)
+            y_offset = np.random.uniform(low=-(w_expand - 1) * roi[ind, 3], high=0)
+            roi_i_prop = [max(roi[ind, 0] + x_offset, 0), max(roi[ind, 1] + y_offset, 0),
+                          min(roi[ind, 2] * h_expand, 1), min(roi[ind, 3] * w_expand, 1)]   #确保矩形框不超过0~1
+            cls_roi.append(roi_i_prop); cls_gt_roi.append(roi[ind, :])
+            lab = np.zeros(shape=[num_cls + 1]); lab[ind] = 1; cls_label.append(lab)
+    for i in range(num_rois):
+        x = np.random.uniform(low=0, high=1);y = np.random.uniform(low=0, high=1)
+        h = 1 - x; w = 1 - y
+        cls_roi.append([x, y, h, w]); cls_gt_roi.append(np.zeros(shape=[4])+0.1)
+        lab = np.zeros(shape=[num_cls + 1]);lab[num_cls] = 1; cls_label.append(lab)
+    return cls_roi, cls_label, cls_gt_roi
+
 def box_roi_generator(cls_label, roi):
     # using pos_neg_roi_generator to generate pos-neg rois
     # Then using this function to generate ground truth rois
@@ -41,13 +62,6 @@ def box_roi_generator(cls_label, roi):
       elif cls_i  == [0, 1]:
           box_roi.append([0, 0, 0, 0])
     return box_roi
-
-
-
-
-
-
-
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
     # dr: DetectionResult roi
@@ -74,25 +88,34 @@ if __name__ == '__main__':
     # print(np.shape(image1))
     # cv2.imshow('image1', image1)
     # cv2.waitKey(0)
+    roi1 = np.random.uniform(low=0, high=1, size=[1, 4])
+    # print(np.shape(roi1))
+    cls_roi, cls_label, cls_gt_roi = cls_roi_generator(roi=roi1, num_rois=10, num_cls=1)
+    # print(cls_roi)
+    # print(cls_label)
+    print(cls_gt_roi)
+    print(np.shape(cls_roi))
+    print(np.shape(cls_label))
+    print(np.shape(cls_gt_roi))
 
 
 
 
 
 
-   # roi1 = [0.1, 0.1, 0.2, 0.2]
+   #
    # roi2 = [0.2, 0.2, 0.2, 0.2]
    # roi3 = [0.3, 0.2, 0.2, 0.2]
    # roi4 = [0.2, 0.3, 0.2, 0.2]
    # print(iou_eval(roi1, roi2))
    # print(iou_eval(roi1, roi3))
    # print(iou_eval(roi1, roi4))
-
-   roi = [0.2, 0.1, 0.5, 0.5]
-   rois, label, RPN_rois = pos_neg_roi_generator(roi, 10)
-   print(np.shape(RPN_rois))
-   # box_roi = box_roi_generator(cls_label=label, roi=roi)
    #
+   # roi = [0.2, 0.1, 0.5, 0.5]
+   # rois, label, RPN_rois = pos_neg_roi_generator(roi, 10)
+   # print(np.shape(RPN_rois))
+   # # box_roi = box_roi_generator(cls_label=label, roi=roi)
+   # #
    # for box_roi_i in box_roi:
    #     print(box_roi_i)
    # print(np.shape(rois))
