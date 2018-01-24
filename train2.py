@@ -10,15 +10,18 @@ def train(img, ground_truth,test_img, test_gt, model, params):
     # placeholder define
     Image = tf.placeholder(tf.float32, params.batch_shape)
     ClsRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
+    RpnGtRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
     ClsGtRoi = tf.placeholder(tf.float32, [params.num_rois, 4])
     ClsLabel = tf.placeholder(tf.float32, [params.num_rois, 2])
 
    # ConvNet define and loss calculation
     base_net = model.base_net(x=Image, trainable=True)
-    cls_label = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
-    box = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
-    cls_loss = loss_classify(cls_predic=cls_label, labels=ClsLabel)
-    roi_loss = loss_box_regressor(gt=ClsGtRoi, dr=box, mode=params.box_loss)
+    cls_predict = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
+    roi_predict = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
+
+   # loss define,
+    cls_loss = loss_classify(cls_predic=cls_predict, labels=ClsLabel)
+    roi_loss = loss_box_regressor(gt=ClsGtRoi, dr=roi_predict, mode=params.box_loss)
     opt1 = tf.train.AdadeltaOptimizer(learning_rate=params.learning_rate, rho=params.rho)
     loss = cls_loss + params.loss_balance*roi_loss
     loss_opt = opt1.minimize(loss)
