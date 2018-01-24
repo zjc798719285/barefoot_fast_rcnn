@@ -12,6 +12,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     ClsRoi = tf.placeholder(tf.float32, [params.num_rois, 4])   # class proposed rois
     ClsGtRoi = tf.placeholder(tf.float32, [params.num_rois, 4])  #class groundtruth rois
     RpnGtRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
+    ClsRpnRoi = tf.placeholder(tf.float32, [int(params.num_rois/2), 4])
     ClsLabel = tf.placeholder(tf.float32, [params.num_rois, 2])
 
    # ConvNet define
@@ -19,7 +20,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     rpn_roi_predict = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True, num_rois=int(params.num_rois / 2))
     cls_predict = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
     roi_predict = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
-
+    roi_predict2 = model.box_regressor(base_net=base_net, rois=ClsRpnRoi, out_size=params.roi_shape, trainable=True)
     # loss function define
     rpn_loss = Loss.loss_RPN(RPN_rois=rpn_roi_predict, gt=RpnGtRoi, num_rois=int(params.num_rois/2), mode=params.box_loss)
     cls_loss = Loss.loss_classify(cls_predic=cls_predict, labels=ClsLabel)
@@ -31,7 +32,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     opt_rpn = opt1.minimize(rpn_loss)
     # training
 
-    train_x = img; train_roi = ground_truth; test_x = test_img
+    train_x = img; train_roi = ground_truth; test_x = test_img; test_roi = test_roi
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
         _Image = np.ndarray(params.batch_shape)
@@ -42,7 +43,8 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 _ClsGtRoi = box_roi_generator(cls_label=_ClsLabel, roi=train_roi[step])
 
                 _opt_rpn, _rpn_loss = sess.run([opt_rpn, rpn_loss], feed_dict={Image: _Image, RpnGtRoi: _RpnGtRoi})
-                _opt_loss, _cls_loss, _roi_loss = sess.run([opt_loss, cls_loss, roi_loss], feed_dict={Image: _Image,  ClsGtRoi: _ClsGtRoi,
+                _opt_loss, _cls_loss, _roi_loss = sess.run(
+                     [opt_loss, cls_loss, roi_loss], feed_dict={Image: _Image,  ClsGtRoi: _ClsGtRoi,
                                               ClsRoi: _ClsRoi, ClsLabel: _ClsLabel})
                 if step % 50 == 0:
                      print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
@@ -50,12 +52,14 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 # testing
                 if step % 500 == 0:
                     for step_t in range(int(math.ceil(len(test_x)/params.batch_shape[0]))):
-                        img = np.ndarray(params.batch_shape)
-                        img[0, :, :, :] = test_x[step_t, :, :, :]
-                        pre_rois = sess.run(rpn_roi_predict, feed_dict={Image: img})
-                        # pre_box_roi = sess.run(pre_box, feed_dict={Image: img, GroundRpnRoi: pre_rois})
-                        if step_t % 50 == 0:
-                            print('epoch=', i, 'test_step=', step_t, 'rpn_loss=')
+                        _Image_t = np.ndarray(params.batch_shape)
+                        _Image_t[0, :, :, :] = test_x[step_t, :, :, :]
+                        _rpn_roi_predict = sess.run(rpn_roi_predict, feed_dict={Image: _Image_t})
+                        _rpn_roi = np.concatenate((_rpn_roi_predict, _rpn_roi_predict), 0)
+                        print(_rpn_roi)
+          #              _roi_predict2 = sess.run(roi_predict, feed_dict={Image: _Image_t, ClsRoi: _rpn_roi})
+          #               if step_t % 50 == 0:
+          #                   print('epoch=', i, 'test_step=', step_t)
 
 
 
