@@ -19,8 +19,8 @@ def ROI_pooling(fc_map, roi, out_size):
     # This function get the roi_img form feature map and roi label
     # return roi_img which is a tensor subsampled from fc_map, by using roi label
     shape_fc_map = fc_map.get_shape().as_list()
-    roi_row = tf.cast(shape_fc_map[1] * tf.gather(indices=0, params=roi)[0], tf.int32)
-    roi_col = tf.cast(shape_fc_map[2] * tf.gather(indices=1, params=roi)[0], tf.int32)
+    roi_row = tf.maximum(tf.cast(shape_fc_map[1] * tf.gather(indices=0, params=roi)[0], tf.int32), 0)
+    roi_col = tf.maximum(tf.cast(shape_fc_map[2] * tf.gather(indices=1, params=roi)[0], tf.int32), 0)
     roi_h = tf.maximum(tf.cast(shape_fc_map[1] * tf.gather(indices=2, params=roi)[0], tf.int32), 1)  # have some bugs
     roi_w = tf.maximum(tf.cast(shape_fc_map[2] * tf.gather(indices=3, params=roi)[0], tf.int32), 1)  #
     roi_img = fc_map[:, roi_row:roi_row+roi_h, roi_col:roi_col+roi_w, :]

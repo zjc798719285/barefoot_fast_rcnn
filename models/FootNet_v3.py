@@ -27,8 +27,8 @@ class FootNet_v3(object):
         net1 = Conv2D(num_rois, (3, 3), padding='same', strides=[1, 1],
                       kernel_initializer=init, activation='relu', trainable=trainable)(net1)
         net1 = tf.reshape(net1, [-1, out_size[0] * out_size[1]])
-        net1 = Dense(32, activation='tanh', trainable=trainable)(net1)
-        RPN_rois = Dense(4, trainable=trainable)(net1)
+        net1 = Dense(32, activation='relu', trainable=trainable)(net1)
+        RPN_rois = Dense(4, activation='sigmoid', trainable=trainable)(net1)
         return RPN_rois
 
 
@@ -40,8 +40,8 @@ class FootNet_v3(object):
         net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
                    kernel_initializer=init, activation='relu', trainable=trainable)(net1)
         net1 = tf.reshape(net1, [-1, out_size[0] * out_size[1] * 256])
-        net1 = Dense(4096, activation='tanh', trainable=trainable)(net1)
-        cls = Dense(2, trainable=trainable)(net1)
+        net1 = Dense(4096, activation='relu', trainable=trainable)(net1)
+        cls = Dense(2, activation='sigmoid', trainable=trainable)(net1)
         return cls
 
 
@@ -53,7 +53,7 @@ class FootNet_v3(object):
         net1 = Conv2D(256, (3, 3), padding='same', strides=[1, 1],
                   kernel_initializer=init, activation='relu', trainable=trainable)(net1)
         net1 = tf.reshape(net1, [-1, out_size[0] * out_size[1] * 256])
-        net1 = Dense(4096, activation='tanh', trainable=trainable)(net1)
-        box = Dense(4, trainable=trainable)(net1)
+        net1 = Dense(4096, activation='relu', trainable=trainable)(net1)
+        box = Dense(4, activation='sigmoid', trainable=trainable)(net1)
         return box
 
