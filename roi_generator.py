@@ -23,11 +23,16 @@ def cls_roi_generator(roi, num_rois, num_cls):
 
 
 def roi_filter(rois, cls):
-
-
-    return
-
-
+    assert len(rois) == len(cls)
+    cls_roi = []; cls_prob = []
+    for ind, cls_i in enumerate(cls):
+        if not cls_i[-1] == 1:
+            cls_roi.append(rois[ind])
+            cls_prob.append(cls_i[0])
+    assert len(cls_prob) == len(cls_roi)
+    cls_prob = map(lambda x: x/sum(cls_prob), [x for x in cls_prob])
+    roi = lambda x, y: x*y, [x for x in cls_prob], [y for y in cls_roi]
+    return roi
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
     # dr: DetectionResult roi

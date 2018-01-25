@@ -1,7 +1,7 @@
 import tensorflow as tf
 from models import FootNet_v3
 import Loss
-from roi_generator import cls_roi_generator, iou_eval
+from roi_generator import cls_roi_generator, iou_eval, roi_filter
 import numpy as np
 import math
 
@@ -45,7 +45,6 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     opt_loss = opt1.minimize(loss)
     opt_rpn = opt1.minimize(rpn_loss)
     # training
-
     train_x = img; train_roi = ground_truth; test_x = test_img; test_gt_roi = test_roi
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -57,13 +56,13 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 _opt_rpn, _rpn_loss = sess.run([opt_rpn, rpn_loss], feed_dict={Image: _Image,
                                                                                ClsGtRoi: _ClsGtRoi})
                 _opt_loss, _cls_loss, _roi_loss = sess.run([opt_loss, cls_loss, roi_loss],
-                                       feed_dict={Image: _Image,
+                                        feed_dict={Image: _Image,
                                                   ClsGtRoi: _ClsGtRoi,
                                                   ClsRoi: _ClsRoi,
                                                   ClsLabel: _ClsLabel})
-                if step % 50 == 0:
-                     print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
-                                           'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
+                # if step % 50 == 0:
+                print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
+                                  'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
                 # testing
                 if step % 500 == 0:
                     for step_t in range(int(math.ceil(len(test_x)/params.batch_shape[0]))):
@@ -73,8 +72,10 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                         _roi_predict, _cls_predict = sess.run([roi_predict, cls_predict],
                                                       feed_dict={Image: _Image_t,
                                                                  ClsRoi: _rpn_roi_predict})
-                        for roi_i in _roi_predict:
-                            print(iou_eval(gt=test_gt_roi[step], dr=roi_i))
+                        final_roi = roi_filter(rois=_roi_predict, cls=_cls_predict)
+                        print(final_roi)
+                        # for roi_i in _roi_predict:
+                        #     print(iou_eval(gt=test_gt_roi[step], dr=roi_i))
                        # print(_roi_predict, _cls_predict)
 
 
