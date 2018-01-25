@@ -47,7 +47,7 @@ def cls_roi_generator(roi, num_rois, num_cls):
     for i in range(num_rois):
         x = np.random.uniform(low=0, high=1);y = np.random.uniform(low=0, high=1)
         h = 1 - x; w = 1 - y
-        cls_roi.append([x, y, h, w]); cls_gt_roi.append(np.zeros(shape=[4])+0.1)
+        cls_roi.append([x, y, h, w]); cls_gt_roi.append(np.zeros(shape=[4]))
         lab = np.zeros(shape=[num_cls + 1]);lab[num_cls] = 1; cls_label.append(lab)
     return cls_roi, cls_label, cls_gt_roi
 

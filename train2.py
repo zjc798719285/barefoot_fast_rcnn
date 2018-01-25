@@ -17,14 +17,32 @@ def train(img, ground_truth, test_img,test_roi, model, params):
 
    # ConvNet define
     base_net = model.base_net(x=Image, trainable=True)
-    rpn_roi_predict = model.RPN(base_net=base_net, out_size=params.roi_shape, trainable=True, num_rois=int(params.num_rois / 2))
-    cls_predict = model.classcify(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
-    roi_predict = model.box_regressor(base_net=base_net, rois=ClsRoi, out_size=params.roi_shape, trainable=True)
-    roi_predict2 = model.box_regressor(base_net=base_net, rois=ClsRpnRoi, out_size=params.roi_shape, trainable=True)
+    rpn_roi_predict = model.RPN(base_net=base_net,
+                                out_size=params.roi_shape,
+                                trainable=True,
+                                num_rois=int(params.num_rois / 2))
+    cls_predict = model.classcify(base_net=base_net,
+                                  rois=ClsRoi,
+                                  out_size=params.roi_shape,
+                                  trainable=True)
+    roi_predict = model.box_regressor(base_net=base_net,
+                                      rois=ClsRoi,
+                                      out_size=params.roi_shape,
+                                      trainable=True)
+    roi_predict2 = model.box_regressor(base_net=base_net,
+                                       rois=ClsRpnRoi,
+                                       out_size=params.roi_shape,
+                                       trainable=True)
     # loss function define
-    rpn_loss = Loss.loss_RPN(RPN_rois=rpn_roi_predict, gt=RpnGtRoi, num_rois=int(params.num_rois/2), mode=params.box_loss)
-    cls_loss = Loss.loss_classify(cls_predic=cls_predict, labels=ClsLabel)
-    roi_loss = Loss.loss_box_regressor(gt=ClsGtRoi, dr=roi_predict, mode=params.box_loss)
+    rpn_loss = Loss.loss_RPN(RPN_rois=rpn_roi_predict,
+                             gt=RpnGtRoi,
+                             num_rois=int(params.num_rois/2),
+                             mode=params.box_loss)
+    cls_loss = Loss.loss_classify(cls_predic=cls_predict,
+                                  labels=ClsLabel)
+    roi_loss = Loss.loss_box_regressor(gt=ClsGtRoi,
+                                       dr=roi_predict,
+                                       mode=params.box_loss)
     loss = cls_loss + params.loss_balance * roi_loss
     # optimatic
     opt1 = tf.train.AdadeltaOptimizer(learning_rate=params.learning_rate, rho=params.rho)
@@ -43,12 +61,13 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                 _ClsRoi, _ClsLabel, _ClsGtRoi = cls_roi_generator(train_roi[step, :], params.num_rois, 1)
                 _RpnGtRoi = _ClsRoi
                # _ClsGtRoi = box_roi_generator(cls_label=_ClsLabel, roi=train_roi[step])
-                _opt_rpn, _rpn_loss = sess.run([opt_rpn, rpn_loss], feed_dict={Image: _Image, RpnGtRoi: _RpnGtRoi})
-                _opt_loss, _cls_loss, _roi_loss = sess.run(
-                     [opt_loss, cls_loss, roi_loss], feed_dict={Image: _Image,
-                                                                ClsGtRoi: _ClsGtRoi,
-                                                                ClsRoi: _ClsRoi,
-                                                                ClsLabel: _ClsLabel})
+                _opt_rpn, _rpn_loss = sess.run([opt_rpn, rpn_loss], feed_dict={Image: _Image,
+                                                                               RpnGtRoi: _RpnGtRoi})
+                _opt_loss, _cls_loss, _roi_loss = sess.run([opt_loss, cls_loss, roi_loss],
+                                       feed_dict={Image: _Image,
+                                                  ClsGtRoi: _ClsGtRoi,
+                                                  ClsRoi: _ClsRoi,
+                                                  ClsLabel: _ClsLabel})
                 if step % 50 == 0:
                      print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
                                            'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
