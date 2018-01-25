@@ -7,7 +7,6 @@ class FootNet_v3(object):
     def __init__(self):
         return
 
-
     def base_net(self, x, trainable):
         init = k.initializers.glorot_normal()
         net1 = Conv2D(64, (3, 3), padding='same', strides=[2, 2],
