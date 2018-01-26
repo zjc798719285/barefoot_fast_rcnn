@@ -1,7 +1,7 @@
 import tensorflow as tf
 from models import FootNet_v3
 import Loss
-from roi_generator import cls_roi_generator, iou_eval, roi_filter
+from roi_generator import cls_roi_generator, iou_eval, roi_filter, roi_check
 import numpy as np
 import math
 
@@ -31,12 +31,13 @@ def train(img, ground_truth, test_img,test_roi, model, params):
     cls_loss = Loss.loss_classify(cls_predic=cls_predict,
                                   labels=ClsLabel)
     #ROI regression
-    roi_predict = model.box_regressor(base_net=base_net,
+    roi_shift = model.box_regressor(base_net=base_net,
                                       rois=ClsRoi,              #根据ROI预测box，训练时用ClsRoi，测试用RpnRoi
                                       out_size=params.roi_shape,
                                       trainable=True)
     roi_loss = Loss.loss_box_regressor(gt=ClsGtRoi,
-                                       dr=roi_predict,
+                                       rois=ClsRoi,
+                                       dr=roi_shift,
                                        mode=params.box_loss)
 
     loss = cls_loss + params.loss_balance * roi_loss
@@ -69,12 +70,14 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                         _Image_t = np.ndarray(params.batch_shape)
                         _Image_t[0, :, :, :] = test_x[step_t, :, :, :]
                         _rpn_roi_predict = sess.run(rpn_roi_predict, feed_dict={Image: _Image_t})
-                        _roi_predict, _cls_predict = sess.run([roi_predict, cls_predict],
+                        _rpn_roi_predict = roi_check(_rpn_roi_predict)
+                        _roi_shift, _cls_predict = sess.run([roi_shift, cls_predict],
                                                       feed_dict={Image: _Image_t,
                                                                  ClsRoi: _rpn_roi_predict})
-                        final_roi = roi_filter(rois=_roi_predict, cls=_cls_predict)
-                        print('final_roi=', final_roi)
-                        print('IOU=', iou_eval(gt=test_gt_roi[step], dr=final_roi))
+                        final_roi = roi_filter(rois=(_roi_shift + _rpn_roi_predict), cls=_cls_predict)
+                        print('final_roi=', final_roi, 'GroundTruth=', test_gt_roi[step_t])
+                        print('IOU=', iou_eval(gt=test_gt_roi[step_t], dr=final_roi))
+
                        # print(_roi_predict, _cls_predict)
 
 

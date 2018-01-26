@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def cls_roi_generator(roi, num_rois, num_cls):
     roi = np.reshape(a=roi, newshape=[num_cls, 4])
     cls_label = []; cls_roi = []; cls_gt_roi = []
@@ -20,7 +19,14 @@ def cls_roi_generator(roi, num_rois, num_cls):
         cls_roi.append([x, y, h, w]); cls_gt_roi.append(np.zeros(shape=[4]))
         lab = np.zeros(shape=[num_cls + 1]);lab[num_cls] = 1; cls_label.append(lab)
     return cls_roi, cls_label, cls_gt_roi
-
+def roi_check(rois):
+    for ind, roi_i in enumerate(rois):
+      for j in range(4):
+          if not roi_i[j] > 0 and roi_i[j] < 1:
+              rois[ind] = np.array([0, 0, 1, 1])
+      if roi_i[0] + roi_i[2] > 1 or roi_i[1] + roi_i[3] > 1:
+          rois[ind] = np.array([0, 0, 1, 1])
+    return rois
 
 def roi_filter(rois, cls):
     if len(rois) < 1:
@@ -33,7 +39,8 @@ def roi_filter(rois, cls):
             cls_roi.append(rois[ind])
             cls_prob.append(cls_i[0])
     assert len(cls_prob) == len(cls_roi)
-    norm_cls_prob = np.reshape(a=cls_prob / sum(cls_prob), newshape=(1, len(cls_prob)))
+    cls_prob_reshape = np.reshape(a=cls_prob, newshape=(1, len(cls_prob)))
+    norm_cls_prob = cls_prob_reshape / sum(cls_prob_reshape)
     for ind, cls_roi_i in enumerate(cls_roi):
         final_roi = final_roi + cls_roi_i * norm_cls_prob[0, ind]
     return final_roi
@@ -62,20 +69,25 @@ def iou_eval(gt, dr):
      return inter_area / union_area
 
 if __name__ == '__main__':
+    rois = np.array([[0.1, 0.1, 0.3, 0.4], [0.5, 0.1, 0.9, 0.4], [0.1, 0.1, -0.3, 0.4]])
+    print(rois)
+    roi = roi_check(rois)
+    print(roi)
+
     # image1 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\0101.jpg')
     # image2 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\4284.jpg')
     # print(np.shape(image1))
-    # cv2.imshow('image1', image1)
-    # cv2.waitKey(0)
-    roi1 = np.random.uniform(low=0, high=1, size=[1, 4])
-    # print(np.shape(roi1))
-    cls_roi, cls_label, cls_gt_roi = cls_roi_generator(roi=roi1, num_rois=10, num_cls=1)
-    # print(cls_roi)
-    # print(cls_label)
-    # print(cls_gt_roi)
-    # print(np.shape(cls_roi))
-    # print(np.shape(cls_label))
-    # print(np.shape(cls_gt_roi))
+    # # cv2.imshow('image1', image1)
+    # # cv2.waitKey(0)
+    # roi1 = np.random.uniform(low=0, high=1, size=[1, 4])
+    # # print(np.shape(roi1))
+    # cls_roi, cls_label, cls_gt_roi = cls_roi_generator(roi=roi1, num_rois=10, num_cls=1)
+    # # print(cls_roi)
+    # # print(cls_label)
+    # # print(cls_gt_roi)
+    # # print(np.shape(cls_roi))
+    # # print(np.shape(cls_label))
+    # # print(np.shape(cls_gt_roi))
 
 
 

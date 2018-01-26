@@ -15,10 +15,9 @@ flags.DEFINE_float('loss_balance', 0.3, 'loss balance factor')
 flags.DEFINE_float('rho', 0.9, 'rho')
 flags.DEFINE_string('box_loss', 'abs', 'abs, L2,...')
 
-
-flags.DEFINE_string('train_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
+flags.DEFINE_string('train_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
                     , 'train_path')
-flags.DEFINE_string('test_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
+flags.DEFINE_string('test_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\test.txt'
                     , 'test_path')
 
 
