@@ -60,9 +60,9 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                                                   ClsGtRoi: _ClsGtRoi,
                                                   ClsRoi: _ClsRoi,
                                                   ClsLabel: _ClsLabel})
-                # if step % 50 == 0:
-                print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
-                                  'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
+                if step % 50 == 0:
+                    print('epoch=', i, 'train_step=', step, 'rpn_loss=', _rpn_loss,
+                                      'cls_loss=', _cls_loss, 'roi_loss=', _roi_loss)
                 # testing
                 if step % 500 == 0:
                     for step_t in range(int(math.ceil(len(test_x)/params.batch_shape[0]))):
@@ -73,9 +73,8 @@ def train(img, ground_truth, test_img,test_roi, model, params):
                                                       feed_dict={Image: _Image_t,
                                                                  ClsRoi: _rpn_roi_predict})
                         final_roi = roi_filter(rois=_roi_predict, cls=_cls_predict)
-                        print(final_roi)
-                        # for roi_i in _roi_predict:
-                        #     print(iou_eval(gt=test_gt_roi[step], dr=roi_i))
+                        print('final_roi=', final_roi)
+                        print('IOU=', iou_eval(gt=test_gt_roi[step], dr=final_roi))
                        # print(_roi_predict, _cls_predict)
 
 

@@ -1,10 +1,10 @@
 import numpy as np
 
+
 def cls_roi_generator(roi, num_rois, num_cls):
     roi = np.reshape(a=roi, newshape=[num_cls, 4])
     cls_label = []; cls_roi = []; cls_gt_roi = []
     for ind in range(num_cls):
-        print(ind)
         for i in range(num_rois):
             h_expand = np.random.uniform(low=1, high=1.2) # set high parameter
             w_expand = np.random.uniform(low=1, high=1.2)
@@ -23,20 +23,28 @@ def cls_roi_generator(roi, num_rois, num_cls):
 
 
 def roi_filter(rois, cls):
+    if len(rois) < 1:
+        return [0, 0, 1, 1]
     assert len(rois) == len(cls)
+    final_roi = np.zeros([1, 4])
     cls_roi = []; cls_prob = []
     for ind, cls_i in enumerate(cls):
-        if not cls_i[-1] == 1:
+        if cls_i[0] > cls_i[1]:
             cls_roi.append(rois[ind])
             cls_prob.append(cls_i[0])
     assert len(cls_prob) == len(cls_roi)
-    cls_prob = map(lambda x: x/sum(cls_prob), [x for x in cls_prob])
-    roi = lambda x, y: x*y, [x for x in cls_prob], [y for y in cls_roi]
-    return roi
+    norm_cls_prob = np.reshape(a=cls_prob / sum(cls_prob), newshape=(1, len(cls_prob)))
+    for ind, cls_roi_i in enumerate(cls_roi):
+        final_roi = final_roi + cls_roi_i * norm_cls_prob[0, ind]
+    return final_roi
+
+
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
     # dr: DetectionResult roi
     # return overlap ratio of gt and dr
+ gt = np.reshape(a=gt, newshape=(4, 1))
+ dr = np.reshape(a=dr, newshape=(4, 1))
  start_x_gt = gt[0]; end_x_gt = gt[0] + gt[2]
  start_y_gt = gt[1]; end_y_gt = gt[1] + gt[3]
  start_x_dr = dr[0]; end_x_dr = dr[0] + dr[2]
@@ -51,7 +59,7 @@ def iou_eval(gt, dr):
      h_inter = end_x - start_x; w_inter = end_y - start_y
      inter_area = h_inter * w_inter
      union_area = gt_area + dr_area - inter_area
-     return  inter_area / union_area
+     return inter_area / union_area
 
 if __name__ == '__main__':
     # image1 = cv2.imread('E:\PROJECT\Data_annotation\\New Folder\\0101.jpg')
@@ -64,10 +72,10 @@ if __name__ == '__main__':
     cls_roi, cls_label, cls_gt_roi = cls_roi_generator(roi=roi1, num_rois=10, num_cls=1)
     # print(cls_roi)
     # print(cls_label)
-    print(cls_gt_roi)
-    print(np.shape(cls_roi))
-    print(np.shape(cls_label))
-    print(np.shape(cls_gt_roi))
+    # print(cls_gt_roi)
+    # print(np.shape(cls_roi))
+    # print(np.shape(cls_label))
+    # print(np.shape(cls_gt_roi))
 
 
 

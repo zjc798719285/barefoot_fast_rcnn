@@ -6,7 +6,7 @@ flags = tf.app.flags
 ############################
 # for training
 flags.DEFINE_integer('batch_shape', [1, 128, 59, 3], 'Shape of a batch tensor')
-flags.DEFINE_integer('num_rois', 20, 'Num rois for per class')
+flags.DEFINE_integer('num_rois', 30, 'Num rois for per class')
 flags.DEFINE_integer('roi_shape', [4, 2], 'Shape of feature map after roi-pooling')
 flags.DEFINE_integer('epoch', 10, 'Max number of epoch')
 flags.DEFINE_integer('num_cls', 1, 'Numbers of classes detection')
