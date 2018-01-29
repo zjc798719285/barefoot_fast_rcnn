@@ -17,7 +17,7 @@ flags.DEFINE_string('box_loss', 'abs', 'abs, L2,...')
 
 flags.DEFINE_string('train_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
                     , 'train_path')
-flags.DEFINE_string('test_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\test.txt'
+flags.DEFINE_string('test_path', 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\test2.txt'
                     , 'test_path')
 
 
