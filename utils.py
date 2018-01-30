@@ -63,6 +63,7 @@ def create_train_test_table(input_dir,label_dir,train_key, output_train, output_
     # input_dir, label_dir: The img source folder path, the label source folder path
     # train_key: A int number, which is represent key point between train and test
     # output_train, output_test: The txt file output path
+
     p_id_img = os.listdir(input_dir)
     p_id_lab = os.listdir(label_dir)
     p_id_img.sort(key=lambda x: int(x))
@@ -139,11 +140,11 @@ if __name__ == '__main__':
 
 
 
-    input_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\image'
-    lab_dir = 'E:\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\label'
-    output_train = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
-    output_test = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
-    create_train_test_table(input_dir, lab_dir, 1, output_train, output_test)
+    input_dir = '\\\\192.168.41.101\e\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\image'
+    lab_dir = '\\\\192.168.41.101\e\PROJECT\Foot_Height\data_Foot_Height\\barefoot_standard\RCNN\mini_V1.0.0.0_128\label'
+    output_train = 'I:\zjc\\barefoot_fast_rcnn\data_txt\\mini_train.txt'
+    output_test = 'I:\zjc\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
+    create_train_test_table(input_dir, lab_dir, 25, output_train, output_test)
 
     #print(file_list)
 

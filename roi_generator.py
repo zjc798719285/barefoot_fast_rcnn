@@ -19,6 +19,7 @@ def cls_roi_generator(roi, num_rois, num_cls):
         cls_roi.append([x, y, h, w]); cls_gt_roi.append(np.zeros(shape=[4]))
         lab = np.zeros(shape=[num_cls + 1]);lab[num_cls] = 1; cls_label.append(lab)
     return cls_roi, cls_label, cls_gt_roi
+
 def roi_check(rois):
     for ind, roi_i in enumerate(rois):
       for j in range(4):
@@ -28,22 +29,25 @@ def roi_check(rois):
           rois[ind] = np.array([0, 0, 1, 1])
     return rois
 
+
 def roi_filter(rois, cls):
     if len(rois) < 1:
-        return [0, 0, 1, 1]
+        return [0, 0, 1, 1], 0
     assert len(rois) == len(cls)
-    final_roi = np.zeros([1, 4])
+    final_roi = np.zeros([4])
     cls_roi = []; cls_prob = []
     for ind, cls_i in enumerate(cls):
         if cls_i[0] > cls_i[1]:
             cls_roi.append(rois[ind])
             cls_prob.append(cls_i[0])
+    if len(cls_prob) == len(cls_roi) == 0:
+        return np.array([0, 0, 1, 1]), len(cls_prob)
     assert len(cls_prob) == len(cls_roi)
-    cls_prob_reshape = np.reshape(a=cls_prob, newshape=(1, len(cls_prob)))
+    cls_prob_reshape = np.reshape(a=cls_prob, newshape=(len(cls_prob)))
     norm_cls_prob = cls_prob_reshape / sum(cls_prob_reshape)
-    for ind, cls_roi_i in enumerate(cls_roi):
-        final_roi = final_roi + cls_roi_i * norm_cls_prob[0, ind]
-    return final_roi
+    for cls_roi_i, norm_cls_prob_i in zip(cls_roi, norm_cls_prob):
+        final_roi = final_roi + cls_roi_i * norm_cls_prob_i
+    return final_roi, len(cls_prob)
 
 
 def iou_eval(gt, dr):
@@ -94,21 +98,5 @@ if __name__ == '__main__':
 
 
 
-   #
-   # roi2 = [0.2, 0.2, 0.2, 0.2]
-   # roi3 = [0.3, 0.2, 0.2, 0.2]
-   # roi4 = [0.2, 0.3, 0.2, 0.2]
-   # print(iou_eval(roi1, roi2))
-   # print(iou_eval(roi1, roi3))
-   # print(iou_eval(roi1, roi4))
-   #
-   # roi = [0.2, 0.1, 0.5, 0.5]
-   # rois, label, RPN_rois = pos_neg_roi_generator(roi, 10)
-   # print(np.shape(RPN_rois))
-   # # box_roi = box_roi_generator(cls_label=label, roi=roi)
-   # #
-   # for box_roi_i in box_roi:
-   #     print(box_roi_i)
-   # print(np.shape(rois))
-   # print(np.shape(label))
+
 
