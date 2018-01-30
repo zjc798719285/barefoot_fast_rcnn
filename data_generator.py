@@ -44,8 +44,8 @@ def pos_neg_roi_generator(rois, cls, num_rois, num_cls):
             border_left = roi_i[1]; border_right = 1 - roi_i[1] - roi_i[3]
             x_offset = np.random.uniform(low=-border_top, high=border_bottom)
             y_offset = np.random.uniform(low=-border_left, high=border_right)
-            h_zoom = np.random.uniform(low=0.5, high=1.3)
-            w_zoom = np.random.uniform(low=0.5, high=1.3)
+            h_zoom = np.random.uniform(low=0.8, high=1.3)
+            w_zoom = np.random.uniform(low=0.8, high=1.3)
             roi_neg = np.array([roi_i[0] + x_offset, roi_i[1]
                                 + y_offset, roi_i[2] * w_zoom, roi_i[3] * h_zoom])
             label_neg = lab.copy(); label_neg[0, num_cls] = 1
