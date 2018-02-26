@@ -2,7 +2,6 @@ from AnchorBoxes import AnchorBoxes
 from keras.layers import Conv2D, ELU, MaxPooling2D, Reshape, Concatenate
 from keras.regularizers import l2
 
-
 class SSDModel(object):
     def __init__(self,
                  l2_regularization,
@@ -70,11 +69,11 @@ class SSDModel(object):
         #                   name='classes6')(conv6)
         classes7 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
                           kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                          name='classes7')(conv7)
+                          name='classes7', activation='sigmoid')(conv7)
 
         classes8 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
                           kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                          name='classes7')(conv8)
+                          name='classes7', activation='sigmoid')(conv8)
         # Output shape of `boxes`: `(batch, height, width, n_boxes * 4)`
         # boxes_offset4 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
         #                 kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
@@ -87,10 +86,10 @@ class SSDModel(object):
         #                 name='boxes6')(conv6)
         boxes_offset7 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes7')(conv7)
+                        name='boxes7',activation='sigmoid')(conv7)
         boxes_offset8 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
                                kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                               name='boxes7')(conv8)
+                               name='boxes7',activation='sigmoid')(conv8)
 
         # anchor4 = AnchorBoxes(img_height=866, img_width=389,
         #                       aspect_ratios=self.aspect_ratios)(boxes_offset4)

@@ -33,7 +33,7 @@ with tf.Session() as sess:
     train_x, train_roi_list, train_class_list = trainData.next_batch()
     classes2, offset2, anchors2 = sess.run([classes, offset, anchors], feed_dict={TRAIN_X: train_x})
     for i in range(100):
-        print(i)
+        print('step=', i)
         train_x, train_roi_list, train_class_list = trainData.next_batch()
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
                                                      classes_list=train_class_list,
@@ -44,8 +44,7 @@ with tf.Session() as sess:
                                                   feed_dict={TRAIN_X: train_x,
                                                              TRAIN_ANCHORS: y_anchors,
                                                              TRAIN_CLASSES: y_classes})
-        print(np.shape(classes1))
-        print(loss_cls1)
+
         print(loss_L11)
 
 
