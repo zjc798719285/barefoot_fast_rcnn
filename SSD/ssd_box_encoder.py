@@ -45,6 +45,8 @@ def ssd_box_encoder_one_image(roi_list, classes_list, num_classes, anchors, iou_
                 y_anchors[0, id_anc, 2] = np.log(roi_i[2] / (anchor[2] + eps))
                 y_anchors[0, id_anc, 3] = np.log(roi_i[3] / (anchor[3] + eps))
                 y_classses[0, id_anc, int(class_i)] = 1
+            else:
+                y_classses[0, id_anc, 0] = 1
     return y_anchors, y_classses
 
 
