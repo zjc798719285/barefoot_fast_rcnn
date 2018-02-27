@@ -28,9 +28,9 @@ def class_pred_acc(cls_pred, cls_true):
                 cor_bk += 1
         if true_i == 1:
             num_cls += 1
-            if cor_cls == 1:
+            if pred_i == 1:
                 cor_cls += 1
-    return cor_bk/num_bk, cor_cls/num_cls
+    return cor_bk/num_bk, cor_cls/num_cls, np.sum(index_pred), np.sum(index_trued)
 
 
 

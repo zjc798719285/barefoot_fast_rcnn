@@ -6,10 +6,12 @@ class SSDModel(object):
     def __init__(self,
                  l2_regularization,
                  n_classes,
-                 aspect_ratios):
+                 aspect_ratios,
+                 scales):
         self.l2_reg = l2_regularization
         self.n_classes = n_classes + 1            # Account for the background class.
         self.aspect_ratios = aspect_ratios
+        self.scales = scales
     def __call__(self, x):
 
         conv1 = Conv2D(32, (5, 5), strides=(1, 1), padding="same", kernel_initializer='he_normal',
@@ -57,7 +59,7 @@ class SSDModel(object):
         # conv7 = BatchNormalization(axis=3, momentum=0.99, name='bn7')(conv7)
         conv8 = ELU(name='elu7')(conv8)
 
-        n_boxes = len(self.aspect_ratios)
+        n_boxes = len(self.aspect_ratios) * len(self.scales)
         # classes4 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
         #                   kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
         #                   name='classes4')(conv4)
@@ -98,9 +100,11 @@ class SSDModel(object):
         # anchor6 = AnchorBoxes(img_height=866, img_width=389,
         #                       aspect_ratios=self.aspect_ratios)(boxes_offset6)
         anchor7 = AnchorBoxes(img_height=866, img_width=389,
-                              aspect_ratios=self.aspect_ratios)(boxes_offset7)
+                              aspect_ratios=self.aspect_ratios,
+                              scales=self.scales)(boxes_offset7)
         anchor8 = AnchorBoxes(img_height=866, img_width=389,
-                              aspect_ratios=self.aspect_ratios)(boxes_offset8)
+                              aspect_ratios=self.aspect_ratios,
+                              scales=self.scales)(boxes_offset8)
         # classes4_reshaped = Reshape((-1, self.n_classes), name='classes4_reshape')(classes4)
         # classes5_reshaped = Reshape((-1, self.n_classes), name='classes5_reshape')(classes5)
         # classes6_reshaped = Reshape((-1, self.n_classes), name='classes6_reshape')(classes6)

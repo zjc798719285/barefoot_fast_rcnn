@@ -2,11 +2,12 @@ import numpy as np
 import keras.backend as K
 from ssd_box_encoder import convert_coordinates
 class AnchorBoxes(object):
-    def __init__(self, img_height, img_width,  aspect_ratios):
+    def __init__(self, img_height, img_width, aspect_ratios, scales):
         self.img_height = img_height
         self.img_width = img_width
         self.aspect_ratios = aspect_ratios
-        self.n_boxes = len(aspect_ratios)
+        self.scales = scales
+        self.n_boxes = len(aspect_ratios) * len(scales)
 
     def __call__(self, x):
         batch_size,  feature_map_height, feature_map_width, feature_map_channels = x._keras_shape
@@ -14,7 +15,10 @@ class AnchorBoxes(object):
         for ar in self.aspect_ratios:
             box_height = 3 / feature_map_height / np.sqrt(ar)  #默认卷积核3*3，此处可以不写死
             box_width = 3 / feature_map_width * np.sqrt(ar)
-            wh_list.append([box_width, box_height])            #矩形框长和宽组成列表
+            for scales_i in self.scales:
+              box_height = box_height * np.sqrt(scales_i)
+              box_width = box_width * np.sqrt(scales_i)
+              wh_list.append([box_width, box_height])            #矩形框长和宽组成列表
         wh_list = np.array(wh_list)
         # 产生anchor中心点的行坐标向量shape=(1, feature_map_height)
         c_row = np.linspace(start=0, stop=1, num=feature_map_height)
