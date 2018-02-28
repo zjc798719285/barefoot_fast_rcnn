@@ -1,7 +1,7 @@
 from SSDModel import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_filter import class_pred_acc, box_filter
+from box_filter import class_pred_acc, box_filter, batch_mean_iou
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
@@ -11,9 +11,9 @@ import Loss
 ######################
 train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
-batch_size = 32
-num_boxes_one_image = 408*3
-pos_neg_ratio = 2
+batch_size = 5
+num_boxes_one_image = 816
+pos_neg_ratio = 3
 #############
 # Load Data #
 #############
@@ -24,7 +24,8 @@ TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
 classes, offset, anchors = SSDModel(l2_regularization=0,
                                     n_classes=1,
                                     aspect_ratios=[0.5, 1, 2],
-                                    scales=[1, 1.5, 2])(TRAIN_X)
+                                    scales=[1, 2],
+                                    detect_kernel=(3, 3))(TRAIN_X)
 
 # loss_cls = Loss.cls_loss(y_pred=classes, y_true=TRAIN_CLASSES)
 # loss_L1 = Loss.smooth_L1(anchor_pred=offset, anchor_true=TRAIN_ANCHORS)
@@ -65,10 +66,11 @@ with tf.Session() as sess:
         if i % 20 == 0:
            acc_bk, acc_cls, num_class_pred, num_class_true, recall_cls = \
                class_pred_acc(cls_pred=cls_pred, cls_true=y_classes)
-           # pred_rect = box_filter(pred_offset=offset_pred,
-           #                        pred_anchors=anchors_pred,
-           #                        pred_classes=cls_pred,
-           #                        num_positives=5)
+           pred_rect = box_filter(pred_offset=offset_pred,
+                                  pred_anchors=anchors_pred,
+                                  pred_classes=cls_pred)
+           mean_iou = batch_mean_iou(roi_list=train_roi_list, rect=pred_rect)
+
            print('step=', i)
            print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1, 'rect_shape=')
            print('acc_bk=', acc_bk, 'acc_cls=', acc_cls)
@@ -76,6 +78,7 @@ with tf.Session() as sess:
                  'num_class_pred=', num_class_pred,
                  'num_class_true=', num_class_true,
                  'recall_cls=', recall_cls)
+           print('Shape of Rect=', pred_rect, 'mean_iou=', mean_iou)
 
 
 

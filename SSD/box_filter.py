@@ -1,19 +1,28 @@
 import numpy as np
+from ssd_box_encoder import iou_eval
 
-def box_filter(pred_offset, pred_classes, pred_anchors, num_positives):
+def box_filter(pred_offset, pred_classes, pred_anchors, num_positives = 1):
     pred_rect_list = []
+    rect = np.zeros([4])
     (batch_size, num_boxes, num_classes) = np.shape(pred_classes)
-    merge = np.concatenate((pred_classes, pred_offset, pred_anchors), axis=2)  #ndarray [batch_size, num_boxex, num_class+4+4]
     for i in range(batch_size):
-       merge_i = np.lexsort(keys=(merge[i, :, 1], merge[i, :, :]), axis=0)
-       top_k_merge = merge_i[-num_positives:-1, :]
-       top_k_merge[:, 6] = top_k_merge[:, 6] + top_k_merge[:, 2]      #解码过程
-       top_k_merge[:, 7] = top_k_merge[:, 7] + top_k_merge[:, 3]
-       top_k_merge[:, 8] = top_k_merge[:, 8] * np.exp(top_k_merge[:, 4])
-       top_k_merge[:, 9] = top_k_merge[:, 9] * np.exp(top_k_merge[:, 5])
-       rect_pred = np.mean(a=top_k_merge, axis=0)
-       pred_rect_list.append(rect_pred)
+        classes_ind = np.argsort(a=pred_classes[i, :, 1], axis=0)
+        # max_confidence = pred_classes[i, classes_ind, 1]
+        offset = pred_offset[i, classes_ind[-num_positives], :]
+        anchors = pred_anchors[i, classes_ind[-num_positives], :]
+        rect[0] = anchors[0] + offset[0]
+        rect[1] = anchors[1] + offset[1]
+        rect[2] = anchors[2] * np.exp(offset[2])
+        rect[3] = anchors[3] * np.exp(offset[3])
+        pred_rect_list.append(rect)
     return np.array(pred_rect_list)
+
+def batch_mean_iou(roi_list, rect):
+    sum_iou = 0
+    for roi_i, rect_i in zip(roi_list, rect):
+        iou = iou_eval(dr=rect_i, gt=roi_i)
+        sum_iou += iou
+    return sum_iou/len(roi_list)
 
 
 
@@ -46,9 +55,38 @@ def class_pred_acc(cls_pred, cls_true):
             num_cls += 1
             if pred_i == 1:
                 num_correct_cls += 1
-    return num_correct_bk/num_bk, num_correct_cls/num_cls, np.sum(index_pred), np.sum(index_trued), \
+    return num_correct_bk/num_bk, \
+           num_correct_cls/(num_cls + 10e-6), \
+           np.sum(index_pred), \
+           np.sum(index_trued), \
            num_bk_to_cls/(num_correct_cls + num_bk_to_cls)
 
+
+def class_pred_acc2(cls_pred, cls_true):
+    (batch_size, boxes, classes) = np.shape(cls_pred)
+    num_bk = 0; num_correct_bk = 0; num_cls = 0; num_correct_cls = 0; num_bk_to_cls = 0
+    np.where()
+    index_pred = np.argmax(a=cls_pred, axis=2)
+    index_trued = np.argmax(a=cls_true, axis=2)
+    index_pred = np.reshape(a=index_pred, newshape=(batch_size * boxes))
+    index_trued = np.reshape(a=index_trued, newshape=(batch_size * boxes))
+    assert(len(index_pred) == len(index_trued), 'index_pred and index_trued are not equal')
+    for pred_i, true_i in zip(index_pred, index_trued):
+        if true_i == 0:
+            num_bk += 1
+            if pred_i == 0:
+                num_correct_bk += 1
+            if pred_i == 1:
+                num_bk_to_cls += 1
+        if true_i == 1:
+            num_cls += 1
+            if pred_i == 1:
+                num_correct_cls += 1
+    return num_correct_bk/num_bk, \
+           num_correct_cls/(num_cls + 10e-6), \
+           np.sum(index_pred), \
+           np.sum(index_trued), \
+           num_bk_to_cls/(num_correct_cls + num_bk_to_cls)
 
 
 
