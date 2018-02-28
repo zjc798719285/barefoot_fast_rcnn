@@ -9,16 +9,19 @@ class AnchorBoxes(object):
         self.scales = scales
         self.n_boxes = len(aspect_ratios) * len(scales)
 
-    def __call__(self, x):
+    def __call__(self, x, mode=False):
         batch_size,  feature_map_height, feature_map_width, feature_map_channels = x._keras_shape
         wh_list = []
+        if mode == True:
+            self.aspect_ratios = self.aspect_ratios / self.aspect_ratios  #将长宽比和尺度归一，
+            self.scales = self.scales / self.scales
         for ar in self.aspect_ratios:
             box_height = 3 / feature_map_height / np.sqrt(ar)  #默认卷积核3*3，此处可以不写死
             box_width = 3 / feature_map_width * np.sqrt(ar)
             for scales_i in self.scales:
-              box_height = box_height * np.sqrt(scales_i)
-              box_width = box_width * np.sqrt(scales_i)
-              wh_list.append([box_width, box_height])            #矩形框长和宽组成列表
+                box_height = box_height * np.sqrt(scales_i)
+                box_width = box_width * np.sqrt(scales_i)
+                wh_list.append([box_width, box_height])            #矩形框长和宽组成列表
         wh_list = np.array(wh_list)
         # 产生anchor中心点的行坐标向量shape=(1, feature_map_height)
         c_row = np.linspace(start=0, stop=1, num=feature_map_height)

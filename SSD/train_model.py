@@ -1,7 +1,7 @@
 from SSDModel import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_filter import class_pred_acc
+from box_filter import class_pred_acc, box_filter
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
@@ -13,7 +13,7 @@ train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
 batch_size = 32
 num_boxes_one_image = 408*3
-pos_neg_ratio = 1
+pos_neg_ratio = 2
 #############
 # Load Data #
 #############
@@ -24,13 +24,13 @@ TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
 classes, offset, anchors = SSDModel(l2_regularization=0,
                                     n_classes=1,
                                     aspect_ratios=[0.5, 1, 2],
-                                    scales=[1, 2, 3])(TRAIN_X)
+                                    scales=[1, 1.5, 2])(TRAIN_X)
 
 # loss_cls = Loss.cls_loss(y_pred=classes, y_true=TRAIN_CLASSES)
 # loss_L1 = Loss.smooth_L1(anchor_pred=offset, anchor_true=TRAIN_ANCHORS)
 # loss = loss_cls + loss_L1
 
-loss_loc, loss_cls= Loss.cls_loc_loss(anchor_pred=anchors, anchor_true=TRAIN_ANCHORS,
+loss_loc, loss_cls = Loss.cls_loc_loss(anchor_pred=anchors, anchor_true=TRAIN_ANCHORS,
                     y_pred=classes, y_true=TRAIN_CLASSES,
                     pos_neg_ratio=pos_neg_ratio)
 loss = loss_cls + loss_loc
@@ -63,12 +63,19 @@ with tf.Session() as sess:
                                                              TRAIN_ANCHORS: y_anchors,
                                                              TRAIN_CLASSES: y_classes})
         if i % 20 == 0:
-           acc_bk, acc_cls, num_class_pred, num_class_true = class_pred_acc(cls_pred=cls_pred, cls_true=y_classes)
+           acc_bk, acc_cls, num_class_pred, num_class_true, recall_cls = \
+               class_pred_acc(cls_pred=cls_pred, cls_true=y_classes)
+           # pred_rect = box_filter(pred_offset=offset_pred,
+           #                        pred_anchors=anchors_pred,
+           #                        pred_classes=cls_pred,
+           #                        num_positives=5)
            print('step=', i)
-           print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1)
+           print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1, 'rect_shape=')
            print('acc_bk=', acc_bk, 'acc_cls=', acc_cls)
            print('num_class=', np.sum(y_classes[:, :, 1]), 'num_bk=', np.sum(y_classes[:, :, 0]),
-                 'num_class_pred=', num_class_pred, 'num_class_true=', num_class_true)
+                 'num_class_pred=', num_class_pred,
+                 'num_class_true=', num_class_true,
+                 'recall_cls=', recall_cls)
 
 
 
