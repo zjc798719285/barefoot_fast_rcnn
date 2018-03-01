@@ -7,14 +7,16 @@ def cls_loss(y_pred, y_true):
     return cls_loss
 
 def log_loss(y_pred, y_true):
+    y_pred = tf.nn.softmax(y_pred)
     y_pred = tf.maximum(y_pred, 1e-15)
     loss = -tf.reduce_sum(y_true * tf.log(y_pred), axis=-1)
     return loss
 
 def smooth_L1(anchor_pred, anchor_true):
-    loss_L1 = tf.abs(anchor_pred - anchor_true)
+    # loss_L1 = tf.abs(anchor_pred - anchor_true)
     loss_L2 = 0.5 * (anchor_pred - anchor_true)**2
-    loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
+    # loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
+    loss = tf.reduce_mean(loss_L2)
     return loss
 
 def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):

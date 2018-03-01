@@ -1,13 +1,23 @@
 import numpy as np
 
-def convert_coordinates(tensor):
+def convert_coordinates(tensor,img_height, img_width):
     #Return a ndarray
     tensor1 = np.copy(tensor).astype(np.float)
-    tensor1[..., 0] = tensor[..., 0] - tensor[..., 3] / 2
-    tensor1[..., 1] = tensor[..., 1] - tensor[..., 2] / 2
-    tensor1[..., 2] = tensor[..., 2]
-    tensor1[..., 3] = tensor[..., 3]
-    return tensor1
+    tensor2 = np.copy(tensor).astype(np.float)
+    #中心坐标转化为[xmin,ymin,xmax,ymax]坐标，并进行限制
+    tensor1[..., 0] = tensor[..., 0] - tensor[..., 3] / 2  #set xmin
+    tensor1[..., 1] = tensor[..., 1] - tensor[..., 2] / 2  #set ymin
+    tensor1[..., 2] = tensor[..., 0] + tensor[..., 3] / 2  #set xmax
+    tensor1[..., 3] = tensor[..., 1] + tensor[..., 2] / 2  #set ymax
+    tensor1[tensor1[..., 0] < 0] = 0; tensor1[tensor1[..., 0] > img_height] = img_height  # 0<xmin<img_heighit
+    tensor1[tensor1[..., 1] < 0] = 0; tensor1[tensor1[..., 1] > img_width] = img_width    # 0<ymin<img_width
+    tensor1[tensor1[..., 2] < 0] = 0; tensor1[tensor1[..., 2] > img_height] = img_height  # 0<xmax<img_heighit
+    tensor1[tensor1[..., 3] < 0] = 0; tensor1[tensor1[..., 3] > img_width] = img_width    # 0<ymax<img_width
+    tensor2[..., 0] = tensor1[..., 0] / img_height
+    tensor2[..., 1] = tensor1[..., 1] / img_width
+    tensor2[..., 2] = (tensor1[..., 3] - tensor1[..., 1]) / img_width
+    tensor2[..., 3] = (tensor1[..., 2] - tensor1[..., 0]) / img_height
+    return tensor2
 
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
@@ -32,25 +42,28 @@ def iou_eval(gt, dr):
     return inter_area / union_area
 
 
-def ssd_box_encoder_one_image(roi_list, classes_list, num_classes, anchors, iou_threshold):
+def ssd_box_encoder_one_image(roi_list, classes_list, num_classes,
+                                 anchors, iou_thresh_loc, iou_thresh_cls):
     eps = 1e-6
     (num_boxes, channels) = np.shape(anchors)
     y_classses = np.zeros((1, num_boxes, num_classes + 1))  # '+1'代表背景类别
     y_anchors = np.zeros((1, num_boxes, 4))
     for id_anc, anchor in enumerate(anchors):
         for roi_i, class_i in zip(roi_list, classes_list):
-            if iou_eval(roi_i, anchor) > iou_threshold:
+            if iou_eval(roi_i, anchor) > iou_thresh_loc:
                 y_anchors[0, id_anc, 0] = roi_i[0] - anchor[0]
                 y_anchors[0, id_anc, 1] = roi_i[1] - anchor[1]
-                y_anchors[0, id_anc, 2] = np.log(roi_i[2] / (anchor[2] + eps))
-                y_anchors[0, id_anc, 3] = np.log(roi_i[3] / (anchor[3] + eps))
+                y_anchors[0, id_anc, 2] = roi_i[2] - anchor[2]
+                y_anchors[0, id_anc, 3] = roi_i[3] - anchor[3]
+            if iou_eval(roi_i, anchor) > iou_thresh_cls:
                 y_classses[0, id_anc, int(class_i)] = 1
             else:
                 y_classses[0, id_anc, 0] = 1
     return y_anchors, y_classses
 
 
-def ssd_box_encoder_batch(roi_list, classes_list, num_classes, anchors, iou_threshold):
+def ssd_box_encoder_batch(roi_list, classes_list, num_classes,
+                             anchors, iou_thresh_loc, iou_thresh_cls):
       (batch, num_boxes, channels) = np.shape(anchors)
       y_classses = np.zeros((batch, num_boxes, num_classes + 1))  # '+1'代表背景类别
       y_anchors = np.zeros((batch, num_boxes, 4))
@@ -60,7 +73,8 @@ def ssd_box_encoder_batch(roi_list, classes_list, num_classes, anchors, iou_thre
                                                              classes_list=classes_list[i],
                                                              num_classes=num_classes,
                                                              anchors=anchors[i, :, :],
-                                                             iou_threshold=iou_threshold)
+                                                             iou_thresh_loc=iou_thresh_loc,
+                                                             iou_thresh_cls=iou_thresh_cls)
       return y_classses, y_anchors,
 
 

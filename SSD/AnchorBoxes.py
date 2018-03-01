@@ -2,32 +2,34 @@ import numpy as np
 import keras.backend as K
 from ssd_box_encoder import convert_coordinates
 class AnchorBoxes(object):
-    def __init__(self, img_height, img_width, aspect_ratios, scales, detect_kernel):
+    def __init__(self, img_height, img_width, aspect_ratios, scales):
         self.img_height = img_height
         self.img_width = img_width
         self.aspect_ratios = aspect_ratios
         self.scales = scales
-        self.n_boxes = len(aspect_ratios) * len(scales)
-        self.detect_kernel = detect_kernel
+        self.n_boxes = len(aspect_ratios)
 
-    def __call__(self, x, mode=False):
+    def __call__(self, x):
         batch_size,  feature_map_height, feature_map_width, feature_map_channels = x._keras_shape
+        #size = min(self.img_height, self.img_width)
+        step_height = self.img_height / feature_map_height
+        step_width = self.img_width / feature_map_width
         wh_list = []
-        if mode == True:
-            self.aspect_ratios = self.aspect_ratios / self.aspect_ratios  #将长宽比和尺度归一，
-            self.scales = self.scales / self.scales
         for ar in self.aspect_ratios:
-            box_height = self.detect_kernel[0] / feature_map_height / np.sqrt(ar)  #默认卷积核3*3，此处可以不写死
-            box_width = self.detect_kernel[1] / feature_map_width * np.sqrt(ar)
-            for scales_i in self.scales:
-                box_height = box_height * np.sqrt(scales_i)
-                box_width = box_width * np.sqrt(scales_i)
-                wh_list.append([box_width, box_height])            #矩形框长和宽组成列表
+            box_height = self.img_height * self.scales / np.sqrt(ar)  #返回到原图上对应像素长度
+            box_width = self.img_width * self.scales * np.sqrt(ar)
+            wh_list.append([box_width, box_height])
         wh_list = np.array(wh_list)
         # 产生anchor中心点的行坐标向量shape=(1, feature_map_height)
-        c_row = np.linspace(start=0, stop=1, num=feature_map_height)
+        offset_height = 0.5
+        offset_width = 0.5
+        c_row = np.linspace(start=offset_height * step_height,
+                            stop=(offset_height + feature_map_height - 1) * step_height,
+                            num=feature_map_height)
         # 产生anchor中心点的列坐标向量shape=(1, feature_map_width)
-        c_col = np.linspace(start=0, stop=1, num=feature_map_width)
+        c_col = np.linspace(start=offset_width * step_width,
+                            stop=(offset_width + feature_map_width - 1) * step_width,
+                            num=feature_map_width)
         #通过向量坐标生成网格数据，
         #c_row_grid的每一列是c_row的列向量，一共有len(c_col)个c_row列向量组成
         #c_col_grid的每一行是c_col的行向量，一共有len(c_row)个c_col行向量组成
@@ -40,7 +42,8 @@ class AnchorBoxes(object):
         anchors[:, :, :, 2] = wh_list[:, 0]
         anchors[:, :, :, 3] = wh_list[:, 1]
         anchors = np.expand_dims(anchors, axis=0)
-        anchors = convert_coordinates(anchors)  #转换anchor box的坐标，从中心原点转换到左上角原点
+        anchors = convert_coordinates(tensor=anchors, img_width=self.img_width, img_height=self.img_height)
+        #转换anchor box的坐标，从中心原点转换到左上角原点
         anchors = K.tile(K.constant(anchors, dtype='float32'), (K.shape(x)[0], 1, 1, 1, 1))
         return anchors
 

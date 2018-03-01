@@ -11,9 +11,9 @@ import Loss
 ######################
 train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\mini_test.txt'
-batch_size = 5
-num_boxes_one_image = 816
-pos_neg_ratio = 3
+batch_size = 10
+num_boxes_one_image = 10360
+pos_neg_ratio = 2
 #############
 # Load Data #
 #############
@@ -23,8 +23,8 @@ TRAIN_ANCHORS = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 4])
 TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
 classes, offset, anchors = SSDModel(l2_regularization=0,
                                     n_classes=1,
-                                    aspect_ratios=[0.5, 1, 2],
-                                    scales=[1, 2],
+                                    aspect_ratios=[1, 1.5, 2, 2.3, 2.8, 3.2, 3.5],
+                                    scales=[0.1, 0.2, 0.3875, 0.575, 0.7625],
                                     detect_kernel=(3, 3))(TRAIN_X)
 
 # loss_cls = Loss.cls_loss(y_pred=classes, y_true=TRAIN_CLASSES)
@@ -52,7 +52,8 @@ with tf.Session() as sess:
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
                                                      classes_list=train_class_list,
                                                      anchors=anchors2,
-                                                     iou_threshold=0.5,
+                                                     iou_thresh_cls=0.4,
+                                                     iou_thresh_loc=0.3,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred, loss_cls1, loss_loc1, opt1 = sess.run([classes,
                                                                      offset,
@@ -66,7 +67,7 @@ with tf.Session() as sess:
         if i % 20 == 0:
            acc_bk, acc_cls, num_class_pred, num_class_true, recall_cls = \
                class_pred_acc(cls_pred=cls_pred, cls_true=y_classes)
-           pred_rect = box_filter(pred_offset=offset_pred,
+           pred_rect, pred_anchors, pred_offset = box_filter(pred_offset=offset_pred,
                                   pred_anchors=anchors_pred,
                                   pred_classes=cls_pred)
            mean_iou = batch_mean_iou(roi_list=train_roi_list, rect=pred_rect)
@@ -74,11 +75,16 @@ with tf.Session() as sess:
            print('step=', i)
            print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1, 'rect_shape=')
            print('acc_bk=', acc_bk, 'acc_cls=', acc_cls)
-           print('num_class=', np.sum(y_classes[:, :, 1]), 'num_bk=', np.sum(y_classes[:, :, 0]),
+           print('num_class=', np.sum(y_classes[:, :, 1]),
+                 'num_bk=', np.sum(y_classes[:, :, 0]),
                  'num_class_pred=', num_class_pred,
                  'num_class_true=', num_class_true,
                  'recall_cls=', recall_cls)
-           print('Shape of Rect=', pred_rect, 'mean_iou=', mean_iou)
+           print('Rect=', pred_rect,
+                 'Offset=', pred_offset,
+                 'mean_iou=', mean_iou,
+                 'roi_list=', np.array(train_roi_list),
+                 'Anchors=', pred_anchors,)
 
 
 

@@ -2,20 +2,35 @@ import numpy as np
 from ssd_box_encoder import iou_eval
 
 def box_filter(pred_offset, pred_classes, pred_anchors, num_positives = 1):
-    pred_rect_list = []
+    pred_rect_list = [];pred_anchors_list = [];pred_offset_list = []
     rect = np.zeros([4])
     (batch_size, num_boxes, num_classes) = np.shape(pred_classes)
     for i in range(batch_size):
         classes_ind = np.argsort(a=pred_classes[i, :, 1], axis=0)
+        print('classe=**********', pred_classes[i, classes_ind[-num_positives], :])
         # max_confidence = pred_classes[i, classes_ind, 1]
         offset = pred_offset[i, classes_ind[-num_positives], :]
         anchors = pred_anchors[i, classes_ind[-num_positives], :]
         rect[0] = anchors[0] + offset[0]
         rect[1] = anchors[1] + offset[1]
-        rect[2] = anchors[2] * np.exp(offset[2])
-        rect[3] = anchors[3] * np.exp(offset[3])
+        rect[2] = anchors[2] * offset[2]
+        rect[3] = anchors[3] * offset[3]
         pred_rect_list.append(rect)
-    return np.array(pred_rect_list)
+        pred_anchors_list.append(anchors)
+        pred_offset_list.append(offset)
+    return np.array(pred_rect_list),\
+            np.array(pred_anchors_list),\
+            np.array(pred_offset_list)
+
+def box_filter2(pred_offset, pred_classes, pred_anchors, num_positives = 1):
+    pred_rect_list = [];pred_anchors_list = [];pred_offset_list = []
+    rect = np.zeros([4])
+    (batch_size, num_boxes, num_classes) = np.shape(pred_classes)
+    for i in range(batch_size):
+        red_offset_list = []
+
+
+    return
 
 def batch_mean_iou(roi_list, rect):
     sum_iou = 0
@@ -33,7 +48,7 @@ def batch_mean_iou(roi_list, rect):
 
 
 
-    return
+
 
 
 def class_pred_acc(cls_pred, cls_true):
