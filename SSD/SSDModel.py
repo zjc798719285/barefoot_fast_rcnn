@@ -64,19 +64,19 @@ class SSDModel(object):
         # Output shape of `boxes`: `(batch, height, width, n_boxes * 4)`
         boxes_offset4 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes4', activation='sigmoid')(conv4)
+                        name='boxes4')(conv4)
         boxes_offset5 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes5', activation='sigmoid')(conv5)
+                        name='boxes5')(conv5)
         boxes_offset6 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes6', activation='sigmoid')(conv6)
+                        name='boxes6')(conv6)
         boxes_offset7 = Conv2D(n_boxes * 4, self.detect_kernel, strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes7', activation='sigmoid')(conv7)
+                        name='boxes7')(conv7)
         boxes_offset8 = Conv2D(n_boxes * 4, self.detect_kernel, strides=(1, 1), padding="same",
                         kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes7', activation='sigmoid')(conv8)
+                        name='boxes7')(conv8)
 
         anchor4 = AnchorBoxes(img_height=866, img_width=389,
                               aspect_ratios=self.aspect_ratios,

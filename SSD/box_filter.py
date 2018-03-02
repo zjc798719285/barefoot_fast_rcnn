@@ -7,7 +7,7 @@ def box_filter(pred_offset, pred_classes, pred_anchors, num_positives = 1):
     (batch_size, num_boxes, num_classes) = np.shape(pred_classes)
     for i in range(batch_size):
         classes_ind = np.argsort(a=pred_classes[i, :, 1], axis=0)
-        print('classe=**********', pred_classes[i, classes_ind[-num_positives], :])
+       # print('classe=**********', pred_classes[i, classes_ind[-num_positives], :])
         # max_confidence = pred_classes[i, classes_ind, 1]
         offset = pred_offset[i, classes_ind[-num_positives], :]
         anchors = pred_anchors[i, classes_ind[-num_positives], :]
@@ -21,6 +21,10 @@ def box_filter(pred_offset, pred_classes, pred_anchors, num_positives = 1):
     return np.array(pred_rect_list),\
             np.array(pred_anchors_list),\
             np.array(pred_offset_list)
+def rect_pred(pred_offset, pred_anchors):
+    rect = np.copy(pred_offset).astype(np.float)
+    # rect[...,0] =
+
 
 def box_filter2(pred_offset, pred_classes, pred_anchors, num_positives = 1):
     pred_rect_list = [];pred_anchors_list = [];pred_offset_list = []
