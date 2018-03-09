@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="before change ssd_encouder">
-      <change beforePath="$PROJECT_DIR$/.idea/barefoot_fast_rcnn.iml" afterPath="$PROJECT_DIR$/.idea/barefoot_fast_rcnn.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" afterPath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/SSD_v3/AnchorBoxes2.py" afterPath="$PROJECT_DIR$/SSD_v3/AnchorBoxes2.py" />
+      <change beforePath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" afterPath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" />
+      <change beforePath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" afterPath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" />
+      <change beforePath="$PROJECT_DIR$/SSD_v3/train_model.py" afterPath="$PROJECT_DIR$/SSD_v3/train_model.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -649,7 +652,14 @@
       <option name="project" value="LOCAL" />
       <updated>1519886672676</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="Add a new folder SSD_v3. This classes head of this version SSD is worked well.">
+      <created>1520583359795</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1520583359795</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TodoView">
@@ -731,7 +741,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="just merge some files" />
     <MESSAGE value="faster rcnn worked, it's my life" />
     <MESSAGE value="just a save for coding style" />
     <MESSAGE value="before a big change" />
@@ -756,7 +765,8 @@
     <MESSAGE value="before a big change of AnchorBox.py" />
     <MESSAGE value="class isn't work,i don't know why.I will refact ssd_keras." />
     <MESSAGE value="before change ssd_encouder" />
-    <option name="LAST_COMMIT_MESSAGE" value="before change ssd_encouder" />
+    <MESSAGE value="Add a new folder SSD_v3. This classes head of this version SSD is worked well." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add a new folder SSD_v3. This classes head of this version SSD is worked well." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

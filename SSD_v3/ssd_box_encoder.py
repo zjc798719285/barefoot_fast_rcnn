@@ -20,8 +20,6 @@ def convert_coordinates(tensor,img_height, img_width):
     return tensor2
 
 
-
-
 def iou_eval(gt, dr):
     # gt: GroundTruth roi
     # dr: DetectionResult roi
@@ -46,7 +44,7 @@ def iou_eval(gt, dr):
 
 
 def ssd_box_encoder_one_image(roi_list, classes_list, num_classes,
-                                 anchors, iou_thresh_pos, iou_thresh_neg):
+                              anchors, iou_thresh_pos, iou_thresh_neg):
     eps = 1e-6
     (num_boxes, channels) = np.shape(anchors)
     y_classses = np.zeros((1, num_boxes, num_classes + 1))  # '+1'代表背景类别

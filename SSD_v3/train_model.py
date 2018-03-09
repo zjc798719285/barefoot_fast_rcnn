@@ -24,8 +24,7 @@ TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
 classes, offset, anchors = SSDModel(l2_regularization=0,
                                     n_classes=1,
                                     aspect_ratios=[2.5, 3, 3.2],
-                                    scales=[47, 52, 56, 59],
-                                    detect_kernel=(3, 3))(TRAIN_X)
+                                    scales=[47, 52, 56, 59])(TRAIN_X)
 
 # loss_cls = Loss.cls_loss(y_pred=classes, y_true=TRAIN_CLASSES)
 # loss_L1 = Loss.smooth_L1(anchor_pred=offset, anchor_true=TRAIN_ANCHORS)
@@ -37,7 +36,6 @@ loss_loc, loss_cls = Loss.cls_loc_loss(anchor_pred=anchors, anchor_true=TRAIN_AN
 loss = loss_cls + loss_loc
 optimizer = tf.train.AdadeltaOptimizer(learning_rate=0.1, rho=0.9)
 opt = optimizer.minimize(loss)
-
 
 
 with tf.Session() as sess:
@@ -55,15 +53,12 @@ with tf.Session() as sess:
                                                      iou_thresh_pos=0.4,
                                                      iou_thresh_neg=0.1,
                                                      num_classes=1)
-        cls_pred, offset_pred, anchors_pred, loss_cls1, loss_loc1, opt1 = sess.run([classes,
-                                                                     offset,
-                                                                     anchors,
-                                                                     loss_cls,
-                                                                     loss_loc,
-                                                                     opt],
-                                                  feed_dict={TRAIN_X: train_x,
-                                                             TRAIN_ANCHORS: y_anchors,
-                                                             TRAIN_CLASSES: y_classes})
+        cls_pred, offset_pred, anchors_pred,\
+        loss_cls1, loss_loc1, opt1 = sess.run([classes, offset, anchors,
+                                               loss_cls, loss_loc, opt],
+                                               feed_dict={TRAIN_X: train_x,
+                                                          TRAIN_ANCHORS: y_anchors,
+                                                          TRAIN_CLASSES: y_classes})
         if i % 5 == 0:
            acc, recall, num_pos, num_hard, num_neg = class_pred_acc2(cls_pred=cls_pred, cls_true=y_classes)
            # pred_rect, pred_anchors, pred_offset = box_filter(pred_offset=offset_pred,

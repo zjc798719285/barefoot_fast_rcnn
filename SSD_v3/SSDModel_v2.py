@@ -18,8 +18,7 @@ class SSDModel(object):
                  l2_regularization,
                  n_classes,
                  aspect_ratios,
-                 scales,
-                 detect_kernel):
+                 scales):
         self.l2_reg = l2_regularization
         self.n_classes = n_classes + 1            # Account for the background class.
         self.aspect_ratios = aspect_ratios
