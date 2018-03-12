@@ -59,16 +59,15 @@ with tf.Session() as sess:
                                                           TRAIN_CLASSES: y_classes})
         if i % 5 == 0:
            acc, recall, num_pos, num_hard, num_neg = class_pred_acc2(cls_pred=cls_pred, cls_true=y_classes)
-           # pred_rect, pred_anchors, pred_offset = box_filter(pred_offset=offset_pred,
-           #                        pred_anchors=anchors_pred,
-           #                        pred_classes=cls_pred)
-           # mean_iou = batch_mean_iou(roi_list=train_roi_list, rect=pred_rect)
+           filted_classes, filted_offset, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
+                                                                      pred_anchors=anchors_pred,
+                                                                      pred_offset=offset_pred)
 
            print('step=', i)
            print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1, 'rect_shape=')
            print('acc=', acc, 'recall=', recall, 'num_pos=', num_pos,
                  'num_hard=', num_hard, 'num_neg=', num_neg)
-           # print('pred_cls=', cls_pred)
+           print('classes', np.shape(filted_rect[1]))
 
 
 

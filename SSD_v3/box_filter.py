@@ -1,29 +1,48 @@
 import numpy as np
 from ssd_box_encoder import iou_eval
 
-def box_filter(pred_offset, pred_classes, pred_anchors, num_positives = 1):
-    pred_rect_list = [];pred_anchors_list = [];pred_offset_list = []
-    rect = np.zeros([4])
+def box_decoder(anchor, offset):
+    anchor_x = anchor[0]; anchor_y = anchor[1]
+    anchor_w = anchor[2]; anchor_h = anchor[3]
+    offset_x = offset[0]; offset_y = offset[1]
+    offset_w = offset[2]; offset_h = offset[3]
+    rect_x = offset_x * anchor_h + anchor_x
+    rect_y = offset_y * anchor_w + anchor_y
+    rect_w = anchor_w * np.exp(offset_w)
+    rect_h = anchor_h * np.exp(offset_h)
+    rect = [rect_x, rect_y, rect_w, rect_h]
+    return rect
+
+
+
+def box_filter(pred_offset, pred_classes, pred_anchors):
+    filted_classes =[]; filted_anchors = []; filted_offset = []
+    filted_rect = []
     (batch_size, num_boxes, num_classes) = np.shape(pred_classes)
     for i in range(batch_size):
-        classes_ind = np.argsort(a=pred_classes[i, :, 1], axis=0)
-       # print('classe=**********', pred_classes[i, classes_ind[-num_positives], :])
-        # max_confidence = pred_classes[i, classes_ind, 1]
-        offset = pred_offset[i, classes_ind[-num_positives], :]
-        anchors = pred_anchors[i, classes_ind[-num_positives], :]
-        rect[0] = anchors[0] + offset[0]
-        rect[1] = anchors[1] + offset[1]
-        rect[2] = anchors[2] * offset[2]
-        rect[3] = anchors[3] * offset[3]
-        pred_rect_list.append(rect)
-        pred_anchors_list.append(anchors)
-        pred_offset_list.append(offset)
-    return np.array(pred_rect_list),\
-            np.array(pred_anchors_list),\
-            np.array(pred_offset_list)
-def rect_pred(pred_offset, pred_anchors):
-    rect = np.copy(pred_offset).astype(np.float)
-    # rect[...,0] =
+        offset = pred_offset[i, :, :]; classes = pred_classes[i, :, :]
+        anchors = pred_anchors[i, :, :]
+        batch_classes = []; batch_anchors = []; batch_offset=[]
+        batch_rect = []
+        for offset_i, classes_i, anchors_i in zip(offset, classes, anchors):
+            if classes_i[1] > classes_i[0] and classes_i[1] > 0.5:
+                batch_classes.append(classes_i)
+                batch_anchors.append(anchors_i)
+                batch_offset.append(offset_i)
+                rect = box_decoder(anchor=anchors_i, offset=offset_i)
+                batch_rect.append(rect)
+        filted_classes.append(batch_classes)
+        filted_anchors.append(batch_anchors)
+        filted_offset.append(batch_offset)
+        filted_rect.append(batch_rect)
+    return filted_classes, filted_offset, filted_anchors, filted_rect
+
+
+
+
+
+
+
 
 
 def box_filter2(pred_offset, pred_classes, pred_anchors, num_positives = 1):
