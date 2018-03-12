@@ -2,7 +2,6 @@ from AnchorBoxes2 import AnchorBoxes
 from keras.layers import Conv2D, Activation, MaxPooling2D, Reshape, Concatenate, SeparableConv2D
 from keras.regularizers import l2
 
-
 def block(x, f, init, trainable=True):
     b1 = SeparableConv2D(filters=f, kernel_size=(3, 3), padding='same', depth_multiplier=1)(x)
     b1 = Conv2D(f, (1, 1), padding='same', strides=[1, 1], activation='relu',

@@ -13,10 +13,10 @@ def log_loss(y_pred, y_true):
     return loss
 
 def smooth_L1(anchor_pred, anchor_true):
-    # loss_L1 = tf.abs(anchor_pred - anchor_true)
+    loss_L1 = tf.abs(anchor_pred - anchor_true)
     loss_L2 = 0.5 * (anchor_pred - anchor_true)**2
-    # loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
-    loss = tf.reduce_mean(loss_L2)
+    loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
+    # loss = tf.reduce_mean(loss)
     return loss
 
 def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):

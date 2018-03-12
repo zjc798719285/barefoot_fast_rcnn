@@ -9,8 +9,8 @@ import Loss
 ######################
 # Parameters setting #
 ######################
-train_txt = 'F:\zjc\data\RCNN\V1.0.0.0_128\\train.txt'
-test_txt = 'F:\zjc\data\RCNN\V1.0.0.0_128\\train.txt'
+train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
+test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 batch_size = 32
 num_boxes_one_image = 1248
 pos_neg_ratio = 1
