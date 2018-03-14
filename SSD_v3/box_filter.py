@@ -12,8 +12,85 @@ def box_decoder(anchor, offset):
     rect_h = anchor_h * np.exp(offset_h)
     rect = [rect_x, rect_y, rect_w, rect_h]
     return rect
+def box_decoder2(anchor, offset):
+    anchor_x = anchor[0]; anchor_y = anchor[1]
+    anchor_w = anchor[2]; anchor_h = anchor[3]
+    offset_x = offset[0]; offset_y = offset[1]
+    offset_w = offset[2]; offset_h = offset[3]
+    rect_x = anchor_x + offset_x
+    rect_y = anchor_y + offset_y
+    rect_w = anchor_w + offset_w
+    rect_h = anchor_h + offset_h
+    rect = [rect_x, rect_y, rect_w, rect_h]
+    return rect
 
-
+# def non_max_suppression_fast(boxes, probs, overlap_thresh=0.9, max_boxes=300):
+# # code used from here: http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
+# # if there are no boxes, return an empty list
+#     if len(boxes) == 0:
+#         return []
+#
+# # grab the coordinates of the bounding boxes
+#     x1 = boxes[:, 0]
+#     y1 = boxes[:, 1]
+#     x2 = boxes[:, 2]
+#     y2 = boxes[:, 3]
+#
+#     np.testing.assert_array_less(x1, x2)
+#     np.testing.assert_array_less(y1, y2)
+#
+# # if the bounding boxes integers, convert them to floats --
+# # this is important since we'll be doing a bunch of divisions
+#     if boxes.dtype.kind == "i":
+#         boxes = boxes.astype("float")
+#
+# # initialize the list of picked indexes
+# 	pick = []
+#
+# # calculate the areas
+#     area = (x2 - x1) * (y2 - y1)
+#
+# # sort the bounding boxes
+#     idxs = np.argsort(probs)
+#
+# # keep looping while some indexes still remain in the indexes
+# # list
+#     while len(idxs) > 0:
+# 		# grab the last index in the indexes list and add the
+# 		# index value to the list of picked indexes
+# 		last = len(idxs) - 1
+# 		i = idxs[last]
+# 		pick.append(i)
+#
+# 		# find the intersection
+#
+# 		xx1_int = np.maximum(x1[i], x1[idxs[:last]])
+# 		yy1_int = np.maximum(y1[i], y1[idxs[:last]])
+# 		xx2_int = np.minimum(x2[i], x2[idxs[:last]])
+# 		yy2_int = np.minimum(y2[i], y2[idxs[:last]])
+#
+# 		ww_int = np.maximum(0, xx2_int - xx1_int)
+# 		hh_int = np.maximum(0, yy2_int - yy1_int)
+#
+# 		area_int = ww_int * hh_int
+#
+# 		# find the union
+# 		area_union = area[i] + area[idxs[:last]] - area_int
+#
+# 		# compute the ratio of overlap
+# 		overlap = area_int/(area_union + 1e-6)
+#
+# 		# delete all indexes from the index list that have
+# 		idxs = np.delete(idxs, np.concatenate(([last],
+# 			np.where(overlap > overlap_thresh)[0])))
+#
+# 		if len(pick) >= max_boxes:
+# 			break
+#
+# # return only the bounding boxes that were picked using the integer data type
+#     boxes = boxes[pick].astype("int")
+#     probs = probs[pick]
+#     return boxes, probs
 
 def box_filter(pred_offset, pred_classes, pred_anchors):
     filted_classes =[]; filted_anchors = []; filted_offset = []
@@ -37,13 +114,21 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
         filted_rect.append(batch_rect)
     return filted_classes, filted_offset, filted_anchors, filted_rect
 
-
-
-
-
-
-
-
+def rect_iou(roi_list, rect_batch):
+    batch_size = np.shape(rect_batch)[0]
+    sum_iou = 0; mean_iou_one_img = 0
+    for i in range(batch_size):
+        roi = roi_list[i][0]
+        rect = rect_batch[i]
+        sum_iou_one_img = 0; len_iou_one_img = 0
+        for rect_i in rect:
+            len_iou_one_img += 1
+            iou = iou_eval(gt=roi, dr=rect_i)
+            sum_iou_one_img += iou
+        mean_iou_one_img = sum_iou_one_img / len_iou_one_img
+        sum_iou += mean_iou_one_img
+    mean_iou = sum_iou / batch_size
+    return mean_iou
 
 def box_filter2(pred_offset, pred_classes, pred_anchors, num_positives = 1):
     pred_rect_list = [];pred_anchors_list = [];pred_offset_list = []
@@ -132,14 +217,5 @@ def class_pred_acc2(cls_pred, cls_true):
 
 
 
-    for i in range(batch_size):
-        for y_i in cls_true[i, :, :]:
-            if (y_i[0] == 1 and y_i[1] == 0):
-                num_bk += 1
-            if (y_i[0] == 0 and y_i[1] == 1):
-                num_cls += 1
-    num_hard = batch_size * boxes - num_bk - num_cls
-
-    return n_correct / n_pred, num_bk, num_cls, num_hard
 
 

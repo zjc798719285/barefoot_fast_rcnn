@@ -1,7 +1,7 @@
 from SSDModel_v2 import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_filter import class_pred_acc, box_filter, batch_mean_iou,class_pred_acc2
+from box_filter import class_pred_acc, box_filter, rect_iou,class_pred_acc2
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
@@ -13,7 +13,7 @@ train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 batch_size = 32
 num_boxes_one_image = 1248
-pos_neg_ratio = 1
+pos_neg_ratio = 0.1
 #############
 # Load Data #
 #############
@@ -48,7 +48,7 @@ with tf.Session() as sess:
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
                                                      classes_list=train_class_list,
                                                      anchors=anchors2,
-                                                     iou_thresh_pos=0.4,
+                                                     iou_thresh_pos=0.5,
                                                      iou_thresh_neg=0.1,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
@@ -62,12 +62,17 @@ with tf.Session() as sess:
            filted_classes, filted_offset, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
                                                                       pred_anchors=anchors_pred,
                                                                       pred_offset=offset_pred)
+           mean_iou_anchors = rect_iou(roi_list=train_roi_list, rect_batch=filted_anchors)
+           mean_iou_rect = rect_iou(roi_list=train_roi_list, rect_batch=filted_rect)
 
            print('step=', i)
-           print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1, 'rect_shape=')
+           print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1)
            print('acc=', acc, 'recall=', recall, 'num_pos=', num_pos,
                  'num_hard=', num_hard, 'num_neg=', num_neg)
-           print('classes', np.shape(filted_rect[1]))
+           print('rect_shape', np.shape(filted_rect[1]),
+                 'mean_iou_anchors=', mean_iou_anchors,
+                 'mean_iou_rect=', mean_iou_rect)
+
 
 
 

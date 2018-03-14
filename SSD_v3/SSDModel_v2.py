@@ -43,9 +43,9 @@ class SSDModel(object):
                       kernel_initializer=self.init)(net4)
         net4 = block(x=net4, f=512, init=self.init)
         n_boxes = len(self.aspect_ratios)*len(self.scales)
-        classes2 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
-                          kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
-                          name='classes6', activation='sigmoid')(net2)
+        # classes2 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
+        #                   kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
+        #                   name='classes6', activation='sigmoid')(net2)
         classes3 = Conv2D(n_boxes * self.n_classes, (3, 3), strides=(1, 1), padding="same",
                           kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
                           name='classes7', activation='sigmoid')(net3)
@@ -58,11 +58,25 @@ class SSDModel(object):
         #                 kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
         #                 name='boxes6')(net2)
         boxes_offset3 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
-                        kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
-                        name='boxes7')(net3)
+                        kernel_initializer ='zero', kernel_regularizer=l2(self.l2_reg),
+                        name ='boxes3')(net3)
+        # boxes_offset3 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
+        #                        kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
+        #                        name='boxes3', activation='relu')(boxes_offset3)
+        # boxes_offset3 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
+        #                        kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
+        #                        name='boxes3')(boxes_offset3)
         boxes_offset4 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
-                        kernel_initializer='he_normal', kernel_regularizer=l2(self.l2_reg),
-                        name='boxes7')(net4)
+                        kernel_initializer='zero', kernel_regularizer=l2(self.l2_reg),
+                        name='boxes4')(net4)
+        # boxes_offset4 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
+        #                        kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
+        #                        name='boxes4', activation='relu')(boxes_offset4)
+        # boxes_offset4 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
+        #                        kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
+        #                        name='boxes4')(boxes_offset4)
+
+
         # anchor2 = AnchorBoxes(img_height=128, img_width=59,
         #                       aspect_ratios=self.aspect_ratios,
         #                       scales=self.scales)(boxes_offset2)

@@ -51,12 +51,13 @@ def ssd_box_encoder_one_image(roi_list, classes_list, num_classes,
     y_anchors = np.zeros((1, num_boxes, 4))
     for id_anc, anchor in enumerate(anchors):
         for roi_i, class_i in zip(roi_list, classes_list):
-            if iou_eval(roi_i, anchor) >= iou_thresh_pos:
-                # x:anchor[0] y:anchor[1] w:anchor[2] h:anchor[3]
-                y_anchors[0, id_anc, 0] = (roi_i[0] - anchor[0]) / anchor[3] #(gt_x - anchor_x)/anchor_h
-                y_anchors[0, id_anc, 1] = (roi_i[1] - anchor[1]) / anchor[2] #(gt_y - anchor_y)/anchor_w
-                y_anchors[0, id_anc, 2] = np.log(roi_i[2] / anchor[2])       #ln(gt_w/anchor_w)
-                y_anchors[0, id_anc, 3] = np.log(roi_i[3] / anchor[3])       #ln(gt_h/anchor_h)
+            # x:anchor[0] y:anchor[1] w:anchor[2] h:anchor[3]
+            gt_x = roi_i[0]; gt_y = roi_i[1]; gt_w = roi_i[2]; gt_h = roi_i[3]
+            anchor_x = anchor[0]; anchor_y = anchor[1]; anchor_w = anchor[2]; anchor_h = anchor[3]
+            y_anchors[0, id_anc, 0] = (gt_x - anchor_x)/anchor_h
+            y_anchors[0, id_anc, 1] = (gt_y - anchor_y)/anchor_w
+            y_anchors[0, id_anc, 2] = np.log(gt_w/anchor_w)
+            y_anchors[0, id_anc, 3] = np.log(gt_h/anchor_h)
             if iou_eval(roi_i, anchor) >= iou_thresh_pos:
                 y_classses[0, id_anc, int(class_i)] = 1
             elif iou_eval(roi_i, anchor) < iou_thresh_neg:
