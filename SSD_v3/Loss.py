@@ -37,4 +37,4 @@ def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
     neg_loss = tf.reduce_mean(values)
     class_loss = pos_loss + neg_loss
 
-    return loc_loss, class_loss
+    return loc_loss, class_loss, values

@@ -1,7 +1,7 @@
 from SSDModel_v2 import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_filter import class_pred_acc, box_filter, rect_iou,class_pred_acc2
+from box_filter import class_pred_acc, box_filter, rect_iou, class_pred_acc2
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
@@ -25,16 +25,14 @@ classes, offset, anchors = SSDModel(l2_regularization=0,
                                     n_classes=1,
                                     aspect_ratios=[2.5, 3, 3.2],
                                     scales=[47, 52, 56, 59])(TRAIN_X)
-
-
-
-loss_loc, loss_cls = Loss.cls_loc_loss(anchor_pred=anchors, anchor_true=TRAIN_ANCHORS,
-                    y_pred=classes, y_true=TRAIN_CLASSES,
-                    pos_neg_ratio=pos_neg_ratio)
+loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=anchors,
+                                       anchor_true=TRAIN_ANCHORS,
+                                       y_pred=classes,
+                                       y_true=TRAIN_CLASSES,
+                                       pos_neg_ratio=pos_neg_ratio)
 loss = loss_cls + loss_loc
 optimizer = tf.train.AdadeltaOptimizer(learning_rate=0.01, rho=0.9)
 opt = optimizer.minimize(loss)
-
 
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
@@ -52,8 +50,8 @@ with tf.Session() as sess:
                                                      iou_thresh_neg=0.1,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
-        loss_cls1, loss_loc1, opt1 = sess.run([classes, offset, anchors,
-                                               loss_cls, loss_loc, opt],
+        loss_cls1, loss_loc1, opt1, values1 = sess.run([classes, offset, anchors,
+                                               loss_cls, loss_loc, opt, values],
                                                feed_dict={TRAIN_X: train_x,
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
@@ -72,6 +70,7 @@ with tf.Session() as sess:
            print('rect_shape', np.shape(filted_rect[1]),
                  'mean_iou_anchors=', mean_iou_anchors,
                  'mean_iou_rect=', mean_iou_rect)
+           print('values_shape=', np.shape(values1))
 
 
 
