@@ -1,7 +1,7 @@
 from SSDModel_v2 import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_filter import class_pred_acc, box_filter, rect_iou, class_pred_acc2
+from box_filter import box_filter, rect_iou, class_acc
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
@@ -13,7 +13,7 @@ train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 batch_size = 32
 num_boxes_one_image = 1248
-pos_neg_ratio = 0.1
+pos_neg_ratio = 1
 #############
 # Load Data #
 #############
@@ -47,7 +47,7 @@ with tf.Session() as sess:
                                                      classes_list=train_class_list,
                                                      anchors=anchors2,
                                                      iou_thresh_pos=0.5,
-                                                     iou_thresh_neg=0.1,
+                                                     iou_thresh_neg=0.2,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
         loss_cls1, loss_loc1, opt1, values1 = sess.run([classes, offset, anchors,
@@ -56,7 +56,7 @@ with tf.Session() as sess:
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
         if i % 5 == 0:
-           acc, recall, num_pos, num_hard, num_neg = class_pred_acc2(cls_pred=cls_pred, cls_true=y_classes)
+           acc, recall, num_pos, num_neg, num_hard = class_acc(_cls_pred=cls_pred, _cls_true=y_classes)
            filted_classes, filted_offset, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
                                                                       pred_anchors=anchors_pred,
                                                                       pred_offset=offset_pred)

@@ -106,7 +106,7 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
                 batch_classes.append(classes_i)
                 batch_anchors.append(anchors_i)
                 batch_offset.append(offset_i)
-                rect = box_decoder(anchor=anchors_i, offset=offset_i)
+                rect = box_decoder2(anchor=anchors_i, offset=offset_i)
                 batch_rect.append(rect)
         filted_classes.append(batch_classes)
         filted_anchors.append(batch_anchors)
@@ -146,42 +146,56 @@ def batch_mean_iou(roi_list, rect):
     return sum_iou/len(roi_list)
 
 
-
-
-
-
-
-
-
-
-
-
-
-def class_pred_acc(cls_pred, cls_true):
-    (batch_size, boxes, classes) = np.shape(cls_pred)
-    n_pred = np.zeros([classes])
-    n_correct = np.zeros([classes])
-    index_pred = np.argmax(a=cls_pred, axis=2)
-    index_trued = np.argmax(a=cls_true, axis=2)
-    index_pred = np.reshape(a=index_pred, newshape=(batch_size * boxes))
-    index_trued = np.reshape(a=index_trued, newshape=(batch_size * boxes))
-    assert(len(index_pred) == len(index_trued), 'index_pred and index_trued are not equal')
-    for pred_i, true_i in zip(index_pred, index_trued):
-        for i in range(classes):
-            if pred_i == i:
-                n_pred[i] = n_pred[i] + 1
-                if true_i == i:
-                    n_correct[i] = n_correct[i] + 1
-
-    num_bk = 0; num_cls = 0
+# def class_pred_acc(cls_pred, cls_true):
+#     (batch_size, boxes, classes) = np.shape(cls_pred)
+#     n_pred = np.zeros([classes])
+#     n_correct = np.zeros([classes])
+#     index_pred = np.argmax(a=cls_pred, axis=2)
+#     index_trued = np.argmax(a=cls_true, axis=2)
+#     index_pred = np.reshape(a=index_pred, newshape=(batch_size * boxes))
+#     index_trued = np.reshape(a=index_trued, newshape=(batch_size * boxes))
+#     assert(len(index_pred) == len(index_trued), 'index_pred and index_trued are not equal')
+#     for pred_i, true_i in zip(index_pred, index_trued):
+#         for i in range(classes):
+#             if pred_i == i:
+#                 n_pred[i] = n_pred[i] + 1
+#                 if true_i == i:
+#                     n_correct[i] = n_correct[i] + 1
+#
+#     num_bk = 0; num_cls = 0
+#     for i in range(batch_size):
+#      for y_i in cls_true[i, :, :]:
+#         if (y_i[0] == 1 and y_i[1] == 0):
+#             num_bk += 1
+#         if (y_i[0] == 0 and y_i[1] == 1):
+#             num_cls += 1
+#     num_hard = batch_size*boxes - num_bk - num_cls
+#     return n_correct / n_pred, num_bk, num_cls, num_hard
+def class_acc(_cls_pred, _cls_true):
+    (batch_size, boxes, classes) = np.shape(_cls_pred)
+    n_pos_pred = 0; n_pos_acc = 0; n_neg_pred = 0;n_neg_acc = 0
+    n_pos = 0; n_neg = 0
     for i in range(batch_size):
-     for y_i in cls_true[i, :, :]:
-        if (y_i[0] == 1 and y_i[1] == 0):
-            num_bk += 1
-        if (y_i[0] == 0 and y_i[1] == 1):
-            num_cls += 1
-    num_hard = batch_size*boxes - num_bk - num_cls
-    return n_correct / n_pred, num_bk, num_cls, num_hard
+        for j in range(boxes):
+            cls_pred = _cls_pred[i, j, :]
+            cls_true = _cls_true[i, j, :]
+            if cls_pred[1] > cls_pred[0]:
+                n_pos_pred += 1
+            elif cls_pred[0] > cls_pred[1]:
+                n_neg_pred += 1
+            if cls_pred[1] > cls_pred[0] and cls_true[1] >= cls_true[0]:
+                n_pos_acc += 1
+            elif cls_pred[0] > cls_pred[1] and cls_true[0] > cls_true[1]:
+                n_neg_acc += 1
+            if cls_true[1] > cls_true[0]:
+                n_pos += 1
+            if cls_true[0] > cls_true[1]:
+                n_neg += 1
+    acc = np.array([n_neg_acc, n_pos_acc]) / np.array([n_neg_pred, n_pos_pred])
+    recall = np.array([n_neg_acc, n_pos_acc]) / np.array([n_neg, n_pos])
+    n_hard = batch_size * boxes - n_pos - n_neg
+    return acc, recall, n_pos, n_neg, n_hard
+
 
 
 
