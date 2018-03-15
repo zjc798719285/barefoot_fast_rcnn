@@ -11,7 +11,7 @@ import Loss
 ######################
 train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
-batch_size = 32
+batch_size = 5
 num_boxes_one_image = 1248
 pos_neg_ratio = 2
 #############
@@ -70,7 +70,8 @@ with tf.Session() as sess:
            print('rect_shape', np.shape(filted_rect[1]),
                  'mean_iou_anchors=', mean_iou_anchors,
                  'mean_iou_rect=', mean_iou_rect)
-           print('values_shape=', np.shape(values1))
+           print('values_shape=', np.shape(values1),
+                 'anchor_shape=', np.shape(filted_anchors))
 
 
 

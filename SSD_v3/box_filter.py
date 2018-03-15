@@ -24,73 +24,31 @@ def box_decoder2(anchor, offset):
     rect = [rect_x, rect_y, rect_w, rect_h]
     return rect
 
-# def non_max_suppression_fast(boxes, probs, overlap_thresh=0.9, max_boxes=300):
-# # code used from here: http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
-# # if there are no boxes, return an empty list
-#     if len(boxes) == 0:
-#         return []
-#
-# # grab the coordinates of the bounding boxes
-#     x1 = boxes[:, 0]
-#     y1 = boxes[:, 1]
-#     x2 = boxes[:, 2]
-#     y2 = boxes[:, 3]
-#
-#     np.testing.assert_array_less(x1, x2)
-#     np.testing.assert_array_less(y1, y2)
-#
-# # if the bounding boxes integers, convert them to floats --
-# # this is important since we'll be doing a bunch of divisions
-#     if boxes.dtype.kind == "i":
-#         boxes = boxes.astype("float")
-#
-# # initialize the list of picked indexes
-# 	pick = []
-#
-# # calculate the areas
-#     area = (x2 - x1) * (y2 - y1)
-#
-# # sort the bounding boxes
-#     idxs = np.argsort(probs)
-#
-# # keep looping while some indexes still remain in the indexes
-# # list
-#     while len(idxs) > 0:
-# 		# grab the last index in the indexes list and add the
-# 		# index value to the list of picked indexes
-# 		last = len(idxs) - 1
-# 		i = idxs[last]
-# 		pick.append(i)
-#
-# 		# find the intersection
-#
-# 		xx1_int = np.maximum(x1[i], x1[idxs[:last]])
-# 		yy1_int = np.maximum(y1[i], y1[idxs[:last]])
-# 		xx2_int = np.minimum(x2[i], x2[idxs[:last]])
-# 		yy2_int = np.minimum(y2[i], y2[idxs[:last]])
-#
-# 		ww_int = np.maximum(0, xx2_int - xx1_int)
-# 		hh_int = np.maximum(0, yy2_int - yy1_int)
-#
-# 		area_int = ww_int * hh_int
-#
-# 		# find the union
-# 		area_union = area[i] + area[idxs[:last]] - area_int
-#
-# 		# compute the ratio of overlap
-# 		overlap = area_int/(area_union + 1e-6)
-#
-# 		# delete all indexes from the index list that have
-# 		idxs = np.delete(idxs, np.concatenate(([last],
-# 			np.where(overlap > overlap_thresh)[0])))
-#
-# 		if len(pick) >= max_boxes:
-# 			break
-#
-# # return only the bounding boxes that were picked using the integer data type
-#     boxes = boxes[pick].astype("int")
-#     probs = probs[pick]
-#     return boxes, probs
+def NMS(rect, classes, threshold, max_boxes = 100):
+    rect = np.array(rect)
+    classes = np.array(classes)
+    boxes = np.concatenate((rect, classes), 1)
+    pick_boxes = []
+    box = boxes[boxes[:, 5].argsort()]; boxes = box.tolist()
+    while boxes:
+        max_box = boxes[-1]
+        pick_boxes.append(max_box[0:4])
+        boxes.remove(max_box)
+        for box_i in boxes:
+            if iou_eval(gt=box_i[0:4], dr=max_box[0:4]) > threshold:
+                boxes.remove(box_i)
+    if len(pick_boxes) > max_boxes:
+        pick_boxes = pick_boxes[0:max_boxes]
+    return pick_boxes
+
+
+
+
+
+
+
+
+
 
 def box_filter(pred_offset, pred_classes, pred_anchors):
     filted_classes =[]; filted_anchors = []; filted_offset = []
@@ -100,18 +58,20 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
         offset = pred_offset[i, :, :]; classes = pred_classes[i, :, :]
         anchors = pred_anchors[i, :, :]
         batch_classes = []; batch_anchors = []; batch_offset=[]
-        batch_rect = []
+        batch_rect = [];
         for offset_i, classes_i, anchors_i in zip(offset, classes, anchors):
-            if classes_i[1] > classes_i[0] and classes_i[1] > 0.5:
+            if classes_i[1] > classes_i[0] :
                 batch_classes.append(classes_i)
                 batch_anchors.append(anchors_i)
                 batch_offset.append(offset_i)
                 rect = box_decoder2(anchor=anchors_i, offset=offset_i)
                 batch_rect.append(rect)
+        rect = NMS(rect=batch_rect, classes=batch_classes, threshold=0.7, max_boxes=300)
+        anchors = NMS(rect=batch_anchors, classes=batch_classes, threshold=0.7, max_boxes=300)
         filted_classes.append(batch_classes)
-        filted_anchors.append(batch_anchors)
+        filted_anchors.append(anchors)
         filted_offset.append(batch_offset)
-        filted_rect.append(batch_rect)
+        filted_rect.append(rect)
     return filted_classes, filted_offset, filted_anchors, filted_rect
 
 def rect_iou(roi_list, rect_batch):
@@ -146,31 +106,7 @@ def batch_mean_iou(roi_list, rect):
     return sum_iou/len(roi_list)
 
 
-# def class_pred_acc(cls_pred, cls_true):
-#     (batch_size, boxes, classes) = np.shape(cls_pred)
-#     n_pred = np.zeros([classes])
-#     n_correct = np.zeros([classes])
-#     index_pred = np.argmax(a=cls_pred, axis=2)
-#     index_trued = np.argmax(a=cls_true, axis=2)
-#     index_pred = np.reshape(a=index_pred, newshape=(batch_size * boxes))
-#     index_trued = np.reshape(a=index_trued, newshape=(batch_size * boxes))
-#     assert(len(index_pred) == len(index_trued), 'index_pred and index_trued are not equal')
-#     for pred_i, true_i in zip(index_pred, index_trued):
-#         for i in range(classes):
-#             if pred_i == i:
-#                 n_pred[i] = n_pred[i] + 1
-#                 if true_i == i:
-#                     n_correct[i] = n_correct[i] + 1
-#
-#     num_bk = 0; num_cls = 0
-#     for i in range(batch_size):
-#      for y_i in cls_true[i, :, :]:
-#         if (y_i[0] == 1 and y_i[1] == 0):
-#             num_bk += 1
-#         if (y_i[0] == 0 and y_i[1] == 1):
-#             num_cls += 1
-#     num_hard = batch_size*boxes - num_bk - num_cls
-#     return n_correct / n_pred, num_bk, num_cls, num_hard
+
 def class_acc(_cls_pred, _cls_true):
     (batch_size, boxes, classes) = np.shape(_cls_pred)
     n_pos_pred = 0; n_pos_acc = 0; n_neg_pred = 0;n_neg_acc = 0
@@ -195,7 +131,6 @@ def class_acc(_cls_pred, _cls_true):
     recall = np.array([n_neg_acc, n_pos_acc]) / np.array([n_neg, n_pos])
     n_hard = batch_size * boxes - n_pos - n_neg
     return acc, recall, n_pos, n_neg, n_hard
-
 
 
 
