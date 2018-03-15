@@ -4,8 +4,6 @@
     <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" afterPath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/Loss.py" afterPath="$PROJECT_DIR$/SSD_v3/Loss.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" afterPath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/box_filter.py" afterPath="$PROJECT_DIR$/SSD_v3/box_filter.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" afterPath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/train_model.py" afterPath="$PROJECT_DIR$/SSD_v3/train_model.py" />
@@ -53,8 +51,8 @@
       <file leaf-file-name="train_model2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SSD_v2/train_model2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="80" column="14" lean-forward="true" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
+            <state relative-caret-position="126">
+              <caret line="75" column="2" lean-forward="false" selection-start-line="75" selection-start-column="2" selection-end-line="75" selection-end-column="2" />
               <folding />
             </state>
           </provider>
@@ -357,13 +355,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515988102876</updated>
-    </task>
-    <task id="LOCAL-00003" summary="utils file add a new function:create_train_test_table, this function is used for create txt(train/test) file">
-      <created>1516085531300</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1516085531300</updated>
     </task>
     <task id="LOCAL-00004" summary="roi_pooling.py has no change&#10;utilis.py add a new function load_data">
       <created>1516088632842</created>
@@ -701,7 +692,14 @@
       <option name="project" value="LOCAL" />
       <updated>1520998012606</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="SSD_V3:change loss and ssd_encoder">
+      <created>1521074573171</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1521074573171</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TodoView">
@@ -782,7 +780,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="roi_pooling have some bugs, if fc_shape = 0, bugs appear" />
     <MESSAGE value="roi_poling bug have been revised" />
     <MESSAGE value="The faster Rcnn have been worked but the detect result is not very well" />
     <MESSAGE value="Delete invalid code" />
@@ -807,7 +804,8 @@
     <MESSAGE value="SSD_V3:before add non_maximum_suppression" />
     <MESSAGE value="make commit before change SSD_V3" />
     <MESSAGE value="SSD_V3:Delete no used python files" />
-    <option name="LAST_COMMIT_MESSAGE" value="SSD_V3:Delete no used python files" />
+    <MESSAGE value="SSD_V3:change loss and ssd_encoder" />
+    <option name="LAST_COMMIT_MESSAGE" value="SSD_V3:change loss and ssd_encoder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1019,8 +1017,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SSD_v2/train_model2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="80" column="14" lean-forward="true" selection-start-line="80" selection-start-column="14" selection-end-line="80" selection-end-column="14" />
+        <state relative-caret-position="126">
+          <caret line="75" column="2" lean-forward="false" selection-start-line="75" selection-start-column="2" selection-end-line="75" selection-end-column="2" />
           <folding />
         </state>
       </provider>

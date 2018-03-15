@@ -13,7 +13,7 @@ train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 batch_size = 32
 num_boxes_one_image = 1248
-pos_neg_ratio = 1
+pos_neg_ratio = 2
 #############
 # Load Data #
 #############
@@ -47,7 +47,7 @@ with tf.Session() as sess:
                                                      classes_list=train_class_list,
                                                      anchors=anchors2,
                                                      iou_thresh_pos=0.5,
-                                                     iou_thresh_neg=0.2,
+                                                     iou_thresh_neg=0.1,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
         loss_cls1, loss_loc1, opt1, values1 = sess.run([classes, offset, anchors,
@@ -71,6 +71,7 @@ with tf.Session() as sess:
                  'mean_iou_anchors=', mean_iou_anchors,
                  'mean_iou_rect=', mean_iou_rect)
            print('values_shape=', np.shape(values1))
+
 
 
 

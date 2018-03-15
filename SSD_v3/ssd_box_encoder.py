@@ -52,7 +52,7 @@ def ssd_box_encoder_one_image(roi_list, classes_list, num_classes,
     for id_anc, anchor in enumerate(anchors):
         for roi_i, class_i in zip(roi_list, classes_list):
             # x:anchor[0] y:anchor[1] w:anchor[2] h:anchor[3]
-            if iou_eval(roi_i, anchor) > iou_thresh_neg:
+            if iou_eval(roi_i, anchor) >= iou_thresh_pos:
                 gt_x = roi_i[0]; gt_y = roi_i[1]; gt_w = roi_i[2]; gt_h = roi_i[3]
                 anchor_x = anchor[0]; anchor_y = anchor[1]; anchor_w = anchor[2]; anchor_h = anchor[3]
                 y_anchors[0, id_anc, 0] = (gt_x - anchor_x)
@@ -61,7 +61,7 @@ def ssd_box_encoder_one_image(roi_list, classes_list, num_classes,
                 y_anchors[0, id_anc, 3] = gt_h - anchor_h
             if iou_eval(roi_i, anchor) >= iou_thresh_pos:
                 y_classses[0, id_anc, int(class_i)] = 1
-            elif iou_eval(roi_i, anchor) <= iou_thresh_neg:
+            elif iou_eval(roi_i, anchor) >= iou_thresh_neg and iou_eval(roi_i, anchor) < iou_thresh_pos:
                 y_classses[0, id_anc, 0] = 1
     return y_classses, y_anchors
 

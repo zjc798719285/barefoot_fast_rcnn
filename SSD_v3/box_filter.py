@@ -183,7 +183,7 @@ def class_acc(_cls_pred, _cls_true):
                 n_pos_pred += 1
             elif cls_pred[0] > cls_pred[1]:
                 n_neg_pred += 1
-            if cls_pred[1] > cls_pred[0] and cls_true[1] >= cls_true[0]:
+            if cls_pred[1] > cls_pred[0] and cls_true[1] > cls_true[0]:
                 n_pos_acc += 1
             elif cls_pred[0] > cls_pred[1] and cls_true[0] > cls_true[1]:
                 n_neg_acc += 1
