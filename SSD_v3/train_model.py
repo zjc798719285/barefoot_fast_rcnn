@@ -1,4 +1,5 @@
-from SSDModel_v2 import SSDModel
+# from SSDModel_v2 import SSDModel
+from resnet import SSDModel
 import tensorflow as tf
 import numpy as np
 from box_filter import box_filter, rect_iou, class_acc
@@ -11,9 +12,9 @@ import Loss
 ######################
 train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
-batch_size = 5
-num_boxes_one_image = 1248
-pos_neg_ratio = 2
+batch_size = 10
+num_boxes_one_image = 1728
+pos_neg_ratio = 10
 #############
 # Load Data #
 #############
@@ -21,8 +22,7 @@ pos_neg_ratio = 2
 TRAIN_X = tf.placeholder(tf.float32, [batch_size, 128, 59, 3])
 TRAIN_ANCHORS = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 4])
 TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
-classes, offset, anchors = SSDModel(l2_regularization=0,
-                                    n_classes=1,
+classes, offset, anchors = SSDModel(n_classes=1,
                                     aspect_ratios=[2.5, 3, 3.2],
                                     scales=[47, 52, 56, 59])(TRAIN_X)
 loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=anchors,
@@ -30,7 +30,7 @@ loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=anchors,
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
                                        pos_neg_ratio=pos_neg_ratio)
-loss = loss_cls + loss_loc
+loss = 0.01 * loss_cls + loss_loc
 optimizer = tf.train.AdadeltaOptimizer(learning_rate=0.01, rho=0.9)
 opt = optimizer.minimize(loss)
 
@@ -46,8 +46,8 @@ with tf.Session() as sess:
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
                                                      classes_list=train_class_list,
                                                      anchors=anchors2,
-                                                     iou_thresh_pos=0.5,
-                                                     iou_thresh_neg=0.1,
+                                                     iou_thresh_pos=0.7,
+                                                     iou_thresh_neg=0.2,
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
         loss_cls1, loss_loc1, opt1, values1 = sess.run([classes, offset, anchors,
@@ -71,7 +71,7 @@ with tf.Session() as sess:
                  'mean_iou_anchors=', mean_iou_anchors,
                  'mean_iou_rect=', mean_iou_rect)
            print('values_shape=', np.shape(values1),
-                 'anchor_shape=', np.shape(filted_anchors))
+                 'anchor_shape=', np.shape(filted_anchors[1]))
 
 
 
