@@ -14,11 +14,10 @@ def block(x, f, init, trainable=True):
 
 class SSDModel(object):
     def __init__(self,
-                 l2_regularization,
                  n_classes,
                  aspect_ratios,
                  scales):
-        self.l2_reg = l2_regularization
+        self.l2_reg = 0
         self.n_classes = n_classes + 1            # Account for the background class.
         self.aspect_ratios = aspect_ratios
         self.scales = scales

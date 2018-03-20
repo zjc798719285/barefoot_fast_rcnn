@@ -12,7 +12,7 @@ import Loss
 ######################
 train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
-batch_size = 10
+batch_size = 5
 num_boxes_one_image = 1728
 pos_neg_ratio = 10
 #############
@@ -25,7 +25,7 @@ TRAIN_CLASSES = tf.placeholder(tf.float32, [batch_size, num_boxes_one_image, 2])
 classes, offset, anchors = SSDModel(n_classes=1,
                                     aspect_ratios=[2.5, 3, 3.2],
                                     scales=[47, 52, 56, 59])(TRAIN_X)
-loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=anchors,
+loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=offset,    #此处函数名称要换
                                        anchor_true=TRAIN_ANCHORS,
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
