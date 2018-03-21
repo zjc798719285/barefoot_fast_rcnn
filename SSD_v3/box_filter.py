@@ -41,15 +41,6 @@ def NMS(rect, classes, threshold, max_boxes = 100):
         pick_boxes = pick_boxes[0:max_boxes]
     return pick_boxes
 
-
-
-
-
-
-
-
-
-
 def box_filter(pred_offset, pred_classes, pred_anchors):
     filted_classes =[]; filted_anchors = []; filted_offset = []
     filted_rect = []
@@ -64,7 +55,7 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
                 batch_classes.append(classes_i)
                 batch_anchors.append(anchors_i)
                 batch_offset.append(offset_i)
-                rect = box_decoder2(anchor=anchors_i, offset=offset_i)
+                rect = box_decoder(anchor=anchors_i, offset=offset_i)
                 batch_rect.append(rect)
         rect = NMS(rect=batch_rect, classes=batch_classes, threshold=0.7, max_boxes=300)
         anchors = NMS(rect=batch_anchors, classes=batch_classes, threshold=0.7, max_boxes=300)

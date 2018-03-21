@@ -21,23 +21,31 @@ def smooth_L1(anchor_pred, anchor_true):
     # loss = tf.reduce_mean(loss)
     return loss
 
-def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
-
-    loc_loss = smooth_L1(anchor_pred=anchor_pred, anchor_true=anchor_true)
+def cls_loss(y_pred, y_true):
+    pos_neg_ratio = 1
     classification_loss = log_loss(y_pred=y_pred, y_true=y_true)
     pos_mask = y_true[:, :, 1]; neg_mask = y_true[:, :, 0]
     num_pos = tf.reduce_sum(pos_mask); num_neg = tf.reduce_sum(neg_mask)
-    # if tf.less(num_pos, tf.constant(1.01)):
-    #     raise ValueError('No positive anchors are selected')
-    pos_loss = tf.reduce_sum(classification_loss * pos_mask) / num_pos
-    loc_loss_pos = tf.reduce_sum(loc_loss * pos_mask) / num_pos
+    pos_loss = tf.reduce_sum(classification_loss * pos_mask)
     neg_loss_all = classification_loss * neg_mask
     num_neg_keep = tf.cast(tf.minimum(tf.maximum(pos_neg_ratio * num_pos, 1), num_neg), tf.int32)  #边界限定
     neg_loss_all_1D = tf.reshape(neg_loss_all, [-1])  # Tensor of shape (batch_size * n_boxes,)
-    # ...and then we get the indices for the `n_negative_keep` boxes with the highest loss out of those...
     values, indices = tf.nn.top_k(neg_loss_all_1D, num_neg_keep, False)
-    neg_loss = tf.reduce_mean(values)
-    class_loss = pos_loss + 1.2*neg_loss
+    neg_loss = tf.reduce_sum(values)
+    class_loss = (pos_loss + neg_loss)/(num_pos + num_neg)
+    return class_loss
 
-    return loc_loss_pos, class_loss, values
-
+def loc_loss(y_pred, y_true):
+    loc_loss = smooth_L1(anchor_pred=y_pred, anchor_true=y_true)
+    pos_mask = y_true[:, :, 1]; num_pos = tf.reduce_sum(pos_mask)
+    loc_loss_pos = tf.reduce_sum(loc_loss * pos_mask) / num_pos
+    return loc_loss_pos
+def loss(y_pred, y_true):
+    y_pred_cls = y_pred[:, :, 0:3]
+    y_true_cls = y_true[:, :, 0:3]
+    y_pred_loc = y_pred[:, :, 4:7]
+    y_true_loc = y_true[:, :, 4:7]
+    loss_cls = cls_loss(y_pred=y_pred_cls, y_true=y_true_cls)
+    loss_loc = loc_loss(y_pred=y_pred_loc, y_true=y_true_loc)
+    loss = 0.1 * loss_cls + loss_loc
+    return loss

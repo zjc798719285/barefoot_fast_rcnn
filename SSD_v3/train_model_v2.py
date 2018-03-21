@@ -32,7 +32,7 @@ loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=offset,    #此处函
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
                                        pos_neg_ratio=pos_neg_ratio)
-loss = loss_cls + 2*loss_loc
+loss = loss_cls + 2*loss_loc                       #一个非常重要的参数，控制分类网络收敛速度
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 opt = optimizer.minimize(loss)
 
@@ -59,6 +59,7 @@ with tf.Session() as sess:
                                                feed_dict={TRAIN_X: train_x,
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
+
 
         if i % 5 == 0:
                 acc, recall, num_pos, num_neg, num_hard = class_acc(_cls_pred=cls_pred, _cls_true=y_classes)
