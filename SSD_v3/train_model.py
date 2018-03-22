@@ -15,8 +15,8 @@ train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 monitor_path = 'E:\PROJECT\\barefoot_fast_rcnn\SSD_v3\monitor\monitor.mat'
 batch_size = 5
-num_boxes_one_image = 1248
-pos_neg_ratio = 3
+num_boxes_one_image = 1920
+pos_neg_ratio = 2
 #############
 # Load Data #
 #############
@@ -32,8 +32,8 @@ loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=offset,    #此处函
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
                                        pos_neg_ratio=pos_neg_ratio)
-loss = loss_cls + 2*loss_loc
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
+loss = loss_cls + 10*loss_loc
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.03)
 opt = optimizer.minimize(loss)
 
 with tf.Session() as sess:
