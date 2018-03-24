@@ -9,14 +9,13 @@ import tensorflow as tf
 def log_loss(y_pred, y_true):
     y_pred = tf.nn.softmax(y_pred)
     y_pred = tf.maximum(y_pred, 1e-15)
-    one = tf.constant([1.0], dtype=tf.float32)
-    cross_entropy = y_true * tf.log(y_pred) + (one - y_true) * tf.log(one - y_pred)
-    loss = -tf.reduce_sum(cross_entropy, axis=2)
+    cross_entropy = -y_true * tf.log(y_pred) - (1 - y_true) * tf.log(1 - y_pred)
+    loss = tf.reduce_sum(cross_entropy, axis=2)
     return loss
 
 def smooth_L1(anchor_pred, anchor_true):
     loss_L1 = tf.abs(anchor_pred - anchor_true)
-    loss_L2 = 0.5 * (anchor_pred - anchor_true)**2
+    loss_L2 = tf.abs(anchor_pred - anchor_true)
     loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
     # loss = tf.reduce_mean(loss)
     return loss
@@ -35,9 +34,9 @@ def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
     num_neg_keep = tf.cast(tf.minimum(tf.maximum(pos_neg_ratio * num_pos, 1), num_neg), tf.int32)  #边界限定
     neg_loss_all_1D = tf.reshape(neg_loss_all, [-1])  # Tensor of shape (batch_size * n_boxes,)
     # ...and then we get the indices for the `n_negative_keep` boxes with the highest loss out of those...
-    values, indices = tf.nn.top_k(neg_loss_all_1D, num_neg_keep, False)
+    values, indices = tf.nn.top_k(neg_loss_all_1D, num_neg_keep, False)   #把负样本loss函数中最大的前N项输出，求导
     neg_loss = tf.reduce_mean(values)
-    class_loss = pos_loss + 1.3*neg_loss
+    class_loss = pos_loss + 1.3 * neg_loss
 
     return loc_loss_pos, class_loss, values
 

@@ -6,8 +6,7 @@ import scipy.io as sio
 from box_filter import box_filter, rect_iou, class_acc
 from ssd_box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
-import Loss
-
+import Loss, time
 ######################
 # Parameters setting #
 ######################
@@ -16,7 +15,7 @@ test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
 monitor_path = 'E:\PROJECT\\barefoot_fast_rcnn\SSD_v3\monitor\monitor.mat'
 batch_size = 5
 num_boxes_one_image = 1920
-pos_neg_ratio = 2
+pos_neg_ratio = 5
 #############
 # Load Data #
 #############
@@ -32,8 +31,8 @@ loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=offset,    #此处函
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
                                        pos_neg_ratio=pos_neg_ratio)
-loss = loss_cls + 10*loss_loc
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.03)
+loss = loss_cls + loss_loc
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 opt = optimizer.minimize(loss)
 
 with tf.Session() as sess:
@@ -46,6 +45,7 @@ with tf.Session() as sess:
     monitor = {'pos_acc': [], 'neg_acc': [], 'cls_loss': [], 'loc_loss': [],
                'anchor_iou': [], 'rect_iou': []}
     for i in range(10000):
+        # t1 = time.time()
         train_x, train_roi_list, train_class_list = trainData.next_batch()
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
                                                      classes_list=train_class_list,
@@ -59,13 +59,17 @@ with tf.Session() as sess:
                                                feed_dict={TRAIN_X: train_x,
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
-
+        # t2 = time.time()
+        # print('train time:', t2 - t1)
         if i % 5 == 0:
                 acc, recall, num_pos, num_neg, num_hard = class_acc(_cls_pred=cls_pred, _cls_true=y_classes)
-
+                # t3 = time.time()
+                # print('class_acc time:', t3 - t2)
                 filted_classes, filted_offset, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
                                                                       pred_anchors=anchors_pred,
-                                                                      pred_offset=offset_pred)
+                                                                       pred_offset=offset_pred)
+                # t4 = time.time()
+                # print('box_filter time:', t4 - t3)
                 mean_iou_anchors = rect_iou(roi_list=train_roi_list, rect_batch=filted_anchors)
                 mean_iou_rect = rect_iou(roi_list=train_roi_list, rect_batch=filted_rect)
                 monitor['pos_acc'].append(acc[0]);monitor['cls_loss'].append(loss_cls1)

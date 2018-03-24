@@ -1,5 +1,6 @@
 import numpy as np
 from ssd_box_encoder import iou_eval
+import time
 
 def box_decoder(anchor, offset):
     anchor_x = anchor[0]; anchor_y = anchor[1]
@@ -25,6 +26,7 @@ def box_decoder2(anchor, offset):
     return rect
 
 def NMS(rect, classes, threshold, max_boxes = 100):
+    t1 = time.time()
     rect = np.array(rect)
     classes = np.array(classes)
     boxes = np.concatenate((rect, classes), 1)
@@ -39,7 +41,8 @@ def NMS(rect, classes, threshold, max_boxes = 100):
                 boxes.remove(box_i)
     if len(pick_boxes) > max_boxes:
         pick_boxes = pick_boxes[0:max_boxes]
-    return pick_boxes
+    t2 = time.time()
+    return pick_boxes, t2 - t1
 
 def box_filter(pred_offset, pred_classes, pred_anchors):
     filted_classes =[]; filted_anchors = []; filted_offset = []
@@ -49,7 +52,7 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
         offset = pred_offset[i, :, :]; classes = pred_classes[i, :, :]
         anchors = pred_anchors[i, :, :]
         batch_classes = []; batch_anchors = []; batch_offset=[]
-        batch_rect = [];
+        batch_rect = []
         for offset_i, classes_i, anchors_i in zip(offset, classes, anchors):
             if classes_i[1] > classes_i[0] :
                 batch_classes.append(classes_i)
@@ -57,12 +60,13 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
                 batch_offset.append(offset_i)
                 rect = box_decoder(anchor=anchors_i, offset=offset_i)
                 batch_rect.append(rect)
-        rect = NMS(rect=batch_rect, classes=batch_classes, threshold=0.7, max_boxes=300)
-        anchors = NMS(rect=batch_anchors, classes=batch_classes, threshold=0.7, max_boxes=300)
+        # rect, time_rect = NMS(rect=batch_rect, classes=batch_classes, threshold=0.7, max_boxes=300)
+        # anchors, time_anchors = NMS(rect=batch_anchors, classes=batch_classes, threshold=0.7, max_boxes=300)
+        # print('time_rect:', time_rect, 'time_anchors:', time_anchors)
         filted_classes.append(batch_classes)
-        filted_anchors.append(anchors)
+        filted_anchors.append(batch_anchors)
         filted_offset.append(batch_offset)
-        filted_rect.append(rect)
+        filted_rect.append(batch_rect)
     return filted_classes, filted_offset, filted_anchors, filted_rect
 
 def rect_iou(roi_list, rect_batch):
@@ -99,9 +103,10 @@ def batch_mean_iou(roi_list, rect):
 
 
 def class_acc(_cls_pred, _cls_true):
+    eps = 10e-6
     (batch_size, boxes, classes) = np.shape(_cls_pred)
-    n_pos_pred = 0; n_pos_acc = 0; n_neg_pred = 0;n_neg_acc = 0
-    n_pos = 0; n_neg = 0
+    n_pos_pred = eps; n_pos_acc = eps; n_neg_pred = eps;n_neg_acc = eps
+    n_pos = eps; n_neg = eps
     for i in range(batch_size):
         for j in range(boxes):
             cls_pred = _cls_pred[i, j, :]
