@@ -36,7 +36,7 @@ def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
     # ...and then we get the indices for the `n_negative_keep` boxes with the highest loss out of those...
     values, indices = tf.nn.top_k(neg_loss_all_1D, num_neg_keep, False)   #把负样本loss函数中最大的前N项输出，求导
     neg_loss = tf.reduce_mean(values)
-    class_loss = pos_loss + 1.3 * neg_loss
+    class_loss = pos_loss + 2 * neg_loss
 
     return loc_loss_pos, class_loss, values
 
