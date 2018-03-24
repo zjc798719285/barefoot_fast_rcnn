@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" afterPath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/Loss.py" afterPath="$PROJECT_DIR$/SSD_v3/Loss.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" afterPath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/box_filter.py" afterPath="$PROJECT_DIR$/SSD_v3/box_filter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" afterPath="$PROJECT_DIR$/SSD_v3/ssd_box_encoder.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/train_model.py" afterPath="$PROJECT_DIR$/SSD_v3/train_model.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,8 +47,8 @@
       <file leaf-file-name="train_model2.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SSD_v2/train_model2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="75" column="2" lean-forward="false" selection-start-line="75" selection-start-column="2" selection-end-line="75" selection-end-column="2" />
+            <state relative-caret-position="67">
+              <caret line="72" column="0" lean-forward="true" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -357,13 +351,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515988102876</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Fast Rcnn have been worked,however architecture of this program is not well">
-      <created>1516589132391</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1516589132391</updated>
     </task>
     <task id="LOCAL-00011" summary="modify &quot;roi_layer&quot;,create a new class &quot;RoiLayer&quot;">
       <created>1516589831321</created>
@@ -701,7 +688,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521685106304</updated>
     </task>
-    <option name="localTasksCounter" value="59" />
+    <task id="LOCAL-00059" summary="SSD_V3:great change">
+      <created>1521852742731</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1521852742734</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TodoView">
@@ -716,8 +710,8 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31537357" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31537357" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10310735" sideWeight="0.5028986" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31497175" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -782,7 +776,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="first commit in loss_v1" />
     <MESSAGE value="loss_v1 is really robust," />
     <MESSAGE value="fast rcnn worked, push in branch loss_v1" />
     <MESSAGE value="fast rcnn worked, but it just like a rubbish" />
@@ -807,7 +800,8 @@
     <MESSAGE value="SSD_V3:Resnet have been worked" />
     <MESSAGE value="SSD_V3:change optimitor, get well work" />
     <MESSAGE value="SSD_V3:rect_mean_iou = 0.6, greate progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="SSD_V3:rect_mean_iou = 0.6, greate progress" />
+    <MESSAGE value="SSD_V3:great change" />
+    <option name="LAST_COMMIT_MESSAGE" value="SSD_V3:great change" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1019,8 +1013,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SSD_v2/train_model2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="75" column="2" lean-forward="false" selection-start-line="75" selection-start-column="2" selection-end-line="75" selection-end-column="2" />
+        <state relative-caret-position="67">
+          <caret line="72" column="0" lean-forward="true" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
           <folding />
         </state>
       </provider>
