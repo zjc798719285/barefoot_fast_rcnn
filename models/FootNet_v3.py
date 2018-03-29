@@ -4,6 +4,8 @@ from roi_pooling import RoiLayer
 import keras as k
 import tensorflow as tf
 
+
+
 class FootNet_v3(object):
     def __init__(self, aspect_ratio, scales):
         self.aspect_ratio = aspect_ratio
@@ -11,7 +13,7 @@ class FootNet_v3(object):
 
     def base_net(self, x):
         init = k.initializers.glorot_normal()
-        net1 = Conv2D(64, (3, 3), padding='same', strides=[2, 2],
+        net1 = Conv2D(64, (7, 7), padding='same', strides=[2, 2],
             kernel_initializer=init, activation='relu')(x)
         net2 = Conv2D(128, (3, 3), padding='same', strides=[1, 1], activation='relu',
             kernel_initializer=init)(net1)
@@ -19,7 +21,12 @@ class FootNet_v3(object):
         net3 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
             kernel_initializer=init)(net2)
         net3 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net3)
-        return net3
+        net4 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
+                      kernel_initializer=init)(net3)
+        net4 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net4)
+        net4 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
+                      kernel_initializer=init)(net4)
+        return net4
 
 
     def RPN(self, base_net, trainable=True):

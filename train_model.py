@@ -20,7 +20,7 @@ loss_rpn_regress = Loss.loss_rpn_regress(y_pred=offset, y_true=OFFSET)
 loss = loss_rpn_regress + loss_rpn_cls
 
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
+optimizer = tf.train.MomentumOptimizer(learning_rate=0.01)
 var_list = tf.trainable_variables()
 gradients = optimizer.compute_gradients(loss=loss, var_list=var_list)
 train_op = optimizer.apply_gradients(grads_and_vars=gradients)
@@ -30,9 +30,12 @@ train_generator = BatchGenerator(info_list=train_list)
 test_generator = BatchGenerator(info_list=test_list)
 sess = tf.InteractiveSession()
 for i in range(EPOCHES):
-    image, classes, offset, names = train_generator.next_batch()
-    _rpn_cls, _rpn_regress, _ = sess.run([loss_rpn_cls, loss_rpn_regress, train_op],
+    try:
+        sess.run(tf.global_variables_initializer())
+        image, classes, offset, names = train_generator.next_batch()
+        _rpn_cls, _rpn_regress, _ = sess.run([loss_rpn_cls, loss_rpn_regress, train_op],
                                          feed_dict={IMAGE: image, CLASSES: classes, OFFSET: offset})
-    print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress)
-
+        print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress)
+    except:
+        continue
 
