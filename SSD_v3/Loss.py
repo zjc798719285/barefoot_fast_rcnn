@@ -21,7 +21,6 @@ def smooth_L1(anchor_pred, anchor_true):
     return loss
 
 def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
-
     loc_loss = smooth_L1(anchor_pred=anchor_pred, anchor_true=anchor_true)
     classification_loss = log_loss(y_pred=y_pred, y_true=y_true)
     pos_mask = y_true[:, :, 1]; neg_mask = y_true[:, :, 0]

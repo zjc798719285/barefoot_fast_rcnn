@@ -1,5 +1,5 @@
 import numpy as np
-from ssd_box_encoder import iou_eval
+from box_encoder import iou_eval
 import time
 
 def box_decoder(anchor, offset):
