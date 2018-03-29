@@ -5,7 +5,7 @@ import numpy as np
 from Monitor import Monitor
 import scipy.io as sio
 from box_filter import box_filter, rect_iou, class_acc
-from ssd_box_encoder import ssd_box_encoder_batch
+from box_encoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
 

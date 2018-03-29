@@ -15,9 +15,9 @@ def log_loss(y_pred, y_true):
 
 def smooth_L1(anchor_pred, anchor_true):
     loss_L1 = tf.abs(anchor_pred - anchor_true)
-    # loss_L2 = 0.5*(anchor_pred - anchor_true)**2
-    # loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
-    loss = tf.reduce_mean(loss_L1)
+    loss_L2 = tf.abs(anchor_pred - anchor_true)
+    loss = tf.reduce_mean(tf.where(tf.less(loss_L1, 1.0), loss_L2, loss_L1 - 0.5))
+    # loss = tf.reduce_mean(loss)
     return loss
 
 def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
@@ -36,7 +36,7 @@ def cls_loc_loss(anchor_pred, anchor_true, y_pred, y_true,pos_neg_ratio):
     # ...and then we get the indices for the `n_negative_keep` boxes with the highest loss out of those...
     values, indices = tf.nn.top_k(neg_loss_all_1D, num_neg_keep, False)   #把负样本loss函数中最大的前N项输出，求导
     neg_loss = tf.reduce_mean(values)
-    class_loss = pos_loss + 1.5 * neg_loss
+    class_loss = pos_loss + 1.3 * neg_loss
 
     return loc_loss_pos, class_loss, values
 
