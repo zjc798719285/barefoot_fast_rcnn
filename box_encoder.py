@@ -101,11 +101,11 @@ def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
             y_classes[1] = 1
         if iou_list2[0][0] >= iou_neg_thresh and iou_list2[0][0] <iou_pos_thresh: #标记hard sample，对于负样本不标记
             y_classes[0] = 1
-        classes_list.append([iou_list2[0][0]])
+        classes_list.append([y_classes])
         offset_list.append([iou_list2[0][1]])
         name_list.append(iou_list2[0][2])
-    classes = np.reshape(np.array(classes_list), newshape=(1, -1, 2))
-    offset = np.reshape(np.array(offset_list), newshape=(1, -1, 4))
+    classes = np.reshape(np.array(classes_list), newshape=(-1, 2))
+    offset = np.reshape(np.array(offset_list), newshape=(-1, 4))
     return classes, offset, name_list
 
 
