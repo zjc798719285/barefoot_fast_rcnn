@@ -10,12 +10,14 @@ import Loss, time
 ######################
 # Parameters setting #
 ######################
-train_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
-test_txt = 'E:\PROJECT\\barefoot_fast_rcnn\data_txt\\train.txt'
-monitor_path = 'E:\PROJECT\\barefoot_fast_rcnn\SSD_v3\monitor\monitor.mat'
-batch_size = 5
+train_txt = 'I:\zjc\\barefoot_fast_rcnn\data_txt\\train.txt'
+test_txt = 'I:\zjc\\barefoot_fast_rcnn\data_txt\\train.txt'
+load_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\checkpoints\\SSD1575.ckpt'
+save_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\checkpoints'
+monitor_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\monitor.mat'
+batch_size = 32
 num_boxes_one_image = 1920
-pos_neg_ratio = 5
+pos_neg_ratio = 3
 #############
 # Load Data #
 #############
@@ -31,12 +33,19 @@ loss_loc, loss_cls, values = Loss.cls_loc_loss(anchor_pred=offset,    #此处函
                                        y_pred=classes,
                                        y_true=TRAIN_CLASSES,
                                        pos_neg_ratio=pos_neg_ratio)
-loss = loss_cls + loss_loc
+loss = loss_cls + 10 * loss_loc
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
-opt = optimizer.minimize(loss)
+saver = tf.train.Saver()
+var_list = tf.trainable_variables()
+trainable_list = var_list
+# trainable_list2 = [v for v in var_list if v.name.split['/'][0] in trainable_list]
+gradients = optimizer.compute_gradients(loss=loss, var_list=trainable_list)
+train_op = optimizer.apply_gradients(grads_and_vars=gradients)
 
+max_iou = 0; mean_iou = 0
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
+    # saver.restore(sess, load_path)
     train_x, train_roi, test_x, test_roi, train_cls, test_cls = load_data(train_txt, test_txt)
     trainData = BatchGenerator(image=train_x, roi=train_roi, classes=train_cls, batch_size=batch_size)
     testData = BatchGenerator(image=test_x, roi=test_roi, classes=test_cls, batch_size=batch_size)
@@ -44,7 +53,7 @@ with tf.Session() as sess:
     classes2, offset2, anchors2 = sess.run([classes, offset, anchors], feed_dict={TRAIN_X: train_x})
     monitor = {'pos_acc': [], 'neg_acc': [], 'cls_loss': [], 'loc_loss': [],
                'anchor_iou': [], 'rect_iou': []}
-    for i in range(10000):
+    for i in range(100000):
         # t1 = time.time()
         train_x, train_roi_list, train_class_list = trainData.next_batch()
         y_classes, y_anchors = ssd_box_encoder_batch(roi_list=train_roi_list,
@@ -55,10 +64,15 @@ with tf.Session() as sess:
                                                      num_classes=1)
         cls_pred, offset_pred, anchors_pred,\
         loss_cls1, loss_loc1, opt1, values1 = sess.run([classes, offset, anchors,
-                                               loss_cls, loss_loc, opt, values],
+                                               loss_cls, loss_loc, train_op, values],
                                                feed_dict={TRAIN_X: train_x,
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
+        _, _, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
+                                                                                pred_anchors=anchors_pred,
+                                                                                pred_offset=offset_pred)
+        mean_iou_rect = rect_iou(roi_list=train_roi_list, rect_batch=filted_rect)
+        mean_iou += mean_iou_rect
         # t2 = time.time()
         # print('train time:', t2 - t1)
         if i % 5 == 0:
@@ -77,7 +91,6 @@ with tf.Session() as sess:
                 monitor['anchor_iou'].append(mean_iou_anchors)
                 monitor['rect_iou'].append(mean_iou_rect)
                 sio.savemat(monitor_path, monitor)
-
                 print('step=', i)
                 print('loss_classes=', loss_cls1, 'loss_L1=', loss_loc1)
                 print('acc=', acc, 'recall=', recall, 'num_pos=', num_pos,
@@ -87,6 +100,14 @@ with tf.Session() as sess:
                     'mean_iou_rect=', mean_iou_rect)
                 print('values_shape=', np.shape(values1),
                     'anchor_shape=', np.shape(filted_anchors[1]))
+                if mean_iou / 5 > max_iou:
+                 print('**************save path ******************', 'mean_iou=', mean_iou / 5)
+                 max_iou = mean_iou / 5
+                 checkpoint = save_path + '\SSD' + str(i) + '.ckpt'
+                 saver.save(sess, checkpoint)
+                mean_iou = 0
+
+
 
 
 

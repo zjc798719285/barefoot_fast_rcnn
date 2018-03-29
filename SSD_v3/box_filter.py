@@ -25,6 +25,19 @@ def box_decoder2(anchor, offset):
     rect = [rect_x, rect_y, rect_w, rect_h]
     return rect
 
+
+def box_decoder3(anchor, offset):
+    anchor_x = anchor[0]; anchor_y = anchor[1]
+    anchor_w = anchor[2]; anchor_h = anchor[3]
+    offset_x = offset[0]; offset_y = offset[1]
+    offset_w = offset[2]; offset_h = offset[3]
+    rect_x = anchor_x - np.log(1/offset_x - 1)
+    rect_y = anchor_y - np.log(1/offset_y - 1)
+    rect_w = anchor_w - np.log(1/offset_w - 1)
+    rect_h = anchor_h - np.log(1/offset_h - 1)
+    rect = [rect_x, rect_y, rect_w, rect_h]
+    return rect
+
 def NMS(rect, classes, threshold, max_boxes = 100):
     t1 = time.time()
     rect = np.array(rect)
@@ -54,11 +67,11 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
         batch_classes = []; batch_anchors = []; batch_offset=[]
         batch_rect = []
         for offset_i, classes_i, anchors_i in zip(offset, classes, anchors):
-            if classes_i[1] > classes_i[0] :
+            if classes_i[1] > classes_i[0]:
                 batch_classes.append(classes_i)
                 batch_anchors.append(anchors_i)
                 batch_offset.append(offset_i)
-                rect = box_decoder(anchor=anchors_i, offset=offset_i)
+                rect = box_decoder2(anchor=anchors_i, offset=offset_i)
                 batch_rect.append(rect)
         # rect, time_rect = NMS(rect=batch_rect, classes=batch_classes, threshold=0.7, max_boxes=300)
         # anchors, time_anchors = NMS(rect=batch_anchors, classes=batch_classes, threshold=0.7, max_boxes=300)
@@ -70,6 +83,7 @@ def box_filter(pred_offset, pred_classes, pred_anchors):
     return filted_classes, filted_offset, filted_anchors, filted_rect
 
 def rect_iou(roi_list, rect_batch):
+    eps = 10e-6
     batch_size = np.shape(rect_batch)[0]
     sum_iou = 0; mean_iou_one_img = 0
     for i in range(batch_size):
@@ -80,7 +94,7 @@ def rect_iou(roi_list, rect_batch):
             len_iou_one_img += 1
             iou = iou_eval(gt=roi, dr=rect_i)
             sum_iou_one_img += iou
-        mean_iou_one_img = sum_iou_one_img / len_iou_one_img
+        mean_iou_one_img = sum_iou_one_img / (len_iou_one_img+eps)
         sum_iou += mean_iou_one_img
     mean_iou = sum_iou / batch_size
     return mean_iou
