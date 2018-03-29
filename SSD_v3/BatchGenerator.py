@@ -2,7 +2,7 @@ import os
 import cv2
 import scipy.io as sio
 import numpy as np
-from box_encoder import ssd_box_encoder_batch
+from ssd_box_encoder import ssd_box_encoder_batch
 ###############################################
 ##########  File I/O funcnctions   ############
 ###############################################
