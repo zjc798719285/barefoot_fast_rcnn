@@ -1,6 +1,6 @@
 import numpy as np
 import keras.backend as K
-from box_encoder import convert_coordinates
+from box_encoder_decoder import convert_coordinates
 class AnchorBoxes(object):
     def __init__(self, img_height, img_width, aspect_ratios, scales):
         self.img_height = img_height

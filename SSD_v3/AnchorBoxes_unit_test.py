@@ -1,7 +1,7 @@
 from SSDModel import SSDModel
 import tensorflow as tf
 import numpy as np
-from box_encoder import iou_eval
+from box_encoder_decoder import iou_eval
 import cv2
 from BatchGenerator import BatchGenerator, load_data
 import Loss

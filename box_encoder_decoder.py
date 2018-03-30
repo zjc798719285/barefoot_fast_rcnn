@@ -82,9 +82,9 @@ def iou_eval(gt, dr):
 
 
 def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
-    y_classes = np.zeros(2)   # +1代表背景
     classes_list = []; offset_list = []; name_list = []
     for anchor_i in anchors:
+        y_classes = np.zeros(2)  # +1代表背景
         iou_list = []
         for obj_i in obj:         #anchor_i与所有obj计算iou和offset，保存到iou_list列表中
             rect = obj_i['rect_corner']
@@ -119,7 +119,7 @@ def roi_box_decoder(anchors, offset, classes, names):
     boxes, probs, names = non_max_suppression_fast(boxes=rect, probs=classes[:, 1], names=names)
     return boxes, probs, names
 
-def non_max_suppression_fast(boxes, probs,names, overlap_thresh=0.9, max_boxes=300):
+def non_max_suppression_fast(boxes, probs, names, overlap_thresh=0.9, max_boxes=300):
     # code used from here: http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
 	# if there are no boxes, return an empty list
 	if len(boxes) == 0:
@@ -176,7 +176,7 @@ def non_max_suppression_fast(boxes, probs,names, overlap_thresh=0.9, max_boxes=3
 		if len(pick) >= max_boxes:
 			break
 	# return only the bounding boxes that were picked using the integer data type
-	boxes = boxes[pick];names[pick]
+	boxes = boxes[pick];names = names[pick]
 	probs = probs[pick]
 	return boxes, probs, names
 

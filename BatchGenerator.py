@@ -2,7 +2,7 @@ import os
 import cv2
 import scipy.io as sio
 import numpy as np
-from box_encoder import rpn_box_encoder
+from box_encoder_decoder import rpn_box_encoder
 from AnchorBoxes import AnchorBoxes
 class BatchGenerator(object):
     def __init__(self, info_list):

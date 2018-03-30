@@ -2,7 +2,7 @@ import resnet
 import tensorflow as tf
 import numpy as np
 from box_filter import box_filter, rect_iou, class_acc
-from box_encoder import ssd_box_encoder_batch
+from box_encoder_decoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 from keras.layers import Input
 from keras.models import Model

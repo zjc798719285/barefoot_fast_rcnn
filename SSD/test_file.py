@@ -2,7 +2,7 @@ from SSDModel import SSDModel
 import tensorflow as tf
 import cv2
 import numpy as np
-from box_encoder import ssd_box_encoder_batch
+from box_encoder_decoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 
 x = tf.placeholder(tf.float32, [32, 128, 59, 3])

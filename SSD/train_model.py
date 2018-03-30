@@ -2,7 +2,7 @@ from SSDModel import SSDModel
 import tensorflow as tf
 import numpy as np
 from box_filter import class_pred_acc, box_filter, batch_mean_iou
-from box_encoder import ssd_box_encoder_batch
+from box_encoder_decoder import ssd_box_encoder_batch
 from BatchGenerator import BatchGenerator, load_data
 import Loss
 
