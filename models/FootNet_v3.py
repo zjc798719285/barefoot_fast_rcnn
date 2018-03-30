@@ -43,6 +43,7 @@ class FootNet_v3(object):
         offset = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
                          activation='tanh', trainable=trainable)(offset)
         classes_reshape = tf.reshape(classes, [-1, 2])
+        classes_reshape = tf.nn.softmax(classes_reshape)
         offset_reshape = tf.reshape(offset, [-1, 4])
         return classes_reshape, offset_reshape
 

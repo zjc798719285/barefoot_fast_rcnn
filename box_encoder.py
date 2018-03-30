@@ -92,7 +92,7 @@ def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
             iou = iou_eval(gt=rect, dr=anchor_i)
             offset_x = rect[0] - anchor_i[0]  #此处offset计算方式与原文不同
             offset_y = rect[1] - anchor_i[1]  #可以替换为指数形式编码
-            offset_w = rect[2] - anchor_i[2]
+            offset_w = rect[2] - anchor_i[2]  #此处为左上角坐标原点
             offset_h = rect[3] - anchor_i[3]
             offset = np.array([offset_x, offset_y, offset_w, offset_h])
             iou_list.append([iou, offset, obj_name])
@@ -109,10 +109,76 @@ def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
     return classes, offset, name_list
 
 
+def roi_box_decoder(anchors, offset, classes, names):
+    idx = np.where((classes[:, 1] <= classes[:, 0]))    #返回背景box的索引
+    anchors = np.delete(arr=anchors, obj=idx, axis=0)   #逐个删除
+    offset = np.delete(arr=offset, obj=idx, axis=0)
+    classes = np.delete(arr=classes, obj=idx, axis=0)
+    names = np.delete(arr=names, obj=idx, axis=0)
+    rect = np.array(anchors) + np.array(offset)
+    boxes, probs, names = non_max_suppression_fast(boxes=rect, probs=classes[:, 1], names=names)
+    return boxes, probs, names
 
+def non_max_suppression_fast(boxes, probs,names, overlap_thresh=0.9, max_boxes=300):
+    # code used from here: http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
+	# if there are no boxes, return an empty list
+	if len(boxes) == 0:
+		return []
+	# grab the coordinates of the bounding boxes
+	xmin = boxes[:, 0]
+	ymin = boxes[:, 1]
+	xmax = boxes[:, 0] + boxes[:, 2]
+	ymax = boxes[:, 1] + boxes[:, 3]
 
+	np.testing.assert_array_less(xmin, xmax)
+	np.testing.assert_array_less(ymin, ymax)
 
+	# if the bounding boxes integers, convert them to floats --
+	# this is important since we'll be doing a bunch of divisions
+	# initialize the list of picked indexes
+	pick = []
+	# calculate the areas
+	area = (xmax - xmin) * (ymax - ymin)
+	# sort the bounding boxes
+	idxs = np.argsort(probs)
 
+	# keep looping while some indexes still remain in the indexes
+	# list
+	while len(idxs) > 0:
+		# grab the last index in the indexes list and add the
+		# index value to the list of picked indexes
+		last = len(idxs) - 1
+		i = idxs[last]
+		pick.append(i)
+
+		# find the intersection
+
+		xx1_int = np.maximum(xmin[i], xmin[idxs[:last]])
+		yy1_int = np.maximum(ymin[i], ymin[idxs[:last]])
+		xx2_int = np.minimum(xmax[i], xmax[idxs[:last]])
+		yy2_int = np.minimum(ymax[i], ymax[idxs[:last]])
+
+		ww_int = np.maximum(0, xx2_int - xx1_int)
+		hh_int = np.maximum(0, yy2_int - yy1_int)
+
+		area_int = ww_int * hh_int
+
+		# find the union
+		area_union = area[i] + area[idxs[:last]] - area_int
+
+		# compute the ratio of overlap
+		overlap = area_int/(area_union + 1e-6)
+
+		# delete all indexes from the index list that have
+		idxs = np.delete(idxs, np.concatenate(([last],
+			np.where(overlap > overlap_thresh)[0])))
+
+		if len(pick) >= max_boxes:
+			break
+	# return only the bounding boxes that were picked using the integer data type
+	boxes = boxes[pick];names[pick]
+	probs = probs[pick]
+	return boxes, probs, names
 
 
 
