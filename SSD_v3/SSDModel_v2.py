@@ -34,15 +34,9 @@ class SSDModel(object):
                       kernel_initializer=self.init, trainable=self.basenet_trainable)(net1)
         net2 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net2)
         net2 = block(x=net2, f=128, init=self.init, trainable=self.basenet_trainable)
-        net2 = block(x=net2, f=128, init=self.init, trainable=self.basenet_trainable)
-        net2 = block(x=net2, f=128, init=self.init, trainable=self.basenet_trainable)
-        net2 = block(x=net2, f=128, init=self.init, trainable=self.basenet_trainable)
         net3 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
                       kernel_initializer=self.init, trainable=self.basenet_trainable)(net2)
         net3 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net3)
-        net3 = block(x=net3, f=256, init=self.init, trainable=self.basenet_trainable)
-        net3 = block(x=net3, f=256, init=self.init, trainable=self.basenet_trainable)
-        net3 = block(x=net3, f=256, init=self.init, trainable=self.basenet_trainable)
         net3 = block(x=net3, f=256, init=self.init, trainable=self.basenet_trainable)
         # net4 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net3)
         # net4 = Conv2D(512, (3, 3), padding='same', strides=[1, 1], activation='relu',
