@@ -1,4 +1,4 @@
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
 from keras.layers import Dense
 from RoiPooling import RoiPooling
 import keras as k
@@ -48,19 +48,26 @@ class FootNet_v3(object):
         return classes_reshape, offset_reshape
 
 
-    def classcify(self, base_net, rois):
-        pooling_layer = RoiPooling(pool_size=14)(base_net, rois)  #[batch_size, pool_size, pool_size, channels]
-        net = Conv2D(256, (3, 3), padding='same', strides=[1, 1], kernel_initializer='zeros',
-                                  activation='tanh')(pooling_layer)
+    def classcify(self, base_net, rois,num_classes = 20):
+        num_classes += 1
+        pooling_layer = RoiPooling(pool_size=14, num_rois=10)(base_net, rois)  #[num_rois, pool_size, pool_size, channels]
+        pool_net = Conv2D(256, (3, 3), padding='same', strides=[1, 1], kernel_initializer='glorot_normal',
+                                  activation='relu')(pooling_layer)
+        pool_net = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(pool_net)
+        pool_net = Conv2D(256, (3, 3), padding='same', strides=[1, 1], kernel_initializer='glorot_normal',
+                          activation='relu')(pool_net)
+        pool_net = AveragePooling2D((7, 7), strides=(1, 1), padding='same')(pool_net)
+        classes = Conv2D(num_classes*4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='unifotm',
+                     activation='sigmoid')(pool_net)
+        classes = Conv2D(num_classes, (1, 1), padding='same', strides=[1, 1], kernel_initializer='unifotm',
+                         activation='sigmoid')(classes)
+        classes = tf.nn.softmax(classes)
 
-
-
-
-        return
-
-
-
-
+        offset = Conv2D(24, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                     activation='tanh')(pool_net)
+        offset = Conv2D(4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                        activation='tanh')(offset)
+        return classes, offset
 
     #
     # def classcify(self, base_net, rois, out_size, trainable):

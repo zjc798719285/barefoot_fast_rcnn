@@ -16,7 +16,7 @@ load_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\checkpoints\\SSD1575.ckpt
 save_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\checkpoints'
 monitor_path = 'I:\zjc\\barefoot_fast_rcnn\SSD_v3\monitor\monitor.mat'
 batch_size = 32
-num_boxes_one_image = 1920
+num_boxes_one_image = 7296
 pos_neg_ratio = 3
 #############
 # Load Data #
@@ -69,8 +69,8 @@ with tf.Session() as sess:
                                                           TRAIN_ANCHORS: y_anchors,
                                                           TRAIN_CLASSES: y_classes})
         _, _, filted_anchors, filted_rect = box_filter(pred_classes=cls_pred,
-                                                                                pred_anchors=anchors_pred,
-                                                                                pred_offset=offset_pred)
+                                                       pred_anchors=anchors_pred,
+                                                       pred_offset=offset_pred)
         mean_iou_rect = rect_iou(roi_list=train_roi_list, rect_batch=filted_rect)
         mean_iou += mean_iou_rect
         # t2 = time.time()
