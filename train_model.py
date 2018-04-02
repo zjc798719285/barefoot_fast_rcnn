@@ -6,7 +6,7 @@ from BatchGenerator import BatchGenerator
 import tensorflow as tf
 from RoiPooling import RoiPooling
 import time
-INPUT_DIR = 'I:\zjc\data\VOCtrainval_11-May-2012\VOCdevkit\VOC2012'
+INPUT_DIR = 'E:\PROJECT\keras-frcnn\VOCtrainval_11-May-2012\VOC2012'
 EPOCHES = 500
 
 IMAGE = tf.placeholder(tf.float32, [1, None, None, 3])
@@ -22,7 +22,7 @@ loss_rpn_regress = Loss.loss_rpn_regress(y_pred=offset_rpn, y_true=OFFSET)
 loss = loss_rpn_regress + loss_rpn_cls
 
 
-classes_cls, offset_cls = model.classcify(base_net=base_net, rois=ROIS)
+
 
 
 
