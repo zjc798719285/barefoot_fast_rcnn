@@ -6,6 +6,8 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AnchorBoxes.py" afterPath="$PROJECT_DIR$/AnchorBoxes.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BatchGenerator.py" afterPath="$PROJECT_DIR$/BatchGenerator.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Loss.py" afterPath="$PROJECT_DIR$/Loss.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" afterPath="$PROJECT_DIR$/SSD_v3/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" afterPath="$PROJECT_DIR$/SSD_v3/SSDModel_v2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/box_encoder_decoder.py" afterPath="$PROJECT_DIR$/box_encoder_decoder.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/FootNet_v3.py" afterPath="$PROJECT_DIR$/models/FootNet_v3.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_model.py" afterPath="$PROJECT_DIR$/train_model.py" />
@@ -20,11 +22,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="train_model.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="train_model.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="243">
+              <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
               </folding>
@@ -35,8 +37,8 @@
       <file leaf-file-name="FootNet_v3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/FootNet_v3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+            <state relative-caret-position="1296">
+              <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
               <folding>
                 <element signature="e#0#63#0" expanded="true" />
               </folding>
@@ -54,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Loss.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Loss.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+            <state relative-caret-position="270">
+              <caret line="10" column="30" lean-forward="false" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -68,10 +70,17 @@
         <entry file="file://$PROJECT_DIR$/BatchGenerator.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="459">
-              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <caret line="32" column="43" lean-forward="true" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
+              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
+                <marker date="1522634851038" expanded="true" signature="176:1440" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="419:1440" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="1485:1839" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="1517:1602" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="1612:1697" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="1868:2881" ph="..." />
+                <marker date="1522634851038" expanded="true" signature="1979:2881" ph="..." />
               </folding>
             </state>
           </provider>
@@ -80,10 +89,17 @@
       <file leaf-file-name="AnchorBoxes.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="702">
-              <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+            <state relative-caret-position="162">
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
+                <marker date="1522634851036" expanded="true" signature="1311:1423" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="1651:1762" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="1806:2982" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="1847:2982" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="2106:2982" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="2203:2982" ph="..." />
+                <marker date="1522634851036" expanded="true" signature="3031:3194" ph="..." />
               </folding>
             </state>
           </provider>
@@ -92,9 +108,20 @@
       <file leaf-file-name="box_encoder_decoder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/box_encoder_decoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="86" column="28" lean-forward="true" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
-              <folding />
+            <state relative-caret-position="285">
+              <caret line="85" column="28" lean-forward="false" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
+              <folding>
+                <marker date="1522634851136" expanded="true" signature="5939:6401" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="6488:8312" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="6493:6641" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="6916:7079" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="7207:7276" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="7298:8143" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="7301:7400" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="8053:8101" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="8356:8900" ph="..." />
+                <marker date="1522634851136" expanded="true" signature="8486:8900" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -154,12 +181,12 @@
         <option value="$PROJECT_DIR$/SSD_v3/BatchGenerator.py" />
         <option value="$PROJECT_DIR$/box_encoder.py" />
         <option value="$PROJECT_DIR$/RoiPooling.py" />
-        <option value="$PROJECT_DIR$/models/FootNet_v3.py" />
         <option value="$PROJECT_DIR$/AnchorBoxes.py" />
         <option value="$PROJECT_DIR$/BatchGenerator.py" />
-        <option value="$PROJECT_DIR$/train_model.py" />
         <option value="$PROJECT_DIR$/box_encoder_decoder.py" />
         <option value="$PROJECT_DIR$/Loss.py" />
+        <option value="$PROJECT_DIR$/models/FootNet_v3.py" />
+        <option value="$PROJECT_DIR$/train_model.py" />
       </list>
     </option>
   </component>
@@ -424,13 +451,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515988102876</updated>
-    </task>
-    <task id="LOCAL-00018" summary="The train streamline has been worked,but test streamline has some bugs,I will try later">
-      <created>1516694840408</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1516694840408</updated>
     </task>
     <task id="LOCAL-00019" summary="placeholder style have been changed">
       <created>1516755672796</created>
@@ -768,7 +788,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522655023973</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Things worked bug rpn_cls is Nan.Why????">
+      <created>1522723567694</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1522723567694</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="TodoView">
@@ -788,7 +815,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10310735" sideWeight="0.5028986" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19724138" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28827587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3022599" sideWeight="0.49710146" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32909605" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -874,7 +901,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="SSD pipline work well but positive classes is zero" />
     <MESSAGE value="positive class is not zero" />
     <MESSAGE value="before a big change of AnchorBox.py" />
     <MESSAGE value="class isn't work,i don't know why.I will refact ssd_keras." />
@@ -899,7 +925,8 @@
     <MESSAGE value="faster_rcnn: Add roi_box_decoder.py and NMS_fast.py" />
     <MESSAGE value="faster_rcnn: RPN net works very well, second classes and regress layer are writing." />
     <MESSAGE value="SSD_VOC2012 WORKED" />
-    <option name="LAST_COMMIT_MESSAGE" value="SSD_VOC2012 WORKED" />
+    <MESSAGE value="Things worked bug rpn_cls is Nan.Why????" />
+    <option name="LAST_COMMIT_MESSAGE" value="Things worked bug rpn_cls is Nan.Why????" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -950,7 +977,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/data_generator.py" />
     <entry file="file://$PROJECT_DIR$/models/FootNet_v4.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2017.1/system/python_stubs/-378163417/numpy/core/multiarray.py" />
     <entry file="file://$PROJECT_DIR$/SSD/box_filter.py">
@@ -1039,7 +1065,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/ops/nn_ops.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2017.1/system/python_stubs/-313451744/numpy/core/multiarray.py" />
     <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/numpy/testing/utils.py" />
     <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/ops/image_ops_impl.py" />
@@ -1165,60 +1190,101 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BatchGenerator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
-          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <caret line="32" column="43" lean-forward="true" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <caret line="32" column="43" lean-forward="false" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="702">
-          <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1522634851038" expanded="true" signature="176:1440" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="419:1440" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="1485:1839" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="1517:1602" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="1612:1697" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="1868:2881" ph="..." />
+            <marker date="1522634851038" expanded="true" signature="1979:2881" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/box_encoder_decoder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="86" column="28" lean-forward="true" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="285">
+          <caret line="85" column="28" lean-forward="false" selection-start-line="85" selection-start-column="28" selection-end-line="85" selection-end-column="28" />
+          <folding>
+            <marker date="1522634851136" expanded="true" signature="5939:6401" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="6488:8312" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="6493:6641" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="6916:7079" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="7207:7276" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="7298:8143" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="7301:7400" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="8053:8101" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="8356:8900" ph="..." />
+            <marker date="1522634851136" expanded="true" signature="8486:8900" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/FootNet_v3.py">
+    <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+        <state relative-caret-position="162">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
-            <element signature="e#0#63#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1522634851036" expanded="true" signature="1311:1423" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="1651:1762" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="1806:2982" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="1847:2982" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="2106:2982" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="2203:2982" ph="..." />
+            <marker date="1522634851036" expanded="true" signature="3031:3194" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Loss.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        <state relative-caret-position="270">
+          <caret line="10" column="30" lean-forward="false" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/ops/nn_ops.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="1466" column="0" lean-forward="true" selection-start-line="1466" selection-start-column="0" selection-end-line="1466" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/framework/op_def_library.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="774" column="13" lean-forward="true" selection-start-line="774" selection-start-column="13" selection-end-line="774" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/FootNet_v3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1296">
+          <caret line="48" column="0" lean-forward="true" selection-start-line="48" selection-start-column="0" selection-end-line="48" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#51#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

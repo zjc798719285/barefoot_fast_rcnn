@@ -20,19 +20,20 @@ class AnchorBoxes(object):
         self.scales = scales
         self.n_boxes = len(aspect_ratios)
 
-    def get_img_output_length(self, width, height, strides):
+    def get_img_output_length(self, width, height):
         def get_output_length(input_length):
             # zero_pad
             # apply 4 strided convolutions
-            for _ in range(strides):
-                input_length = int(np.ceil(input_length / 2))
+            strides = [2, 2, 2, 2]
+            for stride_i in strides:
+                input_length = int(np.ceil(input_length / stride_i))
             return input_length
 
         return get_output_length(width), get_output_length(height)
 
     def __call__(self, scales):
         anchor_list = []
-        feature_map_width, feature_map_height = self.get_img_output_length(self.img_width, self.img_height, scales)
+        feature_map_width, feature_map_height = self.get_img_output_length(self.img_width, self.img_height)
         # feature_map_height = int(self.img_height / scales)
         # feature_map_width = int(self.img_height / scales)
         size = min(self.img_height, self.img_width)

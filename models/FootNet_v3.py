@@ -34,15 +34,15 @@ class FootNet_v3(object):
         num_boxes = len(self.scales) * len(self.aspect_ratio)
         net1 = Conv2D(512, (3, 3), padding='same', strides=[1, 1], kernel_initializer=init,
                       activation='relu', trainable=trainable)(base_net)
-        classes = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+        classes = Conv2D(num_boxes * 2, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
                       activation='sigmoid', trainable=trainable)(net1)
-        classes = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+        classes = Conv2D(num_boxes * 2, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
                       activation='sigmoid', trainable=trainable)(classes)
         offset = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
                       activation='tanh', trainable=trainable)(base_net)
         offset = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
                          activation='tanh', trainable=trainable)(offset)
-        classes_reshape = tf.reshape(classes, [-1, 21])
+        classes_reshape = tf.reshape(classes, [-1, 2])
         classes_reshape = tf.nn.softmax(classes_reshape)
         offset_reshape = tf.reshape(offset, [-1, 4])
         return classes_reshape, offset_reshape
