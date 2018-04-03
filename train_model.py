@@ -34,20 +34,23 @@ train_generator = BatchGenerator(info_list=train_list)
 test_generator = BatchGenerator(info_list=test_list)
 sess = tf.InteractiveSession()
 for i in range(EPOCHES):
-     sess.run(tf.global_variables_initializer())
-     try:
+        sess.run(tf.global_variables_initializer())
+     # try:
+        t1 = time.time()
         image_x, classes_y, offset_y, obj_names, anchors = train_generator.next_batch()
+        t2 = time.time()
         pred_classes, pred_offset, _rpn_cls, _rpn_regress, _ = \
                                     sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress, train_op],
                                              feed_dict={IMAGE: image_x, CLASSES: classes_y, OFFSET: offset_y})
+        t3 = time.time()
         rect_list, prob_list, name_list = roi_box_decoder(anchors=anchors, classes=pred_classes,
                                                           offset=pred_offset, names=obj_names)
-
-
+        t4 = time.time()
+        print('next_batch:', t2-t1, 'sess:', t3-t2, 'roi:', t4 - t3)
         print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
 
-     except:
-          continue
+     # except:
+     #      continue
 
 
 

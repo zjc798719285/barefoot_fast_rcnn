@@ -1,9 +1,18 @@
-from keras.layers import Conv2D, MaxPooling2D, AveragePooling2D
-from keras.layers import Dense
+from keras.layers import AveragePooling2D, SeparableConv2D, Conv2D,MaxPooling2D
 from RoiPooling import RoiPooling
 import keras as k
 import tensorflow as tf
 
+def identity_block(input, filters, init):
+    net1 = Conv2D(filters[0], (1, 1), padding='same', strides=[1, 1], kernel_initializer=init,
+                           activation='relu')(input)
+    net2 = SeparableConv2D(filters[1], (3, 3), padding='same', strides=[1, 1], kernel_initializer=init,
+                           activation='relu')(net1)
+    net3 = Conv2D(filters[2], (1, 1), padding='same', strides=[1, 1], kernel_initializer=init)(net2)
+    shorcut = Conv2D(filters[2], (1, 1), padding='same', strides=[1, 1], kernel_initializer=init)(input)
+    net3 = tf.add(x=shorcut, y=net3)
+    net3 = tf.nn.relu(net3)
+    return net3
 
 
 class FootNet_v3(object):
@@ -14,19 +23,25 @@ class FootNet_v3(object):
     def base_net(self, x):
         init = k.initializers.glorot_normal()
         net1 = Conv2D(64, (7, 7), padding='same', strides=[2, 2],
-            kernel_initializer=init, activation='relu')(x)
-        net2 = Conv2D(128, (3, 3), padding='same', strides=[1, 1], activation='relu',
-            kernel_initializer=init)(net1)
+                      kernel_initializer=init, activation='relu')(x)
+        net1 = identity_block(net1, [64, 128, 64], 'glorot_normal')
+        net2 = Conv2D(128, (1, 1), padding='same', strides=[1, 1], activation='relu',
+                      kernel_initializer=init)(net1)
         net2 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net2)
-        net3 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
-            kernel_initializer=init)(net2)
+        net2 = identity_block(net2, [128, 256, 128], 'glorot_normal')
+        net3 = Conv2D(256, (1, 1), padding='same', strides=[1, 1], activation='relu',
+                      kernel_initializer=init)(net2)
         net3 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net3)
-        net4 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
+        net3 = identity_block(net3, [128, 256, 128], 'glorot_normal')
+        net4 = Conv2D(256, (1, 1), padding='same', strides=[1, 1], activation='relu',
                       kernel_initializer=init)(net3)
         net4 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net4)
-        net4 = Conv2D(256, (3, 3), padding='same', strides=[1, 1], activation='relu',
+        net4 = identity_block(net4, [256, 512, 256], 'glorot_normal')
+        net5 = Conv2D(512, (1, 1), padding='same', strides=[1, 1], activation='relu',
                       kernel_initializer=init)(net4)
-        return net4
+        net5 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net5)
+        net5 = identity_block(net5, [512, 1024, 512], 'glorot_normal')
+        return [net4, net5]
 
 
     def RPN(self, base_net, trainable=True):
