@@ -22,12 +22,6 @@ loss_rpn_regress = Loss.loss_rpn_regress(y_pred=offset_rpn, y_true=OFFSET)
 loss = loss_rpn_regress + loss_rpn_cls
 
 
-
-
-
-
-
-
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 var_list = tf.trainable_variables()
 gradients = optimizer.compute_gradients(loss=loss, var_list=var_list)
