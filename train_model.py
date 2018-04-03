@@ -18,7 +18,7 @@ ROIS = tf.placeholder(tf.float32, [None, 4])
 
 model = FootNet(aspect_ratio=[0.5, 1, 2], scales=[100, 200, 300])
 base_net = model.base_net(x=IMAGE)
-classes_rpn, offset_rpn = model.RPN(base_net=base_net)
+classes_rpn, offset_rpn = model.SSD(base_net=base_net)
 loss_rpn_cls = Loss.loss_rpn_cls(y_pred=classes_rpn, y_true=CLASSES)
 loss_rpn_regress = Loss.loss_rpn_regress(y_pred=offset_rpn, y_true=OFFSET)
 loss = loss_rpn_regress + loss_rpn_cls
@@ -34,8 +34,8 @@ train_generator = BatchGenerator(info_list=train_list)
 test_generator = BatchGenerator(info_list=test_list)
 sess = tf.InteractiveSession()
 for i in range(EPOCHES):
-        sess.run(tf.global_variables_initializer())
-     # try:
+     sess.run(tf.global_variables_initializer())
+     try:
         t1 = time.time()
         image_x, classes_y, offset_y, obj_names, anchors = train_generator.next_batch()
         t2 = time.time()
@@ -48,9 +48,8 @@ for i in range(EPOCHES):
         t4 = time.time()
         print('next_batch:', t2-t1, 'sess:', t3-t2, 'roi:', t4 - t3)
         print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
-
-     # except:
-     #      continue
+     except:
+        continue
 
 
 

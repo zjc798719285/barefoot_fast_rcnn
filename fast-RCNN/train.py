@@ -15,7 +15,7 @@ def train(img, ground_truth, test_img,test_roi, model, params):
    # base net
     base_net = model.base_net(x=Image, trainable=True)
    # Rpn
-    rpn_roi_predict = model.RPN(base_net=base_net,
+    rpn_roi_predict = model.SSD(base_net=base_net,
                                 out_size=params.roi_shape,
                                 trainable=True,
                                 num_rois=int((params.num_cls + 1) * params.num_rois))  #一个RPN网络输出多少个推荐框

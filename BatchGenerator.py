@@ -20,8 +20,11 @@ class BatchGenerator(object):
         list_i = self.list[self.step]
         obj = list_i['obj']; img_width = list_i['width']; img_height = list_i['height'];image_path = list_i['Image']
         img_resize, resize_height, resize_width = get_image(path=image_path, img_height=img_height, img_width=img_width)
-        anchors = AnchorBoxes(img_height=resize_height, img_width=resize_width,
-                             aspect_ratios=[0.5, 1, 2], scales=[0.2, 0.4, 0.8])(5)  #16：表示basenet输出的feature map与原图缩小比例
+        anchors4 = AnchorBoxes(img_height=resize_height, img_width=resize_width,
+                               aspect_ratios=[0.5, 1, 2], scales=[0.2, 0.4, 0.8])(4)
+        anchors5 = AnchorBoxes(img_height=resize_height, img_width=resize_width,
+                              aspect_ratios=[0.5, 1, 2], scales=[0.2, 0.4, 0.8])(5)  #16：表示basenet输出的feature map与原图缩小比例
+        anchors = np.concatenate((anchors4, anchors5), axis=0)
         classes, offset, obj_names = rpn_box_encoder(obj=obj, anchors=anchors, iou_pos_thresh=0.5, iou_neg_thresh=0.1)
         #classes: np数组，[1, num_boxes, 2]; offset: np数组，[1, num_boxes, 4]; obj_names: 列表
         self.step += 1

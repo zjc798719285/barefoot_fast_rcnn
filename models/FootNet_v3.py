@@ -1,8 +1,9 @@
-from keras.layers import AveragePooling2D, SeparableConv2D, Conv2D,MaxPooling2D
+from keras.layers import AveragePooling2D, SeparableConv2D, Conv2D, MaxPooling2D,BatchNormalization
 from RoiPooling import RoiPooling
 import keras as k
 import tensorflow as tf
-
+from keras import backend as K
+K.set_learning_phase(1) #set learning phase
 def identity_block(input, filters, init):
     net1 = Conv2D(filters[0], (1, 1), padding='same', strides=[1, 1], kernel_initializer=init,
                            activation='relu')(input)
@@ -44,23 +45,34 @@ class FootNet_v3(object):
         return [net4, net5]
 
 
-    def RPN(self, base_net, trainable=True):
+    def SSD(self, base_net, trainable=True):
         init = k.initializers.glorot_normal()
         num_boxes = len(self.scales) * len(self.aspect_ratio)
-        net1 = Conv2D(512, (3, 3), padding='same', strides=[1, 1], kernel_initializer=init,
-                      activation='relu', trainable=trainable)(base_net)
-        classes = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
-                      activation='sigmoid', trainable=trainable)(net1)
-        classes = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
-                      activation='sigmoid', trainable=trainable)(classes)
-        offset = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
-                      activation='tanh', trainable=trainable)(base_net)
-        offset = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
-                         activation='tanh', trainable=trainable)(offset)
-        classes_reshape = tf.reshape(classes, [-1, 21])
-        classes_reshape = tf.nn.softmax(classes_reshape)
-        offset_reshape = tf.reshape(offset, [-1, 4])
-        return classes_reshape, offset_reshape
+        classes4 = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+                      activation='sigmoid', trainable=trainable)(base_net[0])
+        classes4 = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+                      activation='sigmoid', trainable=trainable)(classes4)
+        classes5 = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+                          activation='sigmoid', trainable=trainable)(base_net[1])
+        classes5 = Conv2D(num_boxes * 21, (1, 1), padding='same', strides=[1, 1], kernel_initializer='glorot_uniform',
+                          activation='sigmoid', trainable=trainable)(classes5)
+
+        offset4 = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                      activation='tanh', trainable=trainable)(base_net[0])
+        offset4 = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                         activation='tanh', trainable=trainable)(offset4)
+        offset5 = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                         activation='tanh', trainable=trainable)(base_net[1])
+        offset5 = Conv2D(num_boxes * 4, (1, 1), padding='same', strides=[1, 1], kernel_initializer='zeros',
+                         activation='tanh', trainable=trainable)(offset5)
+
+        classes4_reshape = tf.reshape(classes4, [-1, 21])
+        classes5_reshape = tf.reshape(classes5, [-1, 21])
+        offset4_reshape = tf.reshape(offset4, [-1, 4])
+        offset5_reshape = tf.reshape(offset5, [-1, 4])
+        classes = tf.concat([classes4_reshape, classes5_reshape], axis=0)
+        offset = tf.concat([offset4_reshape, offset5_reshape], axis=0)
+        return classes, offset
 
 
     def classcify(self, base_net, rois,num_classes = 20):
