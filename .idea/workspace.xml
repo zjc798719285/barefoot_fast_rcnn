@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="faster_rcnn: RPN net works very well, second classes and regress layer are writing.">
+    <list default="true" id="9f5f5cd2-69d6-4b0f-aa59-e4410c6929e2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AnchorBoxes.py" afterPath="$PROJECT_DIR$/AnchorBoxes.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BatchGenerator.py" afterPath="$PROJECT_DIR$/BatchGenerator.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Loss.py" afterPath="$PROJECT_DIR$/Loss.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/box_encoder_decoder.py" afterPath="$PROJECT_DIR$/box_encoder_decoder.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/FootNet_v3.py" afterPath="$PROJECT_DIR$/models/FootNet_v3.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_model.py" afterPath="$PROJECT_DIR$/train_model.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,22 +23,20 @@
       <file leaf-file-name="train_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state relative-caret-position="162">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding>
                 <element signature="e#0#51#0" expanded="true" />
-                <marker date="1522654852401" expanded="true" signature="2050:2190" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="2050:2158" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FootNet_v3.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="FootNet_v3.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/FootNet_v3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-59">
-              <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+            <state relative-caret-position="285">
+              <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
               <folding>
                 <element signature="e#0#63#0" expanded="true" />
               </folding>
@@ -40,53 +44,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resnet.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/resnet.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="261">
-              <caret line="185" column="11" lean-forward="false" selection-start-line="185" selection-start-column="11" selection-end-line="185" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="roi_pooling.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/roi_pooling.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
+            <state relative-caret-position="397">
               <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AnchorBoxes.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="783">
-              <caret line="38" column="51" lean-forward="true" selection-start-line="38" selection-start-column="51" selection-end-line="38" selection-end-column="51" />
-              <folding>
-                <marker date="1522654852370" expanded="true" signature="1311:1423" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="1651:1762" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="1806:2982" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="1847:2982" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="2106:2982" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="2203:2982" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="3031:3194" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Loss.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Loss.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-314">
-              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-                <marker date="1522654852385" expanded="true" signature="817:997" ph="..." />
-              </folding>
+            <state relative-caret-position="27">
+              <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,22 +67,24 @@
       <file leaf-file-name="BatchGenerator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BatchGenerator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-138">
-              <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
+            <state relative-caret-position="459">
+              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <caret line="32" column="43" lean-forward="true" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
               <folding>
-                <marker date="1522654852370" expanded="true" signature="1900:2881" ph="..." />
-                <marker date="1522654852370" expanded="true" signature="1979:2881" ph="..." />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pascal_parser.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pascal_parser.py">
+      <file leaf-file-name="AnchorBoxes.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="874">
-              <caret line="61" column="11" lean-forward="true" selection-start-line="61" selection-start-column="11" selection-end-line="61" selection-end-column="32" />
-              <folding />
+            <state relative-caret-position="702">
+              <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,20 +92,9 @@
       <file leaf-file-name="box_encoder_decoder.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/box_encoder_decoder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="108" column="37" lean-forward="true" selection-start-line="108" selection-start-column="37" selection-end-line="108" selection-end-column="37" />
-              <folding>
-                <marker date="1522654852401" expanded="true" signature="5939:6401" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="6488:8312" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="6493:6641" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="6916:7079" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="7207:7276" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="7298:8143" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="7301:7400" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="8053:8101" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="8356:8900" ph="..." />
-                <marker date="1522654852401" expanded="true" signature="8486:8900" ph="..." />
-              </folding>
+            <state relative-caret-position="312">
+              <caret line="86" column="28" lean-forward="true" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -190,12 +154,12 @@
         <option value="$PROJECT_DIR$/SSD_v3/BatchGenerator.py" />
         <option value="$PROJECT_DIR$/box_encoder.py" />
         <option value="$PROJECT_DIR$/RoiPooling.py" />
-        <option value="$PROJECT_DIR$/train_model.py" />
-        <option value="$PROJECT_DIR$/Loss.py" />
-        <option value="$PROJECT_DIR$/box_encoder_decoder.py" />
-        <option value="$PROJECT_DIR$/AnchorBoxes.py" />
         <option value="$PROJECT_DIR$/models/FootNet_v3.py" />
+        <option value="$PROJECT_DIR$/AnchorBoxes.py" />
         <option value="$PROJECT_DIR$/BatchGenerator.py" />
+        <option value="$PROJECT_DIR$/train_model.py" />
+        <option value="$PROJECT_DIR$/box_encoder_decoder.py" />
+        <option value="$PROJECT_DIR$/Loss.py" />
       </list>
     </option>
   </component>
@@ -206,9 +170,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-5" />
-    <option name="width" value="1456" />
-    <option name="height" value="876" />
+    <option name="x" value="-6" />
+    <option name="y" value="1" />
+    <option name="width" value="1452" />
+    <option name="height" value="865" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -227,6 +192,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -241,7 +207,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -459,13 +424,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1515988102876</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Save a version before make Faster-RCNN">
-      <created>1516685587827</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1516685587827</updated>
     </task>
     <task id="LOCAL-00018" summary="The train streamline has been worked,but test streamline has some bugs,I will try later">
       <created>1516694840408</created>
@@ -803,7 +761,14 @@
       <option name="project" value="LOCAL" />
       <updated>1522400713482</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="SSD_VOC2012 WORKED">
+      <created>1522655023973</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1522655023973</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TodoView">
@@ -816,40 +781,31 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-5" y="0" width="1456" height="876" extended-state="0" />
+    <frame x="-6" y="1" width="1452" height="865" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21551724" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21902017" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10310735" sideWeight="0.5028986" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3138587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19724138" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3022599" sideWeight="0.49710146" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32909605" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4347826" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24275862" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10310735" sideWeight="0.5028986" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.375" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3022599" sideWeight="0.49710146" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32909605" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21551724" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4347826" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33050847" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -858,11 +814,11 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.10310735" sideWeight="0.5028986" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31473532" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4124138" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3022599" sideWeight="0.49710146" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32909605" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19637682" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21902017" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -870,7 +826,7 @@
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28612304" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4510345" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32902297" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
@@ -918,7 +874,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="smooth_L1 loss is not Nan" />
     <MESSAGE value="SSD pipline work well but positive classes is zero" />
     <MESSAGE value="positive class is not zero" />
     <MESSAGE value="before a big change of AnchorBox.py" />
@@ -943,7 +898,8 @@
     <MESSAGE value="SSD_v3: change ssd_box_encoder bugs" />
     <MESSAGE value="faster_rcnn: Add roi_box_decoder.py and NMS_fast.py" />
     <MESSAGE value="faster_rcnn: RPN net works very well, second classes and regress layer are writing." />
-    <option name="LAST_COMMIT_MESSAGE" value="faster_rcnn: RPN net works very well, second classes and regress layer are writing." />
+    <MESSAGE value="SSD_VOC2012 WORKED" />
+    <option name="LAST_COMMIT_MESSAGE" value="SSD_VOC2012 WORKED" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -973,31 +929,6 @@
           <line>13</line>
           <option name="timeStamp" value="247" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train_model.py</url>
-          <line>43</line>
-          <option name="timeStamp" value="280" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train_model.py</url>
-          <line>45</line>
-          <option name="timeStamp" value="281" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train_model.py</url>
-          <line>46</line>
-          <option name="timeStamp" value="282" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train_model.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="287" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/BatchGenerator.py</url>
-          <line>29</line>
-          <option name="timeStamp" value="298" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1006,29 +937,19 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="300" />
+      <option name="time" value="360" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="pred_classes[0:19836] [1]" />
         <watch expression="obj_names[299]" />
         <watch expression="INPUT_DIR" />
+        <watch expression="pred_classes[0:19836] [1]" />
+        <watch expression="pred_classes[0:19836] [1]" />
       </configuration>
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://D:/Users/Frozen/AppData/Local/Programs/Python/Python35/Lib/site-packages/numpy/core/_methods.py" />
-    <entry file="file://D:/Users/Frozen/AppData/Local/Programs/Python/Python35/Lib/site-packages/tensorflow/python/client/session.py" />
-    <entry file="file://D:/Users/Frozen/AppData/Local/Programs/Python/Python35/Lib/site-packages/tensorflow/python/framework/ops.py" />
-    <entry file="file://D:/Users/Frozen/AppData/Local/Programs/Python/Python35/Lib/site-packages/numpy/core/fromnumeric.py" />
-    <entry file="file://$USER_HOME$/.PyCharmCE2017.1/system/python_stubs/-378163417/math.py" />
-    <entry file="file://$PROJECT_DIR$/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="66" lean-forward="false" selection-start-line="11" selection-start-column="66" selection-end-line="11" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data_generator.py" />
     <entry file="file://$PROJECT_DIR$/models/FootNet_v4.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2017.1/system/python_stubs/-378163417/numpy/core/multiarray.py" />
@@ -1146,14 +1067,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pascal_parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="874">
-          <caret line="61" column="11" lean-forward="true" selection-start-line="61" selection-start-column="11" selection-end-line="61" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/roi_generator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="997">
@@ -1161,29 +1074,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Loss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-314">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1522654852385" expanded="true" signature="817:997" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/keras/layers/convolutional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="432" column="21" lean-forward="false" selection-start-line="432" selection-start-column="21" selection-end-line="432" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/resnet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
           <caret line="185" column="11" lean-forward="false" selection-start-line="185" selection-start-column="11" selection-end-line="185" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1201,79 +1095,130 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train_model.py">
+    <entry file="file://$PROJECT_DIR$/pascal_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="42" column="0" lean-forward="false" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#51#0" expanded="true" />
-            <marker date="1522654852401" expanded="true" signature="2050:2190" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="2050:2158" ph="..." />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="3" column="43" lean-forward="false" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/box_encoder_decoder.py">
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/numpy/core/function_base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="108" column="37" lean-forward="true" selection-start-line="108" selection-start-column="37" selection-end-line="108" selection-end-column="37" />
-          <folding>
-            <marker date="1522654852401" expanded="true" signature="5939:6401" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="6488:8312" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="6493:6641" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="6916:7079" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="7207:7276" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="7298:8143" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="7301:7400" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="8053:8101" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="8356:8900" ph="..." />
-            <marker date="1522654852401" expanded="true" signature="8486:8900" ph="..." />
-          </folding>
+        <state relative-caret-position="133">
+          <caret line="24" column="22" lean-forward="false" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/numpy/lib/function_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-662">
+          <caret line="4549" column="7" lean-forward="true" selection-start-line="4549" selection-start-column="7" selection-end-line="4549" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/training/optimizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="385" column="0" lean-forward="false" selection-start-line="385" selection-start-column="0" selection-end-line="385" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/pydevd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="1584" column="0" lean-forward="false" selection-start-line="1584" selection-start-column="0" selection-end-line="1584" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/tensorflow/python/client/session.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1203">
+          <caret line="894" column="0" lean-forward="false" selection-start-line="894" selection-start-column="0" selection-end-line="894" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/roi_pooling.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
+        <state relative-caret-position="397">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
+    <entry file="file://C:/ProgramData/Anaconda3/Lib/site-packages/keras/layers/convolutional.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="783">
-          <caret line="38" column="51" lean-forward="true" selection-start-line="38" selection-start-column="51" selection-end-line="38" selection-end-column="51" />
+        <state relative-caret-position="324">
+          <caret line="432" column="17" lean-forward="false" selection-start-line="432" selection-start-column="17" selection-end-line="432" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <marker date="1522654852370" expanded="true" signature="1311:1423" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="1651:1762" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="1806:2982" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="1847:2982" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="2106:2982" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="2203:2982" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="3031:3194" ph="..." />
+            <element signature="e#0#51#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BatchGenerator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-138">
-          <caret line="36" column="9" lean-forward="true" selection-start-line="36" selection-start-column="9" selection-end-line="36" selection-end-column="9" />
+        <state relative-caret-position="459">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <caret line="32" column="43" lean-forward="true" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
           <folding>
-            <marker date="1522654852370" expanded="true" signature="1900:2881" ph="..." />
-            <marker date="1522654852370" expanded="true" signature="1979:2881" ph="..." />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnchorBoxes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="41" column="43" lean-forward="true" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/box_encoder_decoder.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="86" column="28" lean-forward="true" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/models/FootNet_v3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-59">
-          <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
+        <state relative-caret-position="285">
+          <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
           <folding>
             <element signature="e#0#63#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

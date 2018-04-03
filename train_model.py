@@ -10,23 +10,18 @@ INPUT_DIR = 'I:\zjc\data\VOCtrainval_11-May-2012\VOCdevkit\VOC2012'
 EPOCHES = 500
 
 IMAGE = tf.placeholder(tf.float32, [1, None, None, 3])
-CLASSES = tf.placeholder(tf.float32, [1, None, 2])
+CLASSES = tf.placeholder(tf.float32, [1, None, 21])
 OFFSET = tf.placeholder(tf.float32, [1, None, 4])
 ROIS = tf.placeholder(tf.float32, [None, 4])
 
-model = FootNet(aspect_ratio=[0.5, 1, 2], scales=[100, 200, 300])
+model = FootNet(aspect_ratio=[0.5, 1, 2], scales=[100, 200, 250, 300])
 base_net = model.base_net(x=IMAGE)
 classes_rpn, offset_rpn = model.RPN(base_net=base_net)
 loss_rpn_cls = Loss.loss_rpn_cls(y_pred=classes_rpn, y_true=CLASSES)
 loss_rpn_regress = Loss.loss_rpn_regress(y_pred=offset_rpn, y_true=OFFSET)
 loss = loss_rpn_regress + loss_rpn_cls
 
-
-classes_cls, offset_cls = model.classcify(base_net=base_net, rois=ROIS)
-
-
-
-
+# classes_cls, offset_cls = model.classcify(base_net=base_net, rois=ROIS)
 
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 var_list = tf.trainable_variables()
@@ -38,25 +33,17 @@ train_generator = BatchGenerator(info_list=train_list)
 test_generator = BatchGenerator(info_list=test_list)
 sess = tf.InteractiveSession()
 for i in range(EPOCHES):
-     sess.run(tf.global_variables_initializer())
-     try:
+        sess.run(tf.global_variables_initializer())
         image_x, classes_y, offset_y, obj_names, anchors = train_generator.next_batch()
         pred_classes, pred_offset, _rpn_cls, _rpn_regress, _ = \
-                                    sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress, train_op],
-                                             feed_dict={IMAGE: image_x, CLASSES: classes_y, OFFSET: offset_y})
+                         sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress, train_op],
+                         feed_dict={IMAGE: image_x, CLASSES: classes_y, OFFSET: offset_y})
         rect_list, prob_list, name_list = roi_box_decoder(anchors=anchors, classes=pred_classes,
                                                           offset=pred_offset, names=obj_names)
-
-
-
-
-
-
-
         print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
 
-     except:
-         continue
+     # except:
+     #     continue
 
 
 
