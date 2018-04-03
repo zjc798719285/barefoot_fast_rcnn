@@ -5,7 +5,8 @@ def loss_rpn_cls(y_pred, y_true):
     neg_pos_ratio = 2; c = 2
     y_pred = tf.maximum(y_pred, 1e-15)
     cross_entropy = -tf.reduce_sum(y_true * tf.log(y_pred) + (1 - y_true) * tf.log(1 - y_pred), axis=2)
-    pos_mask = y_true[:, :, 1]; neg_mask = y_true[:, :, 0]
+    pos_mask = tf.reduce_sum(y_true[:, :, 1:-1], axis=-1) #此处pos_mask一定要注意，
+    neg_mask = y_true[:, :, 0]
     num_pos = tf.reduce_sum(pos_mask); num_neg = tf.reduce_sum(neg_mask)
     loss_pos = tf.reduce_sum(cross_entropy * pos_mask) / num_pos
     loss_neg_all = cross_entropy * neg_mask

@@ -8,9 +8,11 @@ from RoiPooling import RoiPooling
 import time
 INPUT_DIR = 'I:\zjc\data\VOCtrainval_11-May-2012\VOCdevkit\VOC2012'
 EPOCHES = 500
+NUM_CLASSES = 20
+
 
 IMAGE = tf.placeholder(tf.float32, [1, None, None, 3])
-CLASSES = tf.placeholder(tf.float32, [1, None, 2])
+CLASSES = tf.placeholder(tf.float32, [1, None, NUM_CLASSES + 1])
 OFFSET = tf.placeholder(tf.float32, [1, None, 4])
 ROIS = tf.placeholder(tf.float32, [None, 4])
 
@@ -42,15 +44,10 @@ for i in range(EPOCHES):
                                                           offset=pred_offset, names=obj_names)
 
 
-
-
-
-
-
         print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
 
      except:
-         continue
+          continue
 
 
 

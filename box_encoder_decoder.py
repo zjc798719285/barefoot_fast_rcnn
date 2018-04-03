@@ -81,10 +81,11 @@ def iou_eval(gt, dr):
 #       return y_classses, y_anchors
 
 
-def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
+def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh, num_classes=20):
+    num_classes += 1
     classes_list = []; offset_list = []; name_list = []
     for anchor_i in anchors:
-        y_classes = np.zeros(2)  # +1代表背景
+        y_classes = np.zeros(num_classes)  # +1代表背景
         iou_list = []
         for obj_i in obj:         #anchor_i与所有obj计算iou和offset，保存到iou_list列表中
             rect = obj_i['rect_corner']
@@ -98,15 +99,27 @@ def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh):
             iou_list.append([iou, offset, obj_name])
         iou_list2 = sorted(iou_list, key=lambda x: x[0], reverse=True) #对iou_list排序，如果最大iou>thresh，就作为前景
         if iou_list2[0][0] >= iou_pos_thresh:  #标记正样本
-            y_classes[1] = 1
+            idx = classes_mapping(iou_list2[0][2])
+            y_classes[idx] = 1
         if iou_list2[0][0] >= iou_neg_thresh and iou_list2[0][0] <iou_pos_thresh: #标记hard sample，对于负样本不标记
             y_classes[0] = 1
         classes_list.append([y_classes])
         offset_list.append([iou_list2[0][1]])
         name_list.append(iou_list2[0][2])
-    classes = np.reshape(np.array(classes_list), newshape=(-1, 2))
+    classes = np.reshape(np.array(classes_list), newshape=(-1, num_classes))
     offset = np.reshape(np.array(offset_list), newshape=(-1, 4))
     return classes, offset, name_list
+
+def classes_mapping(obj_name):
+
+    mapping = {'person': 1, 'bird': 2, 'cat': 3, 'cow': 4, 'dog': 5, 'horse': 6,
+              'sheep': 7, 'aeroplane': 8, 'bicycle': 9, 'boat': 10, 'bus': 11,
+              'car': 12, 'motorbike': 13, 'train': 14, 'bottle': 15, 'chair': 16,
+              'diningtable': 17, 'pottedplant': 18, 'sofa': 19, 'tvmonitor': 20}
+    return mapping[obj_name]
+
+
+
 
 
 def roi_box_decoder(anchors, offset, classes, names):
