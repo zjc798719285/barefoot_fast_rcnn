@@ -71,6 +71,7 @@ class FootNet_v3(object):
         offset4_reshape = tf.reshape(offset4, [-1, 4])
         offset5_reshape = tf.reshape(offset5, [-1, 4])
         classes = tf.concat([classes4_reshape, classes5_reshape], axis=0)
+        classes = tf.nn.softmax(classes, dim=1)
         offset = tf.concat([offset4_reshape, offset5_reshape], axis=0)
         return classes, offset
 

@@ -1,6 +1,6 @@
 import os
 import cv2
-import scipy.io as sio
+from config import config as C
 import numpy as np
 from box_encoder_decoder import rpn_box_encoder
 from AnchorBoxes import AnchorBoxes
@@ -10,8 +10,9 @@ class BatchGenerator(object):
         self.step = 1
 
     def shuffle(self):
-        r = np.random.permutation(len(self.list))
-        self.list = self.list[r]
+        # r = np.random.permutation(len(self.list))
+        # self.list = self.list[np.array(r)]
+        np.random.shuffle(self.list)
         self.step = 1
 
     def next_batch(self):
@@ -35,11 +36,11 @@ class BatchGenerator(object):
 
 def get_image(path, img_height, img_width):
     if img_height >= img_width:
-        resize_width = 600
-        resize_height = int(img_height * (600/img_width))
+        resize_width = C.resize_scale
+        resize_height = int(img_height * (C.resize_scale/img_width))
     else:
-        resize_height = 600
-        resize_width = int(img_width * (600/img_height))
+        resize_height = C.resize_scale
+        resize_width = int(img_width * (C.resize_scale/img_height))
     img = cv2.imread(path)
     img_resize = cv2.resize(img, (resize_width, resize_height))
     return img_resize, resize_height, resize_width

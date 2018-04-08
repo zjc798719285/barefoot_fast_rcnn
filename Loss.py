@@ -1,8 +1,8 @@
 import tensorflow as tf
-
+from config import config as C
 
 def loss_rpn_cls(y_pred, y_true):
-    neg_pos_ratio = 2; c = 1
+    neg_pos_ratio = C.neg_pos_ratio; c = C.neg_loss_scales
     y_pred = tf.maximum(y_pred, 1e-15)
     cross_entropy = -tf.reduce_sum(y_true * tf.log(y_pred) + (1 - y_true) * tf.log(1 - y_pred), axis=2)
     pos_mask = tf.reduce_sum(y_true[:, :, 1:-1], axis=-1) #此处pos_mask一定要注意，

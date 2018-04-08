@@ -7,7 +7,7 @@ import tensorflow as tf
 from RoiPooling import RoiPooling
 import time
 INPUT_DIR = 'I:\zjc\data\VOCtrainval_11-May-2012\VOCdevkit\VOC2012'
-EPOCHES = 500
+EPOCHES = 50000
 NUM_CLASSES = 20
 
 
@@ -29,27 +29,42 @@ var_list = tf.trainable_variables()
 gradients = optimizer.compute_gradients(loss=loss, var_list=var_list)
 train_op = optimizer.apply_gradients(grads_and_vars=gradients)
 
+
 train_list, test_list = get_data(input_dir=INPUT_DIR)
 train_generator = BatchGenerator(info_list=train_list)
 test_generator = BatchGenerator(info_list=test_list)
 sess = tf.InteractiveSession()
 for i in range(EPOCHES):
-     sess.run(tf.global_variables_initializer())
-     try:
-        t1 = time.time()
+        sess.run(tf.global_variables_initializer())
+     # try:
         image_x, classes_y, offset_y, obj_names, anchors = train_generator.next_batch()
-        t2 = time.time()
         pred_classes, pred_offset, _rpn_cls, _rpn_regress, _ = \
-                                    sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress, train_op],
-                                             feed_dict={IMAGE: image_x, CLASSES: classes_y, OFFSET: offset_y})
-        t3 = time.time()
+                sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress, train_op],
+                feed_dict={IMAGE: image_x, CLASSES: classes_y, OFFSET: offset_y})
         rect_list, prob_list, name_list = roi_box_decoder(anchors=anchors, classes=pred_classes,
                                                           offset=pred_offset, names=obj_names)
-        t4 = time.time()
-        print('next_batch:', t2-t1, 'sess:', t3-t2, 'roi:', t4 - t3)
+
         print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
-     except:
-        continue
+     # except:
+     #    continue
+        if i % 100 == 0:
+             for test_i in range(100):
+                 print('test_i=', test_i)
+                 test_generator.shuffle()
+                 image_val, classes_val, offset_val, obj_names, anchors = test_generator.next_batch()
+                 pred_classes, pred_offset, _rpn_cls, _rpn_regress = \
+                 sess.run([classes_rpn, offset_rpn, loss_rpn_cls, loss_rpn_regress],
+                          feed_dict={IMAGE: image_val, OFFSET: offset_val, CLASSES: classes_val})
+                 rect_list, prob_list, name_list = roi_box_decoder(anchors=anchors, classes=pred_classes,
+                                                                   offset=pred_offset, names=obj_names)
+                 print('epoch', i, 'rpn_cls=', _rpn_cls, 'rpn_regress=', _rpn_regress, 'num_rect=', len(rect_list))
+
+
+
+
+
+
+
 
 
 

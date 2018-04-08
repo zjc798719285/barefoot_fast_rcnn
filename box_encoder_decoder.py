@@ -1,4 +1,5 @@
 import numpy as np
+from config import config as c
 #
 # def convert_coordinates(tensor,img_height, img_width):
 #     #Return a ndarray
@@ -81,7 +82,7 @@ def iou_eval(gt, dr):
 #       return y_classses, y_anchors
 
 
-def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh, num_classes=20):
+def rpn_box_encoder(obj, anchors, iou_pos_thresh, iou_neg_thresh, num_classes=c.num_classes):
     num_classes += 1
     classes_list = []; offset_list = []; name_list = []
     for anchor_i in anchors:
@@ -119,20 +120,17 @@ def classes_mapping(obj_name):
     return mapping[obj_name]
 
 
-
-
-
 def roi_box_decoder(anchors, offset, classes, names):
-    idx = np.where((classes[:, 1] <= classes[:, 0]))    #返回背景box的索引
+    idx = np.where((np.nanmax(classes[:, 1:-1], axis=1) <= classes[:, 0]))    #返回背景box的索引
     anchors = np.delete(arr=anchors, obj=idx, axis=0)   #逐个删除
     offset = np.delete(arr=offset, obj=idx, axis=0)
     classes = np.delete(arr=classes, obj=idx, axis=0)
     names = np.delete(arr=names, obj=idx, axis=0)
     rect = np.array(anchors) + np.array(offset)
-    boxes, probs, names = non_max_suppression_fast(boxes=rect, probs=classes[:, 1], names=names)
+    boxes, probs, names = non_max_suppression_fast(boxes=rect, probs=classes, names=names)
     return boxes, probs, names
 
-def non_max_suppression_fast(boxes, probs, names, overlap_thresh=0.9, max_boxes=300):
+def non_max_suppression_fast(boxes, probs, names, overlap_thresh=c.overlap_thresh, max_boxes=c.num_boxes):
     # code used from here: http://www.pyimagesearch.com/2015/02/16/faster-non-maximum-suppression-python/
 	# if there are no boxes, return an empty list
 	if len(boxes) == 0:
@@ -151,9 +149,10 @@ def non_max_suppression_fast(boxes, probs, names, overlap_thresh=0.9, max_boxes=
 	# initialize the list of picked indexes
 	pick = []
 	# calculate the areas
-	area = (xmax - xmin) * (ymax - ymin)
+	area = (xmax - xmin) * (ymax - ymin);probs2 = np.nanmax(probs[:, 1:-1])
 	# sort the bounding boxes
-	idxs = np.argsort(probs)
+	idxs = np.argsort(probs2)
+
 
 	# keep looping while some indexes still remain in the indexes
 	# list
