@@ -41,7 +41,7 @@ class FootNet_v3(object):
         net5 = Conv2D(512, (1, 1), padding='same', strides=[1, 1], activation='relu',
                       kernel_initializer=init)(net4)
         net5 = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(net5)
-        net5 = identity_block(net5, [512, 1024, 512], 'glorot_normal')
+        net5 = identity_block(net5, [512, 512, 512], 'glorot_normal')
         return [net4, net5]
 
 

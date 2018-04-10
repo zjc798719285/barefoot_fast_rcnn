@@ -149,7 +149,7 @@ def non_max_suppression_fast(boxes, probs, names, overlap_thresh=c.overlap_thres
 	# initialize the list of picked indexes
 	pick = []
 	# calculate the areas
-	area = (xmax - xmin) * (ymax - ymin);probs2 = np.nanmax(probs[:, 1:-1])
+	area = (xmax - xmin) * (ymax - ymin);probs2 = np.nanmax(probs[:, 1:-1], axis=1)
 	# sort the bounding boxes
 	idxs = np.argsort(probs2)
 

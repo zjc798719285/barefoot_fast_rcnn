@@ -70,7 +70,7 @@ class SSDModel(object):
         # boxes_offset2 = Conv2D(n_boxes * 4, (3, 3), strides=(1, 1), padding="same",
         #                 kernel_initializer=self.init, kernel_regularizer=l2(self.l2_reg),
         #                 name='boxes6')(net2)
-        boxes_offset3 = Conv2D(n_boxes * 32, (1, 1), strides=(1, 1), padding="same",
+        boxes_offset3 = Conv2D(n_boxes * 4, (1, 1), strides=(1, 1), padding="same",
                         kernel_initializer ='zeros', activation='tanh', kernel_regularizer=l2(self.l2_reg),
                         name='boxes3', trainable=self.offset_trainable)(net3)
         boxes_offset3 = Conv2D(n_boxes * 4, (1, 1), strides=(1, 1), padding="same",
@@ -79,7 +79,7 @@ class SSDModel(object):
         # boxes_offset3 = Conv2D(n_boxes * 4, (1, 1), strides=(1, 1), padding="same",
         #                        kernel_initializer='zeros', activation='linear',
         #                        kernel_regularizer=l2(self.l2_reg), name='boxes3')(boxes_offset3)
-        boxes_offset2 = Conv2D(n_boxes * 32, (1, 1), strides=(1, 1), padding="same",
+        boxes_offset2 = Conv2D(n_boxes * 4, (1, 1), strides=(1, 1), padding="same",
                         kernel_initializer='zeros', kernel_regularizer=l2(self.l2_reg),
                         name='boxes2', activation='tanh', trainable=self.offset_trainable)(net2)
         boxes_offset2 = Conv2D(n_boxes * 4, (1, 1), strides=(1, 1), padding="same",
